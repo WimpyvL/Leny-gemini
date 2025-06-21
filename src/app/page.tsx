@@ -78,13 +78,13 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
           <Button asChild size="lg" className="rounded-full px-6 text-sm">
-            <Link href="/chat">Sign up</Link>
+            <Link href="/signup">Sign up</Link>
           </Button>
         </nav>
       </header>
 
       <main className="relative z-10 flex-1 flex flex-col items-start justify-center p-4 sm:p-6 md:p-8">
-        <div className="w-full max-w-xl space-y-4">
+        <div className="w-full max-w-lg space-y-4">
           <div className="space-y-1 text-left">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground/90">
               Because every question matters to someone
@@ -108,7 +108,7 @@ export default function Home() {
                   <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
                     <Mic className="h-4 w-4 text-muted-foreground" />
                   </Button>
-                  <Link href="/chat">
+                  <Link href="/signup">
                     <Button size="icon" className="rounded-full h-8 w-8">
                       <ArrowRight className="h-4 w-4"/>
                     </Button>
@@ -132,7 +132,7 @@ export default function Home() {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             {helpTopics.map((topic) => (
                                 <Button key={topic.text} asChild variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent">
-                                    <Link href="/chat">
+                                    <Link href="/signup">
                                       <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
                                           <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
                                       </Avatar>
@@ -164,7 +164,7 @@ export default function Home() {
               <div className="flex items-center justify-center bg-muted p-1 rounded-full text-sm">
                   <Button variant="ghost" size="sm" className="flex-1 rounded-full bg-background shadow text-xs h-8">Patient</Button>
                   <Button asChild variant="ghost" size="sm" className="flex-1 rounded-full text-muted-foreground text-xs h-8">
-                      <Link href="/doctor">Provider</Link>
+                      <Link href="/login">Provider</Link>
                   </Button>
               </div>
             </CardContent>
