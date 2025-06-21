@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut, User as FirebaseUser } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -18,8 +19,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
@@ -28,6 +34,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
+    if (!auth || !googleProvider) {
+      toast({
+        title: 'Authentication Disabled',
+        description: 'Firebase is not configured. Please add credentials to your .env file.',
+        variant: 'destructive',
+      });
+      return;
+    }
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
@@ -36,13 +50,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       router.push('/chat');
     } catch (error) {
       console.error("Error signing in with Google", error);
-      // You could show a toast notification here.
+      toast({
+        title: 'Sign-in Error',
+        description: 'Could not sign in with Google. Please check the console and try again.',
+        variant: 'destructive',
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const logout = async () => {
+    if (!auth) {
+      console.error("Firebase not configured. Cannot log out.");
+      return;
+    }
     await signOut(auth);
     router.push('/login');
   };
