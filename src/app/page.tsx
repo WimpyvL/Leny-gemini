@@ -176,7 +176,7 @@ export default function Home() {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    {messages.length > 0 && (
+                    {messages.length > 0 ? (
                       <ScrollArea className="h-48 w-full pr-4 my-2">
                         <div className="flex flex-col gap-3">
                           {messages.map((msg, index) => (
@@ -205,38 +205,40 @@ export default function Home() {
                         </div>
                         <div ref={scrollRef} />
                       </ScrollArea>
+                    ) : (
+                      <>
+                        <Separator className="my-2" />
+                        
+                        <div className="space-y-2">
+                            <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                {helpTopics.map((topic) => (
+                                    <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
+                                        <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
+                                            <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-xs truncate">{topic.text}</span>
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2 pt-3">
+                            <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
+                            <div className="space-y-1.5">
+                                {popularQuestions.map((q, i) => (
+                                    <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
+                                        <span className="group-hover:underline">{q}</span>
+                                        <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="text-right">
+                                <Button variant="link" size="sm" className="text-xs text-muted-foreground" onClick={handleShuffle}>more</Button>
+                            </div>
+                        </div>
+                      </>
                     )}
-
-                    <Separator className="my-2" />
-                    
-                    <div className="space-y-2">
-                        <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            {helpTopics.map((topic) => (
-                                <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
-                                    <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
-                                        <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
-                                    </Avatar>
-                                    <span className="text-xs truncate">{topic.text}</span>
-                                </Button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="space-y-2 pt-3">
-                        <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
-                        <div className="space-y-1.5">
-                            {popularQuestions.map((q, i) => (
-                                <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
-                                    <span className="group-hover:underline">{q}</span>
-                                    <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="text-right">
-                            <Button variant="link" size="sm" className="text-xs text-muted-foreground" onClick={handleShuffle}>more</Button>
-                        </div>
-                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
