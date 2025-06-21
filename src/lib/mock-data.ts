@@ -25,7 +25,7 @@ export const mockConversations: Conversation[] = [
     avatar: '',
     icon: Users,
     avatarColor: 'bg-purple-500',
-    timestamp: new Date(new Date().getTime() - 2 * 60000), // 2 minutes ago
+    timestamp: new Date('2024-07-29T14:38:00Z'),
     unread: 1,
     messages: [
       { 
@@ -76,7 +76,7 @@ export const mockConversations: Conversation[] = [
     avatar: '',
     icon: Bot,
     avatarColor: 'bg-amber-500',
-    timestamp: new Date(new Date().getTime() - 5 * 60000), // 5 minutes ago
+    timestamp: new Date('2024-07-29T14:35:00Z'),
     messages: [
       { id: 'msg5', text: 'Ready to help with health questions...', senderId: 'assistant', timestamp: new Date('2024-07-29T14:25:00Z'), type: 'user' },
     ],
@@ -89,7 +89,7 @@ export const mockConversations: Conversation[] = [
     avatar: '',
     icon: Stethoscope,
     avatarColor: 'bg-sky-500',
-    timestamp: new Date(new Date().getTime() - 2 * 60 * 60000), // 2 hours ago
+    timestamp: new Date('2024-07-29T12:40:00Z'),
     messages: [
       { id: 'msg6', text: 'Lab results discussion...', senderId: 'dr_chen', timestamp: new Date('2024-07-29T12:30:00Z'), type: 'user' },
     ],
