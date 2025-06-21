@@ -1,3 +1,4 @@
+'use client';
 import { ChatLayout } from "./components/ChatLayout";
 import { mockConversations, mockUsers } from "@/lib/mock-data";
 
