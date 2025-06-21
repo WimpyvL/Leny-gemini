@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from "next/link";
@@ -50,13 +51,13 @@ export default function Home() {
         </nav>
       </header>
 
-      <main className="relative z-10 flex-1 flex items-center p-4 sm:p-6 md:p-8">
-        <div className="w-full max-w-xl mx-auto space-y-6">
+      <main className="relative z-10 flex-1 flex flex-col items-start justify-center p-4 sm:p-6 md:p-8">
+        <div className="w-full max-w-2xl space-y-6">
           <div className="space-y-2 text-left">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground/90">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground/90">
               Because every question matters to someone
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-md text-muted-foreground">
               Include those you trust in the conversation
             </p>
           </div>
