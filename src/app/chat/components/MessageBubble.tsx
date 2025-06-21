@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AssistantSummary } from './AssistantSummary';
+import { useEffect, useState } from 'react';
 
 interface MessageBubbleProps {
   message: Message;
@@ -12,6 +13,14 @@ interface MessageBubbleProps {
 }
 
 export function MessageBubble({ message, isOwnMessage, sender, currentUser }: MessageBubbleProps) {
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+  useEffect(() => {
+    if (message.timestamp) {
+      setFormattedTimestamp(format(message.timestamp, 'p'));
+    }
+  }, [message.timestamp]);
+  
   if (message.type === 'assessment' && message.assessment) {
     return <AssistantSummary assessment={message.assessment} sender={sender} timestamp={message.timestamp} />;
   }
@@ -40,7 +49,7 @@ export function MessageBubble({ message, isOwnMessage, sender, currentUser }: Me
             <p className="text-base whitespace-pre-wrap">{message.text}</p>
         </div>
         <p className="text-xs text-muted-foreground">
-            {format(message.timestamp, 'p')}
+            {formattedTimestamp}
         </p>
       </div>
       {isOwnMessage && userForAvatar && (

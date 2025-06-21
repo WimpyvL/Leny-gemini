@@ -1,9 +1,11 @@
+'use client';
 import type { Assessment, User } from '@/lib/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { useState, useEffect } from 'react';
 
 interface AssistantSummaryProps {
   assessment: Assessment;
@@ -12,6 +14,14 @@ interface AssistantSummaryProps {
 }
 
 export function AssistantSummary({ assessment, sender, timestamp }: AssistantSummaryProps) {
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+  useEffect(() => {
+    if (timestamp) {
+      setFormattedTimestamp(format(timestamp, 'p'));
+    }
+  }, [timestamp]);
+
   return (
     <div className="flex items-start gap-3">
         {sender && (
@@ -24,7 +34,7 @@ export function AssistantSummary({ assessment, sender, timestamp }: AssistantSum
         <div className="w-full">
             <p className="text-xs text-muted-foreground font-semibold flex justify-between w-full">
                 <span>{sender?.name}</span>
-                <span>{format(timestamp, 'p')}</span>
+                <span>{formattedTimestamp}</span>
             </p>
             <Card className="bg-secondary mt-1 border-secondary-foreground/20">
             <CardContent className="p-4 space-y-3">

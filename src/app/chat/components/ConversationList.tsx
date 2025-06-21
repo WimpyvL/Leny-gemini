@@ -6,6 +6,57 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useState, useEffect } from 'react';
+
+function ConversationItem({
+  conv,
+  onSelectConversation,
+  selected,
+}: {
+  conv: Conversation;
+  onSelectConversation: (id: string) => void;
+  selected: boolean;
+}) {
+  const [relativeTime, setRelativeTime] = useState('');
+
+  useEffect(() => {
+    const updateRelativeTime = () => {
+      if (conv.timestamp) {
+        setRelativeTime(formatDistanceToNow(conv.timestamp, { addSuffix: false }));
+      }
+    };
+
+    updateRelativeTime();
+    const interval = setInterval(updateRelativeTime, 60000);
+
+    return () => clearInterval(interval);
+  }, [conv.timestamp]);
+
+  return (
+    <div
+      onClick={() => onSelectConversation(conv.id)}
+      className={cn(
+        "flex items-start p-3 cursor-pointer rounded-lg hover:bg-muted transition-colors gap-3",
+        selected && "bg-secondary"
+      )}
+    >
+      <Avatar className={cn("h-12 w-12 rounded-lg flex-shrink-0", conv.avatarColor)}>
+        <AvatarFallback className={cn("rounded-lg text-white", conv.avatarColor)}>
+          {conv.icon && <conv.icon className="h-6 w-6" />}
+        </AvatarFallback>
+      </Avatar>
+      <div className="w-full overflow-hidden">
+        <div className="flex items-baseline justify-between">
+          <p className="font-semibold text-foreground truncate">{conv.title}</p>
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            {relativeTime}
+          </p>
+        </div>
+        <p className="text-sm text-muted-foreground truncate">{conv.participantString}</p>
+      </div>
+    </div>
+  );
+}
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -33,34 +84,14 @@ export function ConversationList({ conversations, selectedConversationId, onSele
       </header>
       <ScrollArea className="flex-1">
         <nav className="p-2 space-y-1">
-          {conversations.map(conv => {
-            const lastMessage = conv.messages[conv.messages.length - 1];
-            return (
-              <div
-                key={conv.id}
-                onClick={() => onSelectConversation(conv.id)}
-                className={cn(
-                  "flex items-start p-3 cursor-pointer rounded-lg hover:bg-muted transition-colors gap-3",
-                  selectedConversationId === conv.id && "bg-secondary"
-                )}
-              >
-                <Avatar className={cn("h-12 w-12 rounded-lg flex-shrink-0", conv.avatarColor)}>
-                    <AvatarFallback className={cn("rounded-lg text-white", conv.avatarColor)}>
-                        {conv.icon && <conv.icon className="h-6 w-6" />}
-                    </AvatarFallback>
-                </Avatar>
-                <div className="w-full overflow-hidden">
-                    <div className="flex items-baseline justify-between">
-                        <p className="font-semibold text-foreground truncate">{conv.title}</p>
-                        <p className="text-xs text-muted-foreground whitespace-nowrap">
-                            {formatDistanceToNow(conv.timestamp, { addSuffix: false })}
-                        </p>
-                    </div>
-                  <p className="text-sm text-muted-foreground truncate">{conv.participantString}</p>
-                </div>
-              </div>
-            );
-          })}
+          {conversations.map(conv => (
+            <ConversationItem
+              key={conv.id}
+              conv={conv}
+              onSelectConversation={onSelectConversation}
+              selected={selectedConversationId === conv.id}
+            />
+          ))}
         </nav>
       </ScrollArea>
     </aside>
