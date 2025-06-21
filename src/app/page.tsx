@@ -7,7 +7,7 @@ import { ArrowRight, Mic, Paperclip, Pause } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 
@@ -45,14 +45,26 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 export default function Home() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const chatCardRef = useRef<HTMLDivElement>(null);
   
   // State for dynamic content
   const [popularQuestions, setPopularQuestions] = useState(allPopularQuestions.slice(0, 3));
   const [helpTopics, setHelpTopics] = useState(allHelpTopics.slice(0, 3));
 
-  // Shuffle content on client-side mount to avoid hydration errors
+  // Shuffle content on client-side mount and handle clicks outside
   useEffect(() => {
     handleShuffle();
+
+    function handleClickOutside(event: MouseEvent) {
+      if (chatCardRef.current && !chatCardRef.current.contains(event.target as Node)) {
+        setIsExpanded(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleShuffle = () => {
@@ -83,8 +95,8 @@ export default function Home() {
         </nav>
       </header>
 
-      <main className="relative z-10 flex-1 flex flex-col items-start justify-center p-4 sm:p-6 md:p-8">
-        <div className="w-full max-w-lg space-y-4">
+      <main className="relative z-10 flex-1 flex flex-col items-start justify-start p-4 sm:p-6 md:p-8">
+        <div className="w-full max-w-md space-y-4">
           <div className="space-y-1 text-left">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground/90">
               Because every question matters to someone
@@ -94,7 +106,7 @@ export default function Home() {
             </p>
           </div>
           
-          <Card className="w-full shadow-2xl rounded-2xl transition-all duration-300 ease-in-out">
+          <Card ref={chatCardRef} className="w-full shadow-2xl rounded-2xl transition-all duration-300 ease-in-out">
             <CardContent className="p-4 space-y-3">
               <div className="relative" onFocus={() => setIsExpanded(true)}>
                 <Paperclip className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
