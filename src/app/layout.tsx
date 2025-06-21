@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Leny Chat',
-  description: 'A chat application for patients and doctors.',
+  title: 'Leny',
+  description: 'Because every question matters to someone.',
 };
 
 export default function RootLayout({

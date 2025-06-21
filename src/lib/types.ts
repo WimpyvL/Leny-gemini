@@ -36,4 +36,6 @@ export type Conversation = {
   avatar: string;
   avatarColor: string;
   icon?: LucideIcon;
+  patientId?: string;
+  doctorId?: string;
 };

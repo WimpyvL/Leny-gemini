@@ -1,67 +1,121 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Bot, MessageSquare, Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Mic, Paperclip, Pause } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+
+const popularQuestions = [
+  "What should I do about my child's fever?",
+  "Is this chest pain serious?",
+  "Safe foods during pregnancy?",
+];
+
+const helpTopics = [
+  { initials: 'RA', text: 'Draft nutrition plan with Raya', color: 'bg-green-500' },
+  { initials: 'AL', text: 'Create workout routine with Alex', color: 'bg-blue-500' },
+  { initials: 'MY', text: 'Mental health check with...', color: 'bg-purple-500' },
+]
+
+const specialties = [
+    { name: 'Pediatrics', color: 'text-green-500' },
+    { name: 'Cardiology', color: 'text-red-500' },
+    { name: 'Nutrition', color: 'text-orange-500' },
+]
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center bg-background p-4">
-      <div className="flex flex-col items-center text-center space-y-6">
-        <div className="flex items-center gap-3 text-primary">
-          <MessageSquare className="h-10 w-10" />
-          <h1 className="text-5xl font-bold tracking-tighter">Family Health Chat</h1>
-        </div>
-        <p className="max-w-2xl text-lg text-muted-foreground">
-          A new way for families to manage their health together. Coordinate with family members, consult with health assistants, and connect with doctors, all in one place.
-        </p>
-        <div className="flex gap-4">
-          <Button asChild size="lg" className="w-full text-lg py-7 px-8 transition-transform hover:scale-105">
-            <Link href="/chat">
-              Get Started
-              <ArrowRight />
-            </Link>
-          </Button>
-        </div>
-
-        <Card className="w-full max-w-4xl mt-12 shadow-xl bg-card/70 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Features at a Glance</CardTitle>
-          </CardHeader>
-          <CardContent className="grid md:grid-cols-3 gap-6 text-left">
-            <div className="flex flex-col gap-2">
-              <Users className="h-8 w-8 text-primary" />
-              <h3 className="font-semibold">Group Chats</h3>
-              <p className="text-muted-foreground">Keep everyone in the loop with dedicated family health chats.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Bot className="h-8 w-8 text-primary" />
-              <h3 className="font-semibold">AI Health Assistant</h3>
-              <p className="text-muted-foreground">Get instant summaries and answers to your health questions.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <ArrowRight className="h-8 w-8 text-primary" />
-              <h3 className="font-semibold">Doctor Access</h3>
-              <p className="text-muted-foreground">Easily share information and chat with your healthcare providers.</p>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <div className="relative w-full max-w-5xl mt-8">
-            <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-            <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-            <Image 
-                src="https://placehold.co/1200x600.png"
-                alt="App Screenshot"
-                width={1200}
-                height={600}
-                className="rounded-lg shadow-2xl border-4 border-white/80 z-10 relative"
-                data-ai-hint="app screenshot"
-            />
-        </div>
+    <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
+      <div className="absolute inset-0 bg-gray-300 dark:bg-gray-800 z-0 flex items-center justify-center">
+        <h2 className="text-2xl font-medium text-muted-foreground">Loading video...</h2>
       </div>
-    </main>
+      <Button variant="ghost" size="icon" className="absolute bottom-4 right-4 z-20 bg-black/30 text-white/70 hover:bg-black/50 hover:text-white rounded-full">
+        <Pause className="h-5 w-5" />
+      </Button>
+      
+      <header className="relative z-10 p-4 sm:p-6">
+        <nav className="flex items-center justify-between">
+          <Logo />
+          <Button asChild size="lg" className="rounded-full px-6 text-base">
+            <Link href="#">Sign up</Link>
+          </Button>
+        </nav>
+      </header>
+
+      <main className="relative z-10 flex-1 flex items-center p-4 sm:p-6 md:p-8">
+        <div className="grid md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+          <div className="space-y-4 text-left">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter leading-tight text-foreground/90">
+              Because every question matters to someone
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground">
+              Include those you trust in the conversation
+            </p>
+          </div>
+
+          <div className="flex justify-center md:justify-start md:ml-auto">
+            <Card className="w-full max-w-md shadow-2xl rounded-2xl">
+              <CardContent className="p-4 space-y-4">
+                <div className="relative">
+                  <Paperclip className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Mic className="absolute left-10 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <span className="absolute left-18 top-1/2 -translate-y-1/2 h-5 w-2/5 border-l-2 border-primary animate-pulse" />
+                  <Link href="/chat">
+                    <Button size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full h-9 w-9">
+                      <ArrowRight />
+                    </Button>
+                  </Link>
+                </div>
+                
+                <Separator className="my-2" />
+                
+                <div className="space-y-3">
+                    <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
+                    <div className="flex items-center justify-around gap-2">
+                        {helpTopics.map((topic) => (
+                            <Button key={topic.text} variant="outline" className="flex-1 justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent">
+                                <Avatar className="h-6 w-6 mr-2">
+                                    <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
+                                </Avatar>
+                                <span className="text-sm truncate">{topic.text}</span>
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                    <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
+                    <div className="space-y-2">
+                        {popularQuestions.map((q, i) => (
+                            <div key={i} className="flex justify-between items-center text-sm hover:text-primary cursor-pointer">
+                                <span>{q}</span>
+                                <div className="flex items-center gap-2">
+                                    {specialties.map(s => (
+                                        <div key={s.name} className="flex items-center gap-1">
+                                            <span className={`h-2 w-2 rounded-full ${s.color.replace('text-', 'bg-')}`}></span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="text-right">
+                        <Button variant="link" size="sm" className="text-muted-foreground">more</Button>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center bg-muted p-1 rounded-full">
+                    <Button variant="ghost" size="sm" className="flex-1 rounded-full bg-background shadow">Patient</Button>
+                    <Button asChild variant="ghost" size="sm" className="flex-1 rounded-full text-muted-foreground">
+                        <Link href="/doctor">Provider</Link>
+                    </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
-
