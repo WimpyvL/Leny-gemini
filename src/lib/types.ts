@@ -1,26 +1,39 @@
+import type { LucideIcon } from "lucide-react";
+
 export type User = {
   id: string;
   name: string;
   avatar: string;
-  role: 'patient' | 'doctor';
+  avatarColor: string;
+  icon?: LucideIcon;
+  role: 'patient' | 'doctor' | 'family' | 'assistant';
 };
+
+export type Assessment = {
+  title: string;
+  summary: string[];
+  recommendations: string;
+  suggestions: string[];
+}
 
 export type Message = {
   id: string;
-  text: string;
+  text?: string;
   senderId: string;
   timestamp: Date;
-  attachment?: {
-    name: string;
-    url: string;
-    type: 'image' | 'pdf' | 'doc';
-  };
+  type: 'user' | 'assessment';
+  assessment?: Assessment;
 };
 
 export type Conversation = {
   id: string;
+  title: string;
   participants: User[];
+  participantString: string;
   messages: Message[];
-  patientId: string;
-  doctorId: string;
+  timestamp: Date;
+  unread?: number;
+  avatar: string;
+  avatarColor: string;
+  icon?: LucideIcon;
 };
