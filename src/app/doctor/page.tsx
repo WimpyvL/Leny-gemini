@@ -1,3 +1,4 @@
+'use client';
 import { DashboardUI } from "./components/DashboardUI";
 import { mockConversations, mockUsers } from "@/lib/mock-data";
 
