@@ -1,15 +1,17 @@
-import React from 'react';
+'use client';
+import React, { useEffect } from 'react';
 
 export default function DoctorLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    return () => {
+      document.documentElement.classList.remove('dark');
+    };
+  }, []);
+  
+  return <>{children}</>;
 }
