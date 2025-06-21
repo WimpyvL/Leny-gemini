@@ -1,3 +1,4 @@
+'use client';
 import { ChatUI } from "./components/ChatUI";
 import { mockConversations, mockUsers } from "@/lib/mock-data";
 
