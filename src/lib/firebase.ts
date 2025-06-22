@@ -14,14 +14,11 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
-// Check if all Firebase config keys are provided and are not placeholders
+// Check if core Firebase config keys are provided and are not placeholders
 const isFirebaseConfigValid = 
   firebaseConfig.apiKey && firebaseConfig.apiKey !== 'your_api_key' &&
   firebaseConfig.authDomain &&
-  firebaseConfig.projectId &&
-  firebaseConfig.storageBucket &&
-  firebaseConfig.messagingSenderId &&
-  firebaseConfig.appId;
+  firebaseConfig.projectId;
 
 if (isFirebaseConfigValid) {
   try {
