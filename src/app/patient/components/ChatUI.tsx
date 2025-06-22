@@ -5,6 +5,7 @@ import type { Conversation, User, Message } from '@/lib/types';
 import { ConversationList } from './ConversationList';
 import { ChatWindow } from './ChatWindow';
 import { mockUsers } from '@/lib/mock-data';
+import { PatientNavRail } from './PatientNavRail';
 
 interface ChatUIProps {
   user: User;
@@ -23,6 +24,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
       text,
       senderId: user.id,
       timestamp: new Date(),
+      type: 'user',
     };
 
     const updatedConversations = conversations.map(c => {
@@ -38,6 +40,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
 
   return (
     <div className="flex h-screen w-full bg-background">
+      <PatientNavRail currentUser={user} />
       <div className="w-full md:w-1/3 lg:w-1/4 border-r border-border overflow-y-auto">
         <ConversationList
           conversations={conversations}

@@ -24,6 +24,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       text,
       senderId: user.id,
       timestamp: new Date(),
+      type: 'user',
     };
 
     const updatedConversations = conversations.map(c => {
