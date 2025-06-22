@@ -13,7 +13,7 @@ interface PatientNavRailProps {
 
 export function PatientNavRail({ currentUser }: PatientNavRailProps) {
     return (
-        <div className="flex h-screen w-20 flex-col items-center border-r bg-sidebar text-sidebar-foreground p-2 gap-4">
+        <div className="flex h-screen w-16 flex-col items-center border-r bg-sidebar text-sidebar-foreground p-2 gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                 <span className="text-xl font-bold text-primary-foreground">L</span>
             </div>
