@@ -243,11 +243,11 @@ export default function Home() {
                 )}
               </AnimatePresence>
 
-              <div className="flex items-center justify-center bg-muted p-1 rounded-full text-sm">
-                  <Button asChild variant="ghost" size="sm" className="flex-1 rounded-full bg-background shadow text-xs h-8">
+              <div className="flex items-center justify-center bg-muted p-1 rounded-xl">
+                  <Button asChild variant="ghost" size="lg" className="flex-1 bg-background shadow">
                       <Link href="/signup">Patient</Link>
                   </Button>
-                  <Button asChild variant="ghost" size="sm" className="flex-1 rounded-full text-muted-foreground text-xs h-8">
+                  <Button asChild variant="ghost" size="lg" className="flex-1 text-muted-foreground">
                       <Link href="/login">Provider</Link>
                   </Button>
               </div>
