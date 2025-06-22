@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCSgoNqeFqtGy6nl-SZQcxrQySi6KCc9I8",
   authDomain: "leny-chat.firebaseapp.com",
   projectId: "leny-chat",
-  storageBucket: "leny-chat.appspot.com",
+  storageBucket: "leny-chat.firebasestorage.app",
   messagingSenderId: "896396117656",
   appId: "1:896396117656:web:4f7e270b442d2c7a5cf2ed",
   measurementId: "G-NNGH52TJD8"
