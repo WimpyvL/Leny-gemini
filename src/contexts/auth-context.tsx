@@ -48,11 +48,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleAuthError = (error: any) => {
     let description = 'An unknown error occurred.';
     if (error.code) {
-      // For expected, common errors like an email already being in use,
-      // we can log a less severe warning to the console.
-      if (error.code === 'auth/email-already-in-use') {
-        console.warn(`Authentication Warning: ${error.code}`);
-      } else {
+      // Don't log 'email-already-in-use' as an error in the console,
+      // as it's an expected validation step in the signup flow.
+      if (error.code !== 'auth/email-already-in-use') {
         console.error("Authentication Error", error);
       }
 
@@ -74,6 +72,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         default:
           description = error.message;
       }
+    } else {
+      console.error("Authentication Error", error);
     }
     toast({
       title: 'Authentication Error',
