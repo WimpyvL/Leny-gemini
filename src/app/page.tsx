@@ -127,9 +127,6 @@ export default function Home() {
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
           <Logo />
-          <Button asChild size="lg" className="rounded-full px-6 text-sm">
-            <Link href="/signup">Sign up</Link>
-          </Button>
         </nav>
       </header>
 
@@ -241,16 +238,6 @@ export default function Home() {
                 ) : null}
               </AnimatePresence>
 
-              {messages.length === 0 && (
-                <div className="flex items-center justify-center p-0.5 rounded-md">
-                    <Button asChild variant="ghost" size="sm" className="flex-1 h-auto py-1 px-2 text-xs rounded-md">
-                        <Link href="/signup">Patient</Link>
-                    </Button>
-                    <Button asChild variant="ghost" size="sm" className="flex-1 text-muted-foreground h-auto py-1 px-2 text-xs rounded-md">
-                        <Link href="/login">Provider</Link>
-                    </Button>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>
