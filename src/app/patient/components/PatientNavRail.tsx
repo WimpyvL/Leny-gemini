@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageSquare, User, LayoutDashboard } from 'lucide-react';
+import { MessageSquare, Sparkles } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -33,23 +33,12 @@ export function PatientNavRail({ currentUser }: PatientNavRailProps) {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-12 w-12 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg">
-                                <LayoutDashboard className="h-6 w-6" />
-                                <span className="sr-only">Dashboard</span>
+                                <Sparkles className="h-6 w-6" />
+                                <span className="sr-only">For you</span>
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side="right">
-                            <p>Dashboard</p>
-                        </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-12 w-12 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg">
-                                <User className="h-6 w-6" />
-                                <span className="sr-only">Profile</span>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                            <p>Profile</p>
+                            <p>For you</p>
                         </TooltipContent>
                     </Tooltip>
                 </nav>
@@ -61,7 +50,7 @@ export function PatientNavRail({ currentUser }: PatientNavRailProps) {
                            </Avatar>
                         </TooltipTrigger>
                         <TooltipContent side="right">
-                            <p>{currentUser.name}</p>
+                            <p>Profile</p>
                         </TooltipContent>
                     </Tooltip>
                 </div>
