@@ -22,7 +22,7 @@ try {
   googleProvider = new GoogleAuthProvider();
 } catch (e) {
   console.error("Failed to initialize Firebase", e);
-  // @ts-ignore
+  // @ts-ignore - In case of failure, we assign null to prevent app crash
   app = null;
   // @ts-ignore
   auth = null;
