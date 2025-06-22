@@ -87,12 +87,13 @@ export default function Home() {
 
     if (!isExpanded) setIsExpanded(true);
     
+    const isFirstMessage = messages.length === 0;
     setMessages((prev) => [...prev, { sender: 'user', text }]);
     setIsLoading(true);
     setInputValue(''); 
     
     try {
-      const aiResponse = await runLandingChat(text);
+      const aiResponse = await runLandingChat(text, isFirstMessage);
       setMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
     } catch (error) {
       setMessages((prev) => [...prev, { sender: 'ai', text: "Apologies, I'm having a little trouble right now. Please try again." }]);
@@ -243,7 +244,7 @@ export default function Home() {
                 ) : null}
               </AnimatePresence>
 
-              <div className="flex items-center justify-center bg-muted p-0.5 rounded-lg">
+              <div className="flex items-center justify-center p-0.5 rounded-md">
                   <Button asChild variant="ghost" size="sm" className="flex-1 h-auto py-1 px-2 text-xs rounded-md">
                       <Link href="/signup">Patient</Link>
                   </Button>

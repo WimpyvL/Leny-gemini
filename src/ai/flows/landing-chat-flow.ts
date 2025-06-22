@@ -12,6 +12,7 @@ import {z} from 'genkit';
 
 const LandingChatInputSchema = z.object({
   message: z.string().describe('The user message from the landing page chat.'),
+  isFirstMessage: z.boolean().describe('Whether this is the first message in the conversation.'),
 });
 export type LandingChatInput = z.infer<typeof LandingChatInputSchema>;
 
@@ -47,6 +48,10 @@ Here are your core principles:
     *   Always conclude your health-related guidance with a gentle nudge towards professional help, such as: "If it were me, I’d still talk to a doctor just to be safe."
 
 4.  **Ultimate Goal**: While providing support, your primary goal is to encourage the user to sign up or log in to connect with a real healthcare provider for personalized advice.
+
+{{#if isFirstMessage}}
+IMPORTANT: This is the very first message from the user. Your response must be concise and inviting. It MUST NOT be longer than this example: "Okay, I hear what you’re saying. It’s definitely a good idea to be informed about the signs of a heart attack. Here’s what’s usually considered helpful in situations like this: Common signs can include chest pain or discomfort, which might feel like". Subsequent responses can be longer.
+{{/if}}
 
 User's message: {{{message}}}
   `,
