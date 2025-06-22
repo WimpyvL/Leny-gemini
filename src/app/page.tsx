@@ -168,7 +168,7 @@ export default function Home() {
               </div>
               
               <AnimatePresence>
-                {isExpanded && (
+                {isExpanded ? (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
@@ -240,14 +240,14 @@ export default function Home() {
                       </>
                     )}
                   </motion.div>
-                )}
+                ) : null}
               </AnimatePresence>
 
-              <div className="flex items-center justify-center bg-muted p-1 rounded-xl">
-                  <Button asChild variant="ghost" size="lg" className="flex-1 bg-background shadow">
+              <div className="flex items-center justify-center bg-muted p-0.5 rounded-lg">
+                  <Button asChild variant="ghost" size="sm" className="flex-1 bg-background shadow h-auto py-1 px-2 text-xs rounded-md">
                       <Link href="/signup">Patient</Link>
                   </Button>
-                  <Button asChild variant="ghost" size="lg" className="flex-1 text-muted-foreground">
+                  <Button asChild variant="ghost" size="sm" className="flex-1 text-muted-foreground h-auto py-1 px-2 text-xs rounded-md">
                       <Link href="/login">Provider</Link>
                   </Button>
               </div>
