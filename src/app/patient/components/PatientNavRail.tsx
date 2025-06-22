@@ -45,24 +45,26 @@ export function PatientNavRail({ currentUser }: PatientNavRailProps) {
 
                 <nav className={cn("flex flex-1 flex-col gap-2", isExpanded ? "items-stretch w-full" : "items-center")}>
                     {navItems.map((item) => (
-                        <Tooltip {...commonTooltipProps} key={item.label}>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className={cn(
-                                        "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                                        isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
-                                        item.active && "bg-sidebar-accent text-sidebar-accent-foreground"
-                                    )}
-                                >
-                                    <item.icon className="h-6 w-6" />
-                                    <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>{item.label}</span>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>{item.label}</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        <div key={item.label}>
+                            <Tooltip {...commonTooltipProps}>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className={cn(
+                                            "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                            isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
+                                            item.active && "bg-sidebar-accent text-sidebar-accent-foreground"
+                                        )}
+                                    >
+                                        <item.icon className="h-6 w-6" />
+                                        <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>{item.label}</span>
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>{item.label}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
                     ))}
                 </nav>
 
