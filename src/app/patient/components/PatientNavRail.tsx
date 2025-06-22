@@ -1,6 +1,7 @@
 'use client';
 
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -12,49 +13,81 @@ interface PatientNavRailProps {
 }
 
 export function PatientNavRail({ currentUser }: PatientNavRailProps) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const navItems = [
+        { icon: MessageSquare, label: 'Chats', active: true },
+        { icon: Sparkles, label: 'For you', active: false },
+    ];
+
+    const commonTooltipProps = isExpanded ? { open: false } : {};
+
     return (
-        <div className="flex h-screen w-16 flex-col items-center border-r bg-sidebar text-sidebar-foreground p-2 gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
-                <span className="text-xl font-bold text-primary-foreground">L</span>
-            </div>
-            <TooltipProvider delayDuration={0}>
-                <nav className="flex flex-1 flex-col items-center gap-4 pt-4">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-12 w-12 bg-sidebar-accent text-sidebar-accent-foreground rounded-lg">
-                                <MessageSquare className="h-6 w-6" />
-                                <span className="sr-only">Chats</span>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                            <p>Chats</p>
-                        </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-12 w-12 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg">
-                                <Sparkles className="h-6 w-6" />
-                                <span className="sr-only">For you</span>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                            <p>For you</p>
-                        </TooltipContent>
-                    </Tooltip>
+        <TooltipProvider delayDuration={0}>
+            <div
+                className={cn(
+                    "absolute top-0 left-0 h-screen z-20 flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out",
+                    isExpanded ? "w-56 p-4 items-start" : "w-16 p-2 items-center"
+                )}
+            >
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                        "h-12 w-12 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg mb-4",
+                        isExpanded && "self-end"
+                    )}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
+                    {isExpanded ? <ChevronsLeft className="h-6 w-6" /> : <ChevronsRight className="h-6 w-6" />}
+                    <span className="sr-only">Toggle Sidebar</span>
+                </Button>
+
+                <nav className={cn("flex flex-1 flex-col gap-2", isExpanded ? "items-stretch w-full" : "items-center")}>
+                    {navItems.map((item) => (
+                        <Tooltip {...commonTooltipProps} key={item.label}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className={cn(
+                                        "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                        isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
+                                        item.active && "bg-sidebar-accent text-sidebar-accent-foreground"
+                                    )}
+                                >
+                                    <item.icon className="h-6 w-6" />
+                                    <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>{item.label}</span>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                <p>{item.label}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    ))}
                 </nav>
-                <div className="mt-auto">
-                     <Tooltip>
+
+                <div className={cn("mt-auto", isExpanded && "w-full")}>
+                     <Tooltip {...commonTooltipProps}>
                         <TooltipTrigger asChild>
-                           <Avatar className="h-12 w-12 cursor-pointer">
-                                <AvatarFallback className={cn("text-white", currentUser.avatarColor)}>{currentUser.avatar}</AvatarFallback>
-                           </Avatar>
+                           <Button
+                                variant="ghost"
+                                className={cn(
+                                    "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                    isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center"
+                                )}
+                           >
+                               <Avatar className="h-9 w-9">
+                                    <AvatarFallback className={cn("text-white", currentUser.avatarColor)}>{currentUser.avatar}</AvatarFallback>
+                               </Avatar>
+                               <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>Profile</span>
+                           </Button>
                         </TooltipTrigger>
                         <TooltipContent side="right">
                             <p>Profile</p>
                         </TooltipContent>
                     </Tooltip>
                 </div>
-            </TooltipProvider>
-        </div>
+            </div>
+        </TooltipProvider>
     );
 }
