@@ -234,7 +234,7 @@ export default function Home() {
                                 ))}
                             </div>
                             <div className="text-right">
-                                <Button variant="link" size="sm" className="text-xs text-muted-foreground" onClick={handleShuffle}>more</Button>
+                                <Button variant="link" size="sm" className={cn("text-xs text-muted-foreground transition-all", isExpanded && "animate-pulse font-semibold text-primary")} onClick={handleShuffle}>more</Button>
                             </div>
                         </div>
                       </>
@@ -244,7 +244,7 @@ export default function Home() {
               </AnimatePresence>
 
               <div className="flex items-center justify-center bg-muted p-0.5 rounded-lg">
-                  <Button asChild variant="ghost" size="sm" className="flex-1 bg-background shadow h-auto py-1 px-2 text-xs rounded-md">
+                  <Button asChild variant="ghost" size="sm" className="flex-1 h-auto py-1 px-2 text-xs rounded-md">
                       <Link href="/signup">Patient</Link>
                   </Button>
                   <Button asChild variant="ghost" size="sm" className="flex-1 text-muted-foreground h-auto py-1 px-2 text-xs rounded-md">
