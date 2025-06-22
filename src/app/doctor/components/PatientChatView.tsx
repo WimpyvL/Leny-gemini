@@ -103,7 +103,7 @@ export function PatientChatView({ conversation, currentUser, onSendMessage, allU
 
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-screen bg-secondary">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-4">
           <Avatar>
