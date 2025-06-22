@@ -244,14 +244,16 @@ export default function Home() {
                 ) : null}
               </AnimatePresence>
 
-              <div className="flex items-center justify-center p-0.5 rounded-md">
-                  <Button asChild variant="ghost" size="sm" className="flex-1 h-auto py-1 px-2 text-xs rounded-md">
-                      <Link href="/signup">Patient</Link>
-                  </Button>
-                  <Button asChild variant="ghost" size="sm" className="flex-1 text-muted-foreground h-auto py-1 px-2 text-xs rounded-md">
-                      <Link href="/login">Provider</Link>
-                  </Button>
-              </div>
+              {messages.length === 0 && (
+                <div className="flex items-center justify-center p-0.5 rounded-md">
+                    <Button asChild variant="ghost" size="sm" className="flex-1 h-auto py-1 px-2 text-xs rounded-md">
+                        <Link href="/signup">Patient</Link>
+                    </Button>
+                    <Button asChild variant="ghost" size="sm" className="flex-1 text-muted-foreground h-auto py-1 px-2 text-xs rounded-md">
+                        <Link href="/login">Provider</Link>
+                    </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
