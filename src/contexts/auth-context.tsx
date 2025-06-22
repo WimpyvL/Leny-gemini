@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut, User as FirebaseUser } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, signOut, User as FirebaseUser, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
@@ -12,6 +12,8 @@ interface AuthContextType {
   user: FirebaseUser | null;
   loading: boolean;
   signInWithGoogle: (role: Role) => Promise<void>;
+  signUpWithEmail: (email: string, password: string, role: Role) => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -35,11 +37,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
+  const handleAuthSuccess = (role: Role) => {
+    if (role === 'provider') {
+      router.push('/doctor');
+    } else {
+      router.push('/chat');
+    }
+  };
+
+  const handleAuthError = (error: any) => {
+    console.error("Authentication Error", error);
+    let description = 'An unknown error occurred.';
+    if (error.code) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          description = 'This email is already in use. Please log in or use a different email.';
+          break;
+        case 'auth/invalid-email':
+          description = 'The email address is not valid.';
+          break;
+        case 'auth/weak-password':
+          description = 'The password is too weak. Please use a stronger password.';
+          break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          description = 'Invalid email or password. Please try again.';
+          break;
+        default:
+          description = error.message;
+      }
+    }
+    toast({
+      title: 'Authentication Error',
+      description,
+      variant: 'destructive',
+    });
+  };
+
   const signInWithGoogle = async (role: Role) => {
     if (!auth || !googleProvider) {
       toast({
         title: 'Authentication Disabled',
-        description: 'Firebase is not configured. Please add credentials to your .env file.',
+        description: 'Firebase is not configured.',
         variant: 'destructive',
       });
       return;
@@ -47,22 +87,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      if (role === 'provider') {
-        router.push('/doctor');
-      } else {
-        router.push('/chat');
-      }
+      handleAuthSuccess(role);
     } catch (error) {
-      console.error("Error signing in with Google", error);
-      toast({
-        title: 'Sign-in Error',
-        description: 'Could not sign in with Google. Please check the console and try again.',
-        variant: 'destructive',
-      });
+      handleAuthError(error);
     } finally {
       setLoading(false);
     }
   };
+
+  const signUpWithEmail = async (email: string, password: string, role: Role) => {
+    if (!auth) {
+      toast({ title: 'Authentication Disabled', description: 'Firebase is not configured.', variant: 'destructive' });
+      return;
+    }
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      handleAuthSuccess(role);
+    } catch (error) {
+      handleAuthError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signInWithEmail = async (email: string, password: string) => {
+    if (!auth) {
+      toast({ title: 'Authentication Disabled', description: 'Firebase is not configured.', variant: 'destructive' });
+      return;
+    }
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // We don't know the role here, so we default to patient dashboard.
+      // A real app would store role in a database (e.g., Firestore).
+      handleAuthSuccess('patient');
+    } catch (error) {
+      handleAuthError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const logout = async () => {
     if (!auth) {
@@ -73,7 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
-  const value = { user, loading, signInWithGoogle, logout };
+  const value = { user, loading, signInWithGoogle, signUpWithEmail, signInWithEmail, logout };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 }

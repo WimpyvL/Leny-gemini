@@ -3,11 +3,16 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Logo } from '@/components/Logo';
 import { useAuth } from '@/contexts/auth-context';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const GoogleIcon = () => (
   <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
@@ -15,9 +20,26 @@ const GoogleIcon = () => (
   </svg>
 );
 
+const signupSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email.' }),
+  password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
+});
+
 export default function SignupPage() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signUpWithEmail, loading } = useAuth();
   const [role, setRole] = useState<'patient' | 'provider'>('patient');
+
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof signupSchema>) => {
+    await signUpWithEmail(values.email, values.password, role);
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
@@ -28,9 +50,9 @@ export default function SignupPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Create an account</CardTitle>
-            <CardDescription>First, choose your role. Then, sign up with Google.</CardDescription>
+            <CardDescription>First, choose your role. Then, sign up with your email or Google.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 pt-6">
+          <CardContent className="space-y-6">
               <div className="space-y-3">
                 <Label>I am a...</Label>
                 <RadioGroup defaultValue="patient" className="grid grid-cols-2 gap-4" onValueChange={(value: 'patient' | 'provider') => setRole(value)}>
@@ -54,7 +76,53 @@ export default function SignupPage() {
                   </div>
                 </RadioGroup>
               </div>
-              <Button variant="outline" className="w-full h-12 text-base" type="button" onClick={() => signInWithGoogle(role)}>
+              
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="name@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="••••••••" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button className="w-full" type="submit" disabled={loading}>
+                    {loading ? 'Creating account...' : 'Create Account with Email'}
+                  </Button>
+                </form>
+              </Form>
+
+              <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                      Or
+                      </span>
+                  </div>
+              </div>
+              
+              <Button variant="outline" className="w-full h-12 text-base" type="button" onClick={() => signInWithGoogle(role)} disabled={loading}>
                 <GoogleIcon />
                 Sign up with Google
               </Button>
