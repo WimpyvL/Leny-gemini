@@ -127,6 +127,14 @@ export default function Home() {
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
           <Logo />
+          <div className="flex items-center gap-4">
+            <Link href="/patient">
+              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Patient View</Button>
+            </Link>
+            <Link href="/doctor">
+              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Provider View</Button>
+            </Link>
+          </div>
         </nav>
       </header>
 
