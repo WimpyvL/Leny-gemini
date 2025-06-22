@@ -6,10 +6,12 @@ import { auth, googleProvider } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
+type Role = 'patient' | 'provider';
+
 interface AuthContextType {
   user: FirebaseUser | null;
   loading: boolean;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (role: Role) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (role: Role) => {
     if (!auth || !googleProvider) {
       toast({
         title: 'Authentication Disabled',
@@ -45,9 +47,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      // For now, we will redirect all users to the patient chat view.
-      // In a real app, you would handle role selection and redirection here.
-      router.push('/chat');
+      if (role === 'provider') {
+        router.push('/doctor');
+      } else {
+        router.push('/chat');
+      }
     } catch (error) {
       console.error("Error signing in with Google", error);
       toast({
