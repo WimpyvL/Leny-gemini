@@ -122,37 +122,6 @@ export const mockConversations: Conversation[] = [
       },
     ],
   },
-  {
-    id: 'conv_alex_chen',
-    title: 'Dr. Sarah Chen',
-    participants: [patient1User, doctor1User],
-    participantString: 'Follow-up on your results.',
-    avatar: '',
-    icon: Stethoscope,
-    avatarColor: 'bg-sky-500',
-    timestamp: new Date('2024-07-29T12:40:00Z'),
-    patientId: 'patient1',
-    doctorId: 'doctor1',
-    messages: [
-      { id: 'msg_ac_1', text: 'Hi Alex, I have your lab results. Let\'s discuss them when you have a moment.', senderId: 'doctor1', timestamp: new Date('2024-07-29T12:30:00Z'), type: 'user' },
-      { id: 'msg_ac_2', text: 'Thanks Dr. Chen, I am free now.', senderId: 'patient1', timestamp: new Date('2024-07-29T12:40:00Z'), type: 'user' },
-    ],
-  },
-    {
-    id: 'conv_casey_chen',
-    title: 'Dr. Sarah Chen',
-    participants: [mockUsers.find(u => u.id === 'patient2')!, doctor1User],
-    participantString: 'I have a weird rash on my arm.',
-    avatar: '',
-    icon: Stethoscope,
-    avatarColor: 'bg-sky-500',
-    timestamp: new Date('2024-07-30T15:10:00Z'),
-    patientId: 'patient2',
-    doctorId: 'doctor1',
-    messages: [
-      { id: 'msg_cc_1', text: 'Hi Dr. Chen, I have a weird rash on my arm. It doesn\'t itch, but it looks strange. Can I send a picture?', senderId: 'patient2', timestamp: new Date('2024-07-30T15:10:00Z'), type: 'user' },
-    ],
-  },
 ];
 
 
