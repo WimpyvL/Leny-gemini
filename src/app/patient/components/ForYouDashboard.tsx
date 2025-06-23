@@ -4,13 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from '@/components/ui/button';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { Sparkles, Calendar, Bell, FlaskConical, Lightbulb } from 'lucide-react';
+import { Sparkles, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 
 interface ForYouDashboardProps {
   selectedItem: ForYouCardData | null;
+  onBack?: () => void;
 }
 
 const chartConfig = {
@@ -20,7 +21,7 @@ const chartConfig = {
   },
 };
 
-function StreakDashboard({ item }: { item: ForYouCardData }) {
+function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
     if (!item.progressData) return null;
 
     const Icon = item.icon;
@@ -29,6 +30,12 @@ function StreakDashboard({ item }: { item: ForYouCardData }) {
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
                 <div className="flex items-center gap-3">
+                    {onBack && (
+                        <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
+                            <ArrowLeft className="h-5 w-5" />
+                            <span className="sr-only">Back</span>
+                        </Button>
+                    )}
                     <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
                         <Icon className={cn("h-6 w-6", item.iconColor)} />
                     </div>
@@ -71,13 +78,19 @@ function StreakDashboard({ item }: { item: ForYouCardData }) {
     )
 }
 
-function DefaultDashboard({ item }: { item: ForYouCardData }) {
+function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
     if (!item) return null;
     const Icon = item.icon;
      return (
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
                 <div className="flex items-center gap-3">
+                     {onBack && (
+                        <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
+                            <ArrowLeft className="h-5 w-5" />
+                            <span className="sr-only">Back</span>
+                        </Button>
+                     )}
                      <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
                         <Icon className={cn("h-6 w-6", item.iconColor)} />
                     </div>
@@ -97,10 +110,10 @@ function DefaultDashboard({ item }: { item: ForYouCardData }) {
     );
 }
 
-export function ForYouDashboard({ selectedItem }: ForYouDashboardProps) {
+export function ForYouDashboard({ selectedItem, onBack }: ForYouDashboardProps) {
   if (!selectedItem) {
     return (
-      <div className="flex flex-col items-center justify-center h-full bg-secondary text-center p-8">
+      <div className="hidden md:flex flex-col items-center justify-center h-full bg-secondary text-center p-8">
         <Sparkles className="h-16 w-16 text-primary mb-4" />
         <h2 className="text-2xl font-bold">Welcome to Your Space</h2>
         <p className="text-muted-foreground mt-2 max-w-md">
@@ -113,8 +126,8 @@ export function ForYouDashboard({ selectedItem }: ForYouDashboardProps) {
   return (
     <div className="bg-secondary h-full p-6">
         {selectedItem.type === 'health_streak' 
-            ? <StreakDashboard item={selectedItem} /> 
-            : <DefaultDashboard item={selectedItem} />
+            ? <StreakDashboard item={selectedItem} onBack={onBack} /> 
+            : <DefaultDashboard item={selectedItem} onBack={onBack} />
         }
     </div>
   );

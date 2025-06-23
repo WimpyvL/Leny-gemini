@@ -7,7 +7,8 @@ import { MessageInput } from './MessageInput';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Bot } from 'lucide-react';
+import { Bot, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ChatWindowProps {
   conversation: Conversation;
@@ -15,9 +16,10 @@ interface ChatWindowProps {
   onSendMessage: (text: string) => void;
   allUsers: User[];
   isLoading?: boolean;
+  onBack?: () => void;
 }
 
-export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers, isLoading }: ChatWindowProps) {
+export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers, isLoading, onBack }: ChatWindowProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const otherUser = conversation.participants.find(p => p.id !== currentUser.id);
   const assistantUser = allUsers.find(u => u.id === 'assistant');
@@ -36,6 +38,12 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
     <div className="flex flex-col h-screen bg-secondary">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-4">
+          {onBack && (
+            <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
+                <ArrowLeft className="h-5 w-5" />
+                <span className="sr-only">Back</span>
+            </Button>
+          )}
           <Avatar>
             <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
             <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>

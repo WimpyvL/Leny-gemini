@@ -10,6 +10,7 @@ import { ForYou } from './ForYou';
 import { ForYouDashboard } from './ForYouDashboard';
 import { Profile } from './Profile';
 import { runPatientChat } from '../actions';
+import { cn } from '@/lib/utils';
 
 interface ChatUIProps {
   user: User;
@@ -18,7 +19,7 @@ interface ChatUIProps {
 
 export function ChatUI({ user, conversations: initialConversations }: ChatUIProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0] || null);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -26,14 +27,26 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
 
   useEffect(() => {
-    if (activeView === 'chats') {
-      setSelectedForYouItem(null);
-    } else if (activeView === 'foryou') {
-      const firstStreak = forYouData.find(item => item.type === 'health_streak');
-      const firstItem = forYouData[0];
-      setSelectedForYouItem(firstStreak || firstItem || null);
+    // This client-side effect ensures the correct view is shown on initial load
+    // for desktop users without causing hydration errors.
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) { // md breakpoint
+      if (activeView === 'chats' && initialConversations.length > 0 && !selectedConversation) {
+        setSelectedConversation(initialConversations[0]);
+      } else if (activeView === 'foryou' && forYouData.length > 0 && !selectedForYouItem) {
+        const firstStreak = forYouData.find(item => item.type === 'health_streak');
+        const firstItem = forYouData[0];
+        setSelectedForYouItem(firstStreak || firstItem || null);
+      }
     }
-  }, [activeView, forYouData]);
+  }, [activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
+  
+  useEffect(() => {
+    // When the active view (e.g., Chats, For You) changes, clear any specific
+    // item selections to return to the list view on mobile.
+    setSelectedConversation(null);
+    setSelectedForYouItem(null);
+  }, [activeView]);
+
 
   const handleSendMessage = async (text: string) => {
     if (!selectedConversation) return;
@@ -110,7 +123,6 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
           />
         );
       case 'foryou':
-      case 'profile':
         return (
            <ForYou 
               forYouData={forYouData}
@@ -134,20 +146,24 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
             onSendMessage={handleSendMessage}
             allUsers={mockUsers}
             isLoading={isLoading && selectedConversation.participants.some(p => p.id === 'assistant')}
+            onBack={() => setSelectedConversation(null)}
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="hidden md:flex items-center justify-center h-full text-muted-foreground">
             <p>Select a conversation to start chatting</p>
           </div>
         );
       case 'foryou':
-        return <ForYouDashboard selectedItem={selectedForYouItem} />;
+        return <ForYouDashboard selectedItem={selectedForYouItem} onBack={() => setSelectedForYouItem(null)}/>;
       case 'profile':
         return <Profile user={user} />;
       default:
         return null;
     }
   }
+
+  const showDetailView = (activeView === 'chats' && !!selectedConversation) || (activeView === 'foryou' && !!selectedForYouItem);
+  const showProfile = activeView === 'profile';
 
   return (
     <div className="flex h-screen w-full bg-background">
@@ -157,12 +173,26 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
         onViewChange={setActiveView}
       />
       <main className="flex-1 flex ml-16">
-        <div className="w-full md:w-1/3 lg:w-1/4 border-r border-border overflow-y-auto">
-          {renderLeftSidebar()}
-        </div>
-        <div className="hidden md:flex flex-col flex-1">
-          {renderMainContent()}
-        </div>
+        {showProfile ? (
+            <div className="flex-1">
+              {renderMainContent()}
+            </div>
+          ) : (
+          <>
+            <div className={cn(
+              "w-full md:w-1/3 lg:w-1/4 border-r border-border overflow-y-auto flex-col",
+              showDetailView ? "hidden md:flex" : "flex"
+            )}>
+              {renderLeftSidebar()}
+            </div>
+            <div className={cn(
+              "flex-col flex-1",
+              showDetailView ? "flex" : "hidden md:flex"
+            )}>
+              {renderMainContent()}
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
