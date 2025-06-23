@@ -3,8 +3,8 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import {
-  // createUserWithEmailAndPassword,
-  // signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
 
 export async function login(formData: FormData) {
@@ -12,17 +12,15 @@ export async function login(formData: FormData) {
   const password = formData.get('password') as string;
 
   if (!email || !password) {
-    return { error: 'Email and password are required.' };
+    return redirect('/login?error=Email and password are required.');
   }
 
-  // TODO: Implement actual Firebase login
-  // try {
-  //   await signInWithEmailAndPassword(auth, email, password);
-  // } catch (error) {
-  //   return { error: 'Invalid credentials. Please try again.' };
-  // }
-
-  console.log('Logging in with:', { email, password });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.error('Firebase Login Error:', error);
+    return redirect('/login?error=Invalid credentials. Please try again.');
+  }
 
   // For the prototype, we will just redirect based on a mock role.
   // In a real app, you'd get the user role from your database after login.
@@ -39,20 +37,21 @@ export async function signup(formData: FormData) {
   const password = formData.get('password') as string;
   const userType = formData.get('userType') as 'patient' | 'doctor';
   
-  if (!name || !email || !password) {
-    return { error: 'All fields are required.' };
+  if (!name || !email || !password || !userType) {
+    return redirect('/signup?error=All fields are required.');
   }
 
-  // TODO: Implement actual Firebase signup and user profile creation in Firestore
-  // try {
-  //   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  //   const user = userCredential.user;
-  //   // Now, create a user document in Firestore with the user's name, role, etc.
-  // } catch (error) {
-  //   return { error: 'Could not create account. It might already exist.' };
-  // }
-
-  console.log('Signing up with:', { name, email, password, userType });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    // In a real app, you would now create a user document in Firestore 
+    // with the user's name, role (userType), and other details.
+    // e.g., await createUserProfile(user.uid, { name, email, role: userType });
+    console.log('User created:', user.uid, { name, userType });
+  } catch (error) {
+    console.error('Firebase Signup Error:', error);
+    return redirect('/signup?error=Could not create account. It might already exist.');
+  }
 
   if (userType === 'doctor') {
     redirect('/doctor');
