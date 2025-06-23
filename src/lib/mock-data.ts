@@ -37,6 +37,7 @@ export const mockUsers: User[] = [
 
 const assistantUser = mockUsers.find(u => u.id === 'assistant')!;
 const patient1User = mockUsers.find(u => u.id === 'patient1')!;
+const drChenUser = mockUsers.find(u => u.id === 'doctor1')!;
 
 const lenyConversation: Conversation = {
   id: 'conv_leny_patient1',
@@ -59,9 +60,39 @@ const lenyConversation: Conversation = {
   ],
 };
 
+const drChenConversation: Conversation = {
+  id: 'conv_dr_chen_patient1',
+  title: 'Dr. Sarah Chen',
+  participants: [patient1User, drChenUser],
+  participantString: 'Chat with Dr. Sarah Chen',
+  avatar: 'SC',
+  icon: Stethoscope,
+  avatarColor: 'bg-sky-500',
+  timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+  patientId: 'patient1',
+  doctorId: 'doctor1',
+  messages: [
+    {
+      id: 'msg_dr_1',
+      senderId: 'doctor1',
+      text: 'Hi Alex, just following up on your recent lab results. Everything looks normal, but let me know if you have any questions.',
+      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      type: 'user',
+    },
+     {
+      id: 'msg_dr_2',
+      senderId: 'patient1',
+      text: 'Thanks, Dr. Chen! That\'s a relief. I appreciate you letting me know.',
+      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      type: 'user',
+    },
+  ],
+};
+
 
 export const mockConversations: Conversation[] = [
   lenyConversation,
+  drChenConversation,
 ];
 
 

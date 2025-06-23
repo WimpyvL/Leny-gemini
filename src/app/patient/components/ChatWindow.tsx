@@ -7,7 +7,7 @@ import { MessageInput } from './MessageInput';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Bot, ArrowLeft } from 'lucide-react';
+import { Bot, ArrowLeft, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ChatWindowProps {
@@ -17,11 +17,14 @@ interface ChatWindowProps {
   allUsers: User[];
   isLoading?: boolean;
   onBack?: () => void;
+  onAddParticipantClick?: () => void;
 }
 
-export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers, isLoading, onBack }: ChatWindowProps) {
+export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers, isLoading, onBack, onAddParticipantClick }: ChatWindowProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const otherUser = conversation.participants.find(p => p.id !== currentUser.id);
+  const otherParticipants = conversation.participants.filter(p => p.id !== currentUser.id);
+  const isGroupChat = otherParticipants.length > 1;
+  const isAiChat = conversation.participants.some(p => p.id === 'assistant');
   const assistantUser = allUsers.find(u => u.id === 'assistant');
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
   return (
     <div className="flex flex-col h-screen bg-secondary">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-card">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-1 overflow-hidden">
           {onBack && (
             <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
                 <ArrowLeft className="h-5 w-5" />
@@ -45,12 +48,33 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
             </Button>
           )}
           <Avatar>
-            <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
-            <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
-              {otherUser?.icon ? <otherUser.icon className="h-5 w-5" /> : otherUser?.name.charAt(0)}
+            <AvatarImage src={!isGroupChat ? otherParticipants[0]?.avatar : undefined} alt={conversation.title} data-ai-hint="doctor person" />
+            <AvatarFallback className={cn(conversation.avatarColor, 'text-white')}>
+              {conversation.icon ? <conversation.icon className="h-5 w-5" /> : conversation.title.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          <CardTitle className="text-xl font-headline">{otherUser?.name}</CardTitle>
+          <div className="overflow-hidden">
+             <CardTitle className="text-xl font-headline truncate">{conversation.title}</CardTitle>
+             <p className="text-sm text-muted-foreground truncate">{conversation.participantString}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+            {isGroupChat && (
+                 <div className="flex -space-x-2 overflow-hidden">
+                    {otherParticipants.slice(0,3).map(p => (
+                        <Avatar key={p.id} className="inline-block h-8 w-8 rounded-full ring-2 ring-background">
+                            <AvatarImage src={p.avatar} alt={p.name}/>
+                            <AvatarFallback className={cn("text-white text-xs", p.avatarColor)}>{p.avatar}</AvatarFallback>
+                        </Avatar>
+                    ))}
+                 </div>
+            )}
+            {!isAiChat && (
+                <Button variant="ghost" size="icon" onClick={onAddParticipantClick}>
+                    <UserPlus className="h-5 w-5" />
+                    <span className="sr-only">Add participant</span>
+                </Button>
+            )}
         </div>
       </CardHeader>
       

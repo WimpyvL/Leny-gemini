@@ -13,6 +13,8 @@ import { runPatientChat } from '../actions';
 import { cn } from '@/lib/utils';
 import { InviteDialog } from './InviteDialog';
 import { useToast } from '@/hooks/use-toast';
+import { AddParticipantDialog } from './AddParticipantDialog';
+import { Users } from 'lucide-react';
 
 interface ChatUIProps {
   user: User;
@@ -26,6 +28,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   const [activeView, setActiveView] = useState<PatientView>('chats');
   const [isLoading, setIsLoading] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const [isAddParticipantDialogOpen, setIsAddParticipantDialogOpen] = useState(false);
   const { toast } = useToast();
   
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
@@ -51,6 +54,23 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
     setSelectedConversation(null);
     setSelectedForYouItem(null);
   }, [activeView]);
+
+  const generateParticipantString = (participants: User[], currentUserId: string): string => {
+    const otherParticipants = participants.filter(p => p.id !== currentUserId && p.id !== 'assistant');
+    if (participants.some(p => p.id === 'assistant') && otherParticipants.length === 0) {
+        return 'Your AI Health Companion';
+    }
+    if (otherParticipants.length === 1) {
+        return `Chat with ${otherParticipants[0].name}`;
+    }
+    const names = otherParticipants.map(p => p.name.split(' ')[0]);
+    const participantNames = [ 'You', ...names ];
+
+    if (participantNames.length <= 3) {
+      return participantNames.join(', ');
+    }
+    return `${participantNames.slice(0, 3).join(', ')} & ${participantNames.length - 3} others`;
+  };
 
 
   const handleSendMessage = async (text: string) => {
@@ -117,6 +137,48 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
     setForYouData(prevData => [goalToAdd, ...prevData]);
   };
 
+  const handleAddParticipants = (userIds: string[]) => {
+    if (!selectedConversation) return;
+
+    const usersToAdd = allUsers.filter(u => userIds.includes(u.id) && !selectedConversation.participants.some(p => p.id === u.id));
+    if (usersToAdd.length === 0) return;
+
+    const updatedParticipants = [...selectedConversation.participants, ...usersToAdd];
+
+    const systemMessageText = `${user.name} added ${usersToAdd.map(u => u.name).join(', ')} to the chat.`;
+
+    const systemMessage: Message = {
+      id: `msg_system_${Date.now()}`,
+      senderId: 'assistant',
+      text: systemMessageText,
+      timestamp: new Date(),
+      type: 'user',
+    };
+    
+    const newParticipantString = generateParticipantString(updatedParticipants, user.id);
+
+    const updatedConversations = conversations.map(c => {
+      if (c.id === selectedConversation.id) {
+        return {
+          ...c,
+          title: 'Group Chat',
+          participants: updatedParticipants,
+          participantString: newParticipantString,
+          messages: [...c.messages, systemMessage],
+          icon: Users,
+          avatarColor: 'bg-gray-500',
+        };
+      }
+      return c;
+    });
+
+    setConversations(updatedConversations);
+    setSelectedConversation(updatedConversations.find(c => c.id === selectedConversation.id) || null);
+    setIsAddParticipantDialogOpen(false);
+    toast({ title: 'Participants Added', description: `${usersToAdd.map(u => u.name).join(', ')} added to the chat.` });
+  };
+
+
   const handleSendInvite = (email: string) => {
     let invitedUser = allUsers.find(u => u.email === email);
     let currentUsers = allUsers;
@@ -153,11 +215,12 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
       return;
     }
 
+    const newParticipants = [user, invitedUser];
     const newConversation: Conversation = {
       id: `conv_${user.id}_${invitedUser.id}`,
       title: invitedUser.name,
-      participants: [user, invitedUser],
-      participantString: `Chat with ${invitedUser.name}`,
+      participants: newParticipants,
+      participantString: generateParticipantString(newParticipants, user.id),
       messages: [{
         id: `msg_system_${Date.now()}`,
         senderId: 'assistant',
@@ -210,12 +273,14 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
       case 'chats':
         return selectedConversation ? (
           <ChatWindow
+            key={selectedConversation.id}
             conversation={selectedConversation}
             currentUser={user}
             onSendMessage={handleSendMessage}
             allUsers={allUsers}
             isLoading={isLoading && selectedConversation.participants.some(p => p.id === 'assistant')}
             onBack={() => setSelectedConversation(null)}
+            onAddParticipantClick={() => setIsAddParticipantDialogOpen(true)}
           />
         ) : (
           <div className="hidden md:flex items-center justify-center h-full text-muted-foreground">
@@ -246,6 +311,16 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
         onOpenChange={setIsInviteDialogOpen}
         onInvite={handleSendInvite}
       />
+      {selectedConversation && (
+        <AddParticipantDialog
+          isOpen={isAddParticipantDialogOpen}
+          onOpenChange={setIsAddParticipantDialogOpen}
+          onAddParticipants={handleAddParticipants}
+          allUsers={allUsers}
+          currentParticipants={selectedConversation.participants}
+          currentUser={user}
+        />
+      )}
       <main className="flex-1 flex ml-16">
         {showProfile ? (
             <div className="flex-1">
