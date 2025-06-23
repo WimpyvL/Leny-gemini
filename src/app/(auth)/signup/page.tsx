@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,9 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { signup, findOrCreateUser } from '@/app/auth/actions';
-import { auth } from '@/lib/firebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signup } from '@/app/auth/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
@@ -29,37 +27,16 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function SignupPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
   const { toast } = useToast();
 
   const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      const { role } = await findOrCreateUser({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-        avatar: user.photoURL,
-      });
-
-      if (role === 'doctor') {
-        router.push('/doctor');
-      } else {
-        router.push('/patient');
-      }
-    } catch (error) {
-      console.error("Google Sign-Up Error", error);
-      toast({
-        title: "Sign-Up Failed",
-        description: "Could not sign up with Google. Please try again.",
-        variant: "destructive",
-      });
-    }
+    // Temporarily disabled for development.
+    toast({
+      title: 'Google Sign-In Disabled',
+      description: 'This feature is temporarily disabled for development.',
+    });
   };
 
   return (
