@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mic } from 'lucide-react';
 import { QuickActionsView } from './QuickActionsView';
 import { mockRecentSearches, mockFavoriteActions, mockEmergencyProtocols } from '@/lib/mock-data';
 
@@ -20,6 +20,16 @@ interface ConversationListProps {
 export function ConversationList({ conversations, selectedConversationId, onSelectConversation }: ConversationListProps) {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+
+  const handleMicClick = () => {
+    const lenyConversation = conversations.find(c => c.participants.some(p => p.id === 'assistant'));
+    if (lenyConversation) {
+      onSelectConversation(lenyConversation.id);
+      setIsSearchActive(false); // Close the search view if it's open
+    } else {
+      console.log("Leny's conversation not found.");
+    }
+  };
 
   return (
     <div className="h-full w-full md:w-72 flex-shrink-0 flex flex-col bg-card border-r overflow-hidden">
@@ -39,13 +49,22 @@ export function ConversationList({ conversations, selectedConversationId, onSele
             <Input 
               placeholder="Search or start a new chat"
               className={cn(
-                "h-11 rounded-full bg-muted border-none focus-visible:ring-primary text-base transition-all duration-300",
+                "h-11 rounded-full bg-muted border-none focus-visible:ring-primary text-base transition-all duration-300 pr-12",
                 isSearchActive ? "pl-4" : "pl-12"
               )}
               onFocus={() => setIsSearchActive(true)}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
+            <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full"
+                onClick={handleMicClick}
+            >
+                <Mic className="h-5 w-5 text-muted-foreground" />
+                <span className="sr-only">Chat with Leny</span>
+            </Button>
           </div>
         </div>
       </div>
