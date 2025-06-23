@@ -17,6 +17,14 @@ export type User = {
     conditions?: string[];
     medications?: { name: string; dosage: string }[];
   };
+  doctorInfo?: {
+    specialty?: string;
+    licenseNumber?: string;
+    practiceName?: string;
+    practiceAddress?: string;
+    officeHours?: string;
+    bio?: string;
+  };
   settings?: {
     theme?: 'light' | 'dark' | 'system';
     notifications?: {

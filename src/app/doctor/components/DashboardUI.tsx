@@ -8,7 +8,7 @@ import { SymptomAnalysisCard } from './SymptomAnalysisCard';
 import { PatientNavRail, type PatientView } from '@/app/patient/components/PatientNavRail';
 import { ForYou } from '@/app/patient/components/ForYou';
 import { ForYouDashboard } from '@/app/patient/components/ForYouDashboard';
-import { Profile } from '@/app/patient/components/Profile';
+import { DoctorProfile } from './DoctorProfile';
 import { mockForYouData } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -157,7 +157,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       case 'foryou':
         return renderForYouView();
       case 'profile':
-        return <Profile user={user} />;
+        return <DoctorProfile user={user} />;
       default:
         return null;
     }

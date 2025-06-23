@@ -3,7 +3,30 @@ import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame
 
 export const mockUsers: User[] = [
   { id: 'assistant', name: 'Leny', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
-  { id: 'doctor1', name: 'Dr. Sarah Chen', avatar: 'SC', avatarColor: 'bg-sky-500', role: 'doctor', icon: Stethoscope, email: 'drchen@example.com' },
+  { 
+    id: 'doctor1', 
+    name: 'Dr. Sarah Chen', 
+    avatar: 'SC', 
+    avatarColor: 'bg-sky-500', 
+    role: 'doctor', 
+    icon: Stethoscope, 
+    email: 'drchen@example.com',
+    doctorInfo: {
+      specialty: 'Cardiology',
+      licenseNumber: 'MD-12345678',
+      practiceName: 'Heartwell Clinic',
+      practiceAddress: '123 Health St, Medville, MD 12345',
+      officeHours: 'Mon-Fri, 9:00 AM - 5:00 PM',
+      bio: 'Dr. Sarah Chen is a board-certified cardiologist with over 15 years of experience in treating a wide range of cardiovascular conditions. She is dedicated to providing compassionate and comprehensive care to her patients.'
+    },
+    settings: {
+        theme: 'light',
+        notifications: {
+            email: true,
+            push: true,
+        }
+    }
+  },
   { 
     id: 'patient1', 
     name: 'Alex', 
@@ -57,33 +80,18 @@ const lenyConversation: Conversation = {
       timestamp: new Date(),
       type: 'user',
     },
-  ],
-};
-
-const drChenConversation: Conversation = {
-  id: 'conv_dr_chen_patient1',
-  title: 'Dr. Sarah Chen',
-  participants: [patient1User, drChenUser],
-  participantString: 'Chat with Dr. Sarah Chen',
-  avatar: 'SC',
-  icon: Stethoscope,
-  avatarColor: 'bg-sky-500',
-  timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-  patientId: 'patient1',
-  doctorId: 'doctor1',
-  messages: [
-    {
-      id: 'msg_dr_1',
-      senderId: 'doctor1',
-      text: 'Hi Alex, just following up on your recent lab results. Everything looks normal, but let me know if you have any questions.',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+     {
+      id: 'msg_leny_2',
+      senderId: 'patient1',
+      text: 'Hi Leny, I\'ve been having some trouble sleeping lately. Any tips?',
+      timestamp: new Date(),
       type: 'user',
     },
-     {
-      id: 'msg_dr_2',
-      senderId: 'patient1',
-      text: 'Thanks, Dr. Chen! That\'s a relief. I appreciate you letting me know.',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+    {
+      id: 'msg_leny_3',
+      senderId: 'assistant',
+      text: 'I\'m sorry to hear that, Alex. Trouble sleeping can be really frustrating. Some people find that creating a relaxing bedtime routine, like reading or listening to calm music, can be helpful. It\'s also often recommended to avoid screens for an hour before bed. Have you tried anything like that?',
+      timestamp: new Date(),
       type: 'user',
     },
   ],
@@ -91,8 +99,7 @@ const drChenConversation: Conversation = {
 
 
 export const mockConversations: Conversation[] = [
-  lenyConversation,
-  drChenConversation,
+  lenyConversation
 ];
 
 
