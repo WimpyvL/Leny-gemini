@@ -26,7 +26,7 @@ export async function findOrCreateUser(userData: {
   const newUser: Omit<User, 'id'> = {
     name: name || 'New User',
     email: email || '',
-    avatar: avatar || uid.substring(0,2).toUpperCase(),
+    avatar: avatar || name?.substring(0,2).toUpperCase() || '??',
     avatarColor: `bg-blue-500`, // Default color
     role: 'patient',
   };
