@@ -36,13 +36,6 @@ export const mockUsers: User[] = [
 
 const assistantUser = mockUsers.find(u => u.id === 'assistant')!;
 const patient1User = mockUsers.find(u => u.id === 'patient1')!;
-const doctor1User = mockUsers.find(u => u.id === 'doctor1')!;
-
-const groupChatParticipants = [
-  patient1User,
-  assistantUser,
-  doctor1User,
-];
 
 const lenyConversation: Conversation = {
   id: 'conv_leny_patient1',
@@ -68,60 +61,6 @@ const lenyConversation: Conversation = {
 
 export const mockConversations: Conversation[] = [
   lenyConversation,
-  {
-    id: 'conv_group_1',
-    title: 'AI Assisted Chat',
-    participants: groupChatParticipants,
-    participantString: 'You, Leny, Dr. Chen',
-    avatar: '',
-    icon: Users,
-    avatarColor: 'bg-purple-500',
-    timestamp: new Date('2024-07-30T10:00:00Z'),
-    unread: 2,
-    patientId: 'patient1',
-    doctorId: 'doctor1',
-    messages: [
-      {
-        id: 'msg_grp_1',
-        senderId: 'patient1',
-        text: 'I\'ve been having a persistent headache for 3 days.',
-        timestamp: new Date('2024-07-30T09:55:00Z'),
-        type: 'user',
-      },
-      {
-        id: 'msg_grp_2',
-        senderId: 'assistant',
-        type: 'assessment',
-        assessment: {
-          title: "Headache Analysis:",
-          summary: [
-            "Symptom: Persistent headache (3 days).",
-            "To better assist, please provide more details:",
-            "• Location of the pain (e.g., temples, forehead)",
-            "• Type of pain (e.g., throbbing, sharp, dull)",
-            "• Any other symptoms? (e.g., nausea, sensitivity to light)",
-          ],
-          recommendations: "You can share this information here. I can also invite Dr. Chen to this chat if you'd like a professional opinion.",
-          suggestions: ["Describe the pain", "Note other symptoms", "Invite Dr. Chen"],
-        },
-        timestamp: new Date('2024-07-30T09:56:00Z'),
-      },
-       {
-        id: 'msg_grp_3',
-        senderId: 'patient1',
-        text: 'Yes, please invite Dr. Chen.',
-        timestamp: new Date('2024-07-30T09:58:00Z'),
-        type: 'user',
-      },
-       {
-        id: 'msg_grp_4',
-        senderId: 'doctor1',
-        text: 'Hi, I\'m Dr. Chen. Thanks for inviting me. Could you please describe the headache in more detail?',
-        timestamp: new Date('2024-07-30T10:00:00Z'),
-        type: 'user',
-      },
-    ],
-  },
 ];
 
 
