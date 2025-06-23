@@ -84,13 +84,13 @@ export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate 
         </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4">
         {isCreatingGoal ? (
           <GoalCreator onSave={handleSaveGoal} onCancel={() => setIsCreatingGoal(false)} />
         ) : (
-          <>
+          <div className="space-y-4">
             {streaks.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-2">
                     <h3 className="text-base font-semibold text-foreground px-1">Your Health Streaks</h3>
                     {streaks.map(card => (
                       <ForYouCard 
@@ -103,10 +103,10 @@ export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate 
                 </div>
             )}
             
-            {streaks.length > 0 && otherItems.length > 0 && <Separator className="my-4" />}
+            {streaks.length > 0 && otherItems.length > 0 && <Separator />}
 
             {otherItems.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-2">
                     <h3 className="text-base font-semibold text-foreground px-1">Inbox</h3>
                     {otherItems.map(card => (
                     <ForYouCard 
@@ -118,7 +118,7 @@ export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate 
                     ))}
                 </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
