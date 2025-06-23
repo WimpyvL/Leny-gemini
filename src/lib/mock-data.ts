@@ -35,7 +35,7 @@ export const mockUsers: User[] = [
     id: 'patient1', 
     name: 'Alex', 
     avatar: 'A', 
-    avatarColor: 'bg-orange-400', 
+    avatarColor: 'bg-blue-500', 
     role: 'patient',
     email: 'alex@example.com',
     dob: '1990-05-15',
