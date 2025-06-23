@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const allPopularQuestions = [
   "What should I do about my child's fever?",
@@ -52,6 +54,7 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [devMode, setDevMode] = useState(false);
   
   const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
   const [helpTopics, setHelpTopics] = useState<typeof allHelpTopics>([]);
@@ -132,14 +135,32 @@ export default function Home() {
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
           <Logo />
-          <div className="flex items-center gap-4">
-             <Link href="/login">
-              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>Sign Up Free</Button>
-            </Link>
-          </div>
+           <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Switch id="dev-mode" checked={devMode} onCheckedChange={setDevMode} />
+                <Label htmlFor="dev-mode" className="text-white/70 text-xs">Dev</Label>
+              </div>
+
+              {devMode ? (
+                <>
+                  <Link href="/patient">
+                    <Button variant="secondary">Patient View</Button>
+                  </Link>
+                  <Link href="/doctor">
+                    <Button variant="secondary">Doctor View</Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button>Sign Up Free</Button>
+                  </Link>
+                </>
+              )}
+            </div>
         </nav>
       </header>
 
