@@ -35,8 +35,7 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
         onChange={(e) => setText(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder="Type a message..."
-        rows={1}
-        className="resize-none max-h-24"
+        className="resize-none min-h-14 rounded-2xl p-4 max-h-36"
       />
       <Button size="icon" onClick={handleSend} className="shrink-0" disabled={!text.trim()}>
         <Send />
