@@ -1,52 +1,14 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { createUserProfile, getUser } from '@/lib/data';
 import type { User } from '@/lib/types';
 
-export async function login(formData: FormData) {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-
-  if (!email || !password) {
-    return redirect('/login?error=Email and password are required.');
-  }
-
-  // Dev mode: bypass Firebase auth.
-  // Use an email containing "doctor" to log in as a doctor.
-  if (email.toLowerCase().includes('doctor')) {
-    redirect('/doctor');
-  } else {
-    redirect('/patient');
-  }
-}
-
-export async function signup(formData: FormData) {
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const userType = formData.get('userType') as 'patient' | 'doctor';
-  
-  if (!name || !email || !password || !userType) {
-    return redirect('/signup?error=All fields are required.');
-  }
-
-  // Dev mode: bypass Firebase auth.
-  if (userType === 'doctor') {
-    redirect('/doctor');
-  } else {
-    redirect('/patient');
-  }
-}
-
-interface GoogleUser {
+export async function findOrCreateUser(userData: {
   uid: string;
   email: string | null;
   name: string | null;
   avatar: string | null;
-}
-
-export async function findOrCreateUser(userData: GoogleUser): Promise<User> {
+}): Promise<User> {
   const { uid, email, name, avatar } = userData;
 
   if (!uid) {
@@ -72,4 +34,17 @@ export async function findOrCreateUser(userData: GoogleUser): Promise<User> {
   await createUserProfile(uid, newUser);
 
   return { id: uid, ...newUser };
+}
+
+export async function createNewUser(uid: string, data: Omit<User, 'id' | 'avatar' | 'avatarColor'>) {
+    const newUser: Omit<User, 'id'> = {
+        ...data,
+        avatar: data.name.substring(0,2).toUpperCase(),
+        avatarColor: 'bg-green-500',
+    };
+    await createUserProfile(uid, newUser);
+}
+
+export async function getUserData(uid: string): Promise<User | undefined> {
+    return await getUser(uid);
 }
