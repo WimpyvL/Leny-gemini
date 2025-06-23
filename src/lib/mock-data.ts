@@ -2,34 +2,7 @@ import type { User, Conversation, ForYouCardData } from './types';
 import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell } from 'lucide-react';
 
 export const mockUsers: User[] = [
-  { 
-    id: 'user1', 
-    name: 'You', 
-    avatar: 'Y', 
-    avatarColor: 'bg-blue-400', 
-    role: 'patient',
-    email: 'alex@example.com',
-    dob: '1990-05-15',
-    healthInfo: {
-      height: '5\'10"',
-      weight: '160 lbs',
-      bloodType: 'O+',
-      allergies: ['Peanuts', 'Pollen'],
-      conditions: ['Asthma'],
-      medications: [
-        { name: 'Albuterol', dosage: 'As needed' },
-        { name: 'Singulair', dosage: '10mg daily' },
-      ],
-    },
-    settings: {
-      theme: 'light',
-      notifications: {
-        email: true,
-        push: false,
-      }
-    }
-  },
-  { id: 'assistant', name: 'Leny Assistant', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
+  { id: 'assistant', name: 'Leny', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
   { id: 'doctor1', name: 'Dr. Sarah Chen', avatar: 'SC', avatarColor: 'bg-sky-500', role: 'doctor', icon: Stethoscope, email: 'drchen@example.com' },
   { 
     id: 'patient1', 
@@ -61,29 +34,56 @@ export const mockUsers: User[] = [
   { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient', email: 'casey@example.com' },
 ];
 
+const assistantUser = mockUsers.find(u => u.id === 'assistant')!;
+const patient1User = mockUsers.find(u => u.id === 'patient1')!;
+const doctor1User = mockUsers.find(u => u.id === 'doctor1')!;
+
 const groupChatParticipants = [
-  mockUsers.find(u => u.id === 'user1')!,
-  mockUsers.find(u => u.id === 'assistant')!,
-  mockUsers.find(u => u.id === 'doctor1')!,
+  patient1User,
+  assistantUser,
+  doctor1User,
 ];
 
+const lenyConversation: Conversation = {
+  id: 'conv_leny_patient1',
+  title: 'Leny',
+  participants: [patient1User, assistantUser],
+  participantString: 'Your AI Health Companion',
+  avatar: '',
+  icon: Bot,
+  avatarColor: 'bg-primary',
+  timestamp: new Date(), // most recent
+  patientId: 'patient1',
+  messages: [
+    {
+      id: 'msg_leny_1',
+      senderId: 'assistant',
+      text: 'Hi Alex! I\'m Leny, your personal health companion. I\'m here to help answer questions, track your goals, or just chat. What\'s on your mind today?',
+      timestamp: new Date(),
+      type: 'user',
+    },
+  ],
+};
+
+
 export const mockConversations: Conversation[] = [
+  lenyConversation,
   {
     id: 'conv_group_1',
     title: 'AI Assisted Chat',
     participants: groupChatParticipants,
-    participantString: 'You, Leny Assistant, Dr. Chen',
+    participantString: 'You, Leny, Dr. Chen',
     avatar: '',
     icon: Users,
     avatarColor: 'bg-purple-500',
     timestamp: new Date('2024-07-30T10:00:00Z'),
     unread: 2,
-    patientId: 'user1',
+    patientId: 'patient1',
     doctorId: 'doctor1',
     messages: [
       {
         id: 'msg_grp_1',
-        senderId: 'user1',
+        senderId: 'patient1',
         text: 'I\'ve been having a persistent headache for 3 days.',
         timestamp: new Date('2024-07-30T09:55:00Z'),
         type: 'user',
@@ -108,7 +108,7 @@ export const mockConversations: Conversation[] = [
       },
        {
         id: 'msg_grp_3',
-        senderId: 'user1',
+        senderId: 'patient1',
         text: 'Yes, please invite Dr. Chen.',
         timestamp: new Date('2024-07-30T09:58:00Z'),
         type: 'user',
@@ -125,7 +125,7 @@ export const mockConversations: Conversation[] = [
   {
     id: 'conv_alex_chen',
     title: 'Dr. Sarah Chen',
-    participants: [mockUsers.find(u => u.id === 'patient1')!, mockUsers.find(u => u.id === 'doctor1')!],
+    participants: [patient1User, doctor1User],
     participantString: 'Follow-up on your results.',
     avatar: '',
     icon: Stethoscope,
@@ -141,7 +141,7 @@ export const mockConversations: Conversation[] = [
     {
     id: 'conv_casey_chen',
     title: 'Dr. Sarah Chen',
-    participants: [mockUsers.find(u => u.id === 'patient2')!, mockUsers.find(u => u.id === 'doctor1')!],
+    participants: [mockUsers.find(u => u.id === 'patient2')!, doctor1User],
     participantString: 'I have a weird rash on my arm.',
     avatar: '',
     icon: Stethoscope,

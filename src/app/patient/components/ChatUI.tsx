@@ -9,6 +9,7 @@ import { PatientNavRail, type PatientView } from './PatientNavRail';
 import { ForYou } from './ForYou';
 import { ForYouDashboard } from './ForYouDashboard';
 import { Profile } from './Profile';
+import { runPatientChat } from '../actions';
 
 interface ChatUIProps {
   user: User;
@@ -19,6 +20,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0] || null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
+  const [isLoading, setIsLoading] = useState(false);
   
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
@@ -33,7 +35,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
     }
   }, [activeView, forYouData]);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     if (!selectedConversation) return;
 
     const newMessage: Message = {
@@ -44,15 +46,48 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
       type: 'user',
     };
 
-    const updatedConversations = conversations.map(c => {
+    const updatedConversationsWithUserMessage = conversations.map(c => {
       if (c.id === selectedConversation.id) {
         return { ...c, messages: [...c.messages, newMessage] };
       }
       return c;
     });
 
-    setConversations(updatedConversations);
-    setSelectedConversation(updatedConversations.find(c => c.id === selectedConversation.id) || null);
+    setConversations(updatedConversationsWithUserMessage);
+    setSelectedConversation(updatedConversationsWithUserMessage.find(c => c.id === selectedConversation.id) || null);
+
+    const isAiChat = selectedConversation.participants.some(p => p.id === 'assistant') && selectedConversation.participants.length === 2;
+
+    if (isAiChat) {
+      setIsLoading(true);
+      try {
+        const aiResponse = await runPatientChat(text, user.name);
+
+        const aiMessage: Message = {
+          id: `msg_ai_${Date.now()}`,
+          text: aiResponse,
+          senderId: 'assistant',
+          timestamp: new Date(),
+          type: 'user',
+        };
+
+        setConversations(prevConvos => {
+            const finalConvos = prevConvos.map(c => {
+                if (c.id === selectedConversation.id) {
+                    return { ...c, messages: [...c.messages, aiMessage] };
+                }
+                return c;
+            });
+            setSelectedConversation(finalConvos.find(c => c.id === selectedConversation.id) || null);
+            return finalConvos;
+        });
+
+      } catch (error) {
+        console.error("Failed to get AI response", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
   
   const handleAddGoal = (newGoal: Omit<ForYouCardData, 'id' | 'type'>) => {
@@ -98,6 +133,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
             currentUser={user}
             onSendMessage={handleSendMessage}
             allUsers={mockUsers}
+            isLoading={isLoading && selectedConversation.participants.some(p => p.id === 'assistant')}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground">
