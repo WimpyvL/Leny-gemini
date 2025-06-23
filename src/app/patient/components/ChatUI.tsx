@@ -180,7 +180,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
           ) : (
           <>
             <div className={cn(
-              "w-full md:w-1/3 lg:w-1/4 border-r border-border overflow-y-auto flex-col",
+              "w-full md:w-72 flex-shrink-0 border-r border-border overflow-y-auto flex-col",
               showDetailView ? "hidden md:flex" : "flex"
             )}>
               {renderLeftSidebar()}
