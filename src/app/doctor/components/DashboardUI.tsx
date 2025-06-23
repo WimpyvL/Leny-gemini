@@ -12,6 +12,8 @@ import { DoctorProfile } from './DoctorProfile';
 import { mockDoctorForYouData } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface DashboardUIProps {
   user: User;
@@ -26,6 +28,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockDoctorForYouData);
   const [isAnalysisSheetOpen, setIsAnalysisSheetOpen] = useState(false);
+  const [isAnalysisSidebarOpen, setIsAnalysisSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
@@ -114,9 +117,23 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
           </div>
         )}
       </div>
-       <aside className="w-full hidden lg:block lg:w-1/3 xl:w-1/4 border-l border-border bg-card/50 p-4 overflow-y-auto">
-         <SymptomAnalysisCard lastPatientMessage={lastPatientMessage} />
-      </aside>
+
+       <div className="hidden lg:flex items-stretch bg-background">
+          <aside className={cn(
+              "bg-card/50 overflow-hidden transition-all duration-300 ease-in-out",
+              isAnalysisSidebarOpen ? "w-[350px] p-4 border-l" : "w-0 p-0"
+          )}>
+              <div className="w-[calc(350px-2rem)] h-full overflow-y-auto">
+                  <SymptomAnalysisCard lastPatientMessage={lastPatientMessage} />
+              </div>
+          </aside>
+          <div className="flex-shrink-0 border-l bg-card">
+              <Button variant="ghost" size="icon" className="h-full w-12 rounded-none" onClick={() => setIsAnalysisSidebarOpen(!isAnalysisSidebarOpen)}>
+                  {isAnalysisSidebarOpen ? <ChevronsRight className="h-5 w-5" /> : <ChevronsLeft className="h-5 w-5" />}
+              </Button>
+          </div>
+      </div>
+
       <Sheet open={isAnalysisSheetOpen} onOpenChange={setIsAnalysisSheetOpen}>
         <SheetContent side="right" className="w-full sm:max-w-md p-0 lg:hidden">
             <SymptomAnalysisCard lastPatientMessage={lastPatientMessage} />
