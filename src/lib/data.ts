@@ -3,7 +3,7 @@
 import { mockConversations, mockUsers } from '@/lib/mock-data';
 import type { User, Conversation } from '@/lib/types';
 import { db } from './firebase';
-import { doc, getDoc, setDoc, getDocs, collection, query, where } from 'firebase/firestore';
+import { doc, getDoc, setDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
 
 // This file acts as a data service layer.
 // In a real application, these functions would fetch data from a database like Firestore.
@@ -17,6 +17,15 @@ export async function createUserProfile(uid: string, data: Omit<User, 'id'>): Pr
   }
 }
 
+export async function updateUser(uid: string, data: Partial<User>): Promise<void> {
+  try {
+    const userDocRef = doc(db, 'users', uid);
+    await updateDoc(userDocRef, data);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw new Error('Could not update user profile.');
+  }
+}
 
 export async function getUser(userId: string): Promise<User | undefined> {
   console.log(`Fetching user from Firestore: ${userId}`);

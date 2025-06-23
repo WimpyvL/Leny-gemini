@@ -1,7 +1,8 @@
 'use server';
 
-import { createUserProfile, getUser } from '@/lib/data';
+import { createUserProfile, getUser, updateUser } from '@/lib/data';
 import type { User } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 
 export async function findOrCreateUser(userData: {
   uid: string;
@@ -47,4 +48,34 @@ export async function createNewUser(uid: string, data: Omit<User, 'id' | 'avatar
 
 export async function getUserData(uid: string): Promise<User | undefined> {
     return await getUser(uid);
+}
+
+export async function upgradeToDoctor(uid: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const user = await getUser(uid);
+    if (!user) {
+        return { success: false, error: "User not found." };
+    }
+
+    await updateUser(uid, {
+      role: 'doctor',
+      doctorInfo: {
+        specialty: 'General Practice',
+        licenseNumber: '',
+        practiceName: '',
+        practiceAddress: '',
+        officeHours: '',
+        bio: `Joined as a new provider. Formerly ${user.name}.`,
+      }
+    });
+
+    // Revalidate paths to ensure data is fresh
+    revalidatePath('/patient');
+    revalidatePath('/doctor');
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to upgrade user to doctor:", error);
+    return { success: false, error: "An unexpected error occurred during the upgrade process." };
+  }
 }

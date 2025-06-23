@@ -2,6 +2,7 @@
 
 import type { User } from '@/lib/types';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,21 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Edit, User as UserIcon, HeartPulse, Bell, Settings, Shield } from 'lucide-react';
+import { Edit, User as UserIcon, HeartPulse, Bell, Settings, Shield, Briefcase, Loader2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { upgradeToDoctor } from '@/app/auth/actions';
+import { useToast } from '@/hooks/use-toast';
+
 
 interface ProfileProps {
   user: User;
@@ -19,6 +34,9 @@ interface ProfileProps {
 export function Profile({ user: initialUser }: ProfileProps) {
   const [user, setUser] = useState(initialUser);
   const [isEditing, setIsEditing] = useState(false);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,6 +65,26 @@ export function Profile({ user: initialUser }: ProfileProps) {
     setIsEditing(false);
     // In a real app, you would call an API to save the user data.
     // For this prototype, we just exit edit mode.
+  };
+
+  const handleUpgrade = async () => {
+    setIsUpgrading(true);
+    const result = await upgradeToDoctor(user.id);
+    if (result.success) {
+      toast({
+        title: 'Account Upgraded!',
+        description: 'You are now registered as a provider. Redirecting...',
+      });
+      // a small delay to allow toast to be seen
+      setTimeout(() => router.push('/doctor'), 1500);
+    } else {
+      toast({
+        title: 'Upgrade Failed',
+        description: result.error,
+        variant: 'destructive',
+      });
+      setIsUpgrading(false);
+    }
   };
 
   return (
@@ -146,13 +184,41 @@ export function Profile({ user: initialUser }: ProfileProps) {
                   </div>
                 </div>
                  <Separator />
-                 <div>
-                    <h3 className="font-medium mb-2 flex items-center gap-2"><Shield /> Account Actions</h3>
-                    <div className="flex gap-2">
-                        <Button variant="outline">Export My Data</Button>
-                        <Button variant="destructive">Delete Account</Button>
-                    </div>
-                 </div>
+                <div>
+                  <h3 className="font-medium mb-2 flex items-center gap-2"><Shield /> Account Actions</h3>
+                  <div className="space-y-2">
+                      <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+                          <div>
+                              <Label className="font-medium">Register as a Doctor/Provider</Label>
+                              <p className="text-xs text-muted-foreground">Access provider dashboard and tools.</p>
+                          </div>
+                          <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                  <Button variant="secondary"><Briefcase className="mr-2 h-4 w-4" /> Register</Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                      <AlertDialogTitle>Confirm Account Upgrade</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                          Are you sure you want to register as a Doctor/Provider? This will grant you access to provider-level features. This action cannot be easily undone.
+                                      </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                      <AlertDialogCancel disabled={isUpgrading}>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={handleUpgrade} disabled={isUpgrading}>
+                                          {isUpgrading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                          Confirm & Upgrade
+                                      </AlertDialogAction>
+                                  </AlertDialogFooter>
+                              </AlertDialogContent>
+                          </AlertDialog>
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                          <Button variant="outline">Export My Data</Button>
+                          <Button variant="destructive">Delete Account</Button>
+                      </div>
+                  </div>
+                </div>
               </CardContent>
           </Card>
 
