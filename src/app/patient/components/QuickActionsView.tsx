@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Star, ArrowDown, Rocket, ArrowUp, ShieldAlert } from 'lucide-react';
 import React from 'react';
+import { Icon } from '@/components/Icon';
 
 interface QuickActionsViewProps {
   onHide: () => void;
@@ -18,7 +19,7 @@ const QuickActionCard = ({ action }: { action: QuickAction }) => (
   <Card className={cn("p-2 text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer relative", action.cardColor)}>
     {action.isStarred && <Star className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />}
     <CardContent className="p-2 flex flex-col items-center justify-center gap-2">
-      <action.icon className={cn("h-6 w-6", action.iconColor)} />
+      <Icon name={action.icon} className={cn("h-6 w-6", action.iconColor)} />
       <span className="text-xs font-medium text-center">{action.label}</span>
     </CardContent>
   </Card>

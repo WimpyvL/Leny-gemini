@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useState, useEffect } from 'react';
+import { Icon } from '@/components/Icon';
 
 function ConversationItem({
   conv,
@@ -42,7 +43,7 @@ function ConversationItem({
     >
       <Avatar className={cn("h-12 w-12 rounded-lg flex-shrink-0", conv.avatarColor)}>
         <AvatarFallback className={cn("rounded-lg text-white", conv.avatarColor)}>
-          {conv.icon && <conv.icon className="h-6 w-6" />}
+          {conv.icon && <Icon name={conv.icon} className="h-6 w-6" />}
         </AvatarFallback>
       </Avatar>
       <div className="w-full overflow-hidden">

@@ -14,7 +14,6 @@ import { cn } from '@/lib/utils';
 import { InviteDialog } from './InviteDialog';
 import { useToast } from '@/hooks/use-toast';
 import { AddParticipantDialog } from './AddParticipantDialog';
-import { Users } from 'lucide-react';
 
 interface ChatUIProps {
   user: User;
@@ -165,7 +164,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
           participants: updatedParticipants,
           participantString: newParticipantString,
           messages: [...c.messages, systemMessage],
-          icon: Users,
+          icon: 'Users',
           avatarColor: 'bg-gray-500',
         };
       }

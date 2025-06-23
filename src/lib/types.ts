@@ -7,7 +7,7 @@ export type User = {
   dob?: string;
   avatar: string;
   avatarColor: string;
-  icon?: LucideIcon;
+  icon?: string;
   role: 'patient' | 'doctor' | 'family' | 'assistant';
   healthInfo?: {
     height?: string;
@@ -60,7 +60,7 @@ export type Conversation = {
   unread?: number;
   avatar: string;
   avatarColor: string;
-  icon?: LucideIcon;
+  icon?: string;
   patientId?: string;
   doctorId?: string;
 };
@@ -78,7 +78,7 @@ export type ForYouCardType =
 export interface ForYouCardData {
     id: string;
     type: ForYouCardType;
-    icon: LucideIcon;
+    icon: string;
     iconColor: string;
     title: string;
     description: string;
@@ -92,7 +92,7 @@ export interface ForYouCardData {
 export interface QuickAction {
   id:string;
   label: string;
-  icon: LucideIcon;
+  icon: string;
   isStarred?: boolean;
   iconColor?: string;
   cardColor?: string;

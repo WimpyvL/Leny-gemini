@@ -1,15 +1,14 @@
 import type { User, Conversation, ForYouCardData, QuickAction } from './types';
-import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell, Pill, Siren, HeartPulse, NotepadText, CalendarPlus, PhoneCall, MapPin, BookOpenCheck, Newspaper, ClipboardPenLine } from 'lucide-react';
 
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'Leny', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
+  { id: 'assistant', name: 'Leny', avatar: '', icon: 'Bot', avatarColor: 'bg-primary', role: 'assistant' },
   { 
     id: 'doctor1', 
     name: 'Dr. Sarah Chen', 
     avatar: 'SC', 
     avatarColor: 'bg-sky-500', 
     role: 'doctor', 
-    icon: Stethoscope, 
+    icon: 'Stethoscope', 
     email: 'drchen@example.com',
     doctorInfo: {
       specialty: 'Cardiology',
@@ -68,7 +67,7 @@ const lenyConversation: Conversation = {
   participants: [patient1User, assistantUser],
   participantString: 'Your AI Health Companion',
   avatar: '',
-  icon: Bot,
+  icon: 'Bot',
   avatarColor: 'bg-primary',
   timestamp: new Date(), // most recent
   patientId: 'patient1',
@@ -107,7 +106,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_streak_1',
     type: 'health_streak',
-    icon: Flame,
+    icon: 'Flame',
     iconColor: 'text-orange-500',
     title: '7-Day Meditation Streak',
     description: 'Keep it up! Just 3 more days to reach your goal.',
@@ -127,7 +126,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_streak_2',
     type: 'health_streak',
-    icon: Dumbbell,
+    icon: 'Dumbbell',
     iconColor: 'text-blue-500',
     title: 'Monthly Workout Goal',
     description: 'You\'ve completed 10 workouts this month.',
@@ -144,7 +143,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_1',
     type: 'appointment',
-    icon: Calendar,
+    icon: 'Calendar',
     iconColor: 'text-blue-500',
     title: 'Upcoming Appointment',
     description: 'Cardiology check-up with Dr. Sarah Chen.',
@@ -154,7 +153,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_2',
     type: 'reminder',
-    icon: Bell,
+    icon: 'Bell',
     iconColor: 'text-orange-500',
     title: 'Medication Reminder',
     description: 'Take your daily multivitamin.',
@@ -163,7 +162,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_3',
     type: 'lab_result',
-    icon: FlaskConical,
+    icon: 'FlaskConical',
     iconColor: 'text-purple-500',
     title: 'New Lab Results',
     description: 'Your recent blood test results are available.',
@@ -173,7 +172,7 @@ export const mockForYouData: ForYouCardData[] = [
     {
     id: 'fy_4',
     type: 'health_tip',
-    icon: Lightbulb,
+    icon: 'Lightbulb',
     iconColor: 'text-green-500',
     title: 'Health Tip of the Day',
     description: 'Stay hydrated! Aim for 8 glasses of water.',
@@ -185,7 +184,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_1',
     type: 'research_update',
-    icon: ClipboardPenLine,
+    icon: 'ClipboardPenLine',
     iconColor: 'text-blue-600',
     title: 'New Study on Beta-Blockers in Post-MI Patients',
     description: 'A recent trial published in NEJM challenges long-standing practices for stable post-MI patients without heart failure.',
@@ -195,7 +194,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_2',
     type: 'industry_news',
-    icon: Newspaper,
+    icon: 'Newspaper',
     iconColor: 'text-green-600',
     title: 'FDA Approves New SGLT2 Inhibitor for Heart Failure',
     description: 'The FDA has expanded the indication for a new SGLT2 inhibitor to include patients with heart failure with preserved ejection fraction (HFpEF).',
@@ -205,7 +204,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_3',
     type: 'cme_course',
-    icon: BookOpenCheck,
+    icon: 'BookOpenCheck',
     iconColor: 'text-purple-600',
     title: 'Upcoming CME: Advanced Cardiac Imaging',
     description: 'Earn 5 CME credits with this online course covering the latest in cardiac MRI and CT angiography.',
@@ -215,7 +214,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_4',
     type: 'research_update',
-    icon: ClipboardPenLine,
+    icon: 'ClipboardPenLine',
     iconColor: 'text-blue-600',
     title: 'AI in ECG Interpretation Shows Promise',
     description: 'A new algorithm demonstrates higher accuracy in detecting atrial fibrillation from standard 12-lead ECGs compared to traditional methods.',
@@ -232,13 +231,13 @@ export const mockRecentSearches: string[] = [
 ];
 
 export const mockFavoriteActions: QuickAction[] = [
-    { id: 'fav1', label: 'Log Symptoms', icon: NotepadText, isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
-    { id: 'fav2', label: 'Track Medication', icon: Pill, isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
-    { id: 'fav3', label: 'Book Appointment', icon: CalendarPlus, isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
+    { id: 'fav1', label: 'Log Symptoms', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'fav2', label: 'Track Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
+    { id: 'fav3', label: 'Book Appointment', icon: 'CalendarPlus', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
 ];
 
 export const mockEmergencyProtocols: QuickAction[] = [
-    { id: 'em1', label: 'Call 911', icon: Siren, isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em2', label: 'Poison Control', icon: PhoneCall, isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em3', label: 'Find Urgent Care', icon: MapPin, isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em1', label: 'Call 911', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em2', label: 'Poison Control', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em3', label: 'Find Urgent Care', icon: 'MapPin', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
 ];

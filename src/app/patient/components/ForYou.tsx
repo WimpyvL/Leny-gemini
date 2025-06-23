@@ -9,6 +9,7 @@ import { ArrowRight, Flame, PlusCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { GoalCreator } from './GoalCreator';
+import { Icon } from '@/components/Icon';
 
 function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
     return (
@@ -22,7 +23,7 @@ function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSe
             <CardContent className="p-4 flex flex-col gap-3">
                 <div className="flex items-start gap-4">
                     <div className="bg-muted p-2 rounded-lg">
-                        <card.icon className={cn("h-6 w-6", card.iconColor)} />
+                        <Icon name={card.icon} className={cn("h-6 w-6", card.iconColor)} />
                     </div>
                     <div className="flex-1">
                         <h3 className="font-semibold text-card-foreground">{card.title}</h3>

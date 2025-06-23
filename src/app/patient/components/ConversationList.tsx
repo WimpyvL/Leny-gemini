@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Mic, UserPlus } from 'lucide-react';
 import { QuickActionsView } from './QuickActionsView';
 import { mockRecentSearches, mockFavoriteActions, mockEmergencyProtocols } from '@/lib/mock-data';
+import { Icon } from '@/components/Icon';
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -100,7 +101,7 @@ export function ConversationList({ conversations, selectedConversationId, onSele
                   <Avatar className="h-10 w-10 mr-3">
                     <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
                     <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
-                      {otherUser?.icon ? <otherUser.icon className="h-5 w-5" /> : otherUser?.name.charAt(0)}
+                      {otherUser?.icon ? <Icon name={otherUser.icon} className="h-5 w-5" /> : otherUser?.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="w-full overflow-hidden">

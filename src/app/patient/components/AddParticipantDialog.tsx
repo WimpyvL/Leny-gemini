@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/Icon';
 
 interface AddParticipantDialogProps {
   isOpen: boolean;
@@ -74,7 +75,7 @@ export function AddParticipantDialog({
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
                                 <AvatarFallback className={cn(user.avatarColor, 'text-white text-xs')}>
-                                    {user.icon ? <user.icon className="h-4 w-4" /> : user.name.charAt(0)}
+                                    {user.icon ? <Icon name={user.icon} className="h-4 w-4" /> : user.name.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
                             <span className="font-normal">{user.name}</span>

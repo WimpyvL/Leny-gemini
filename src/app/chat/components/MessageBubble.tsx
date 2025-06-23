@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AssistantSummary } from './AssistantSummary';
 import { useEffect, useState } from 'react';
+import { Icon } from '@/components/Icon';
 
 interface MessageBubbleProps {
   message: Message;
@@ -32,7 +33,7 @@ export function MessageBubble({ message, isOwnMessage, sender, currentUser }: Me
       {!isOwnMessage && userForAvatar && (
         <Avatar className="h-9 w-9">
           <AvatarFallback className={cn("text-white", userForAvatar.avatarColor)}>
-            {userForAvatar.icon ? <userForAvatar.icon className="h-5 w-5" /> : userForAvatar.avatar}
+            {userForAvatar.icon ? <Icon name={userForAvatar.icon} className="h-5 w-5" /> : userForAvatar.avatar}
             </AvatarFallback>
         </Avatar>
       )}

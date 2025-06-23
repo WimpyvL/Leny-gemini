@@ -5,6 +5,7 @@ import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { Icon } from '@/components/Icon';
 
 interface ChatWindowProps {
   conversation: Conversation;
@@ -33,7 +34,7 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers 
         <div className="flex items-center gap-3">
           <Avatar className={cn("h-10 w-10 rounded-lg", conversation.avatarColor)}>
               <AvatarFallback className={cn("rounded-lg text-white", conversation.avatarColor)}>
-                  {conversation.icon && <conversation.icon className="h-5 w-5" />}
+                  {conversation.icon && <Icon name={conversation.icon} className="h-5 w-5" />}
               </AvatarFallback>
           </Avatar>
           <div>

@@ -8,6 +8,7 @@ import { Sparkles, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
+import { Icon } from '@/components/Icon';
 
 interface ForYouDashboardProps {
   selectedItem: ForYouCardData | null;
@@ -24,8 +25,6 @@ const chartConfig = {
 function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
     if (!item.progressData) return null;
 
-    const Icon = item.icon;
-
     return (
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
@@ -37,7 +36,7 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
                         </Button>
                     )}
                     <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
-                        <Icon className={cn("h-6 w-6", item.iconColor)} />
+                        <Icon name={item.icon} className={cn("h-6 w-6", item.iconColor)} />
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
@@ -80,7 +79,6 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
 
 function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
     if (!item) return null;
-    const Icon = item.icon;
      return (
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
@@ -92,7 +90,7 @@ function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () 
                         </Button>
                      )}
                      <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
-                        <Icon className={cn("h-6 w-6", item.iconColor)} />
+                        <Icon name={item.icon} className={cn("h-6 w-6", item.iconColor)} />
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
