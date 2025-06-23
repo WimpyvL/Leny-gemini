@@ -4,7 +4,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Paperclip, Send } from 'lucide-react';
+import { Paperclip, Send, ArrowLeft, BrainCircuit } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,8 @@ interface PatientChatViewProps {
   currentUser: User;
   onSendMessage: (text: string) => void;
   allUsers: User[];
+  onBack?: () => void;
+  onShowAnalysis?: () => void;
 }
 
 function MessageBubble({ message, isOwnMessage, sender }: { message: any; isOwnMessage: boolean; sender?: User }) {
@@ -88,7 +90,7 @@ function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void
   );
 }
 
-export function PatientChatView({ conversation, currentUser, onSendMessage, allUsers }: PatientChatViewProps) {
+export function PatientChatView({ conversation, currentUser, onSendMessage, allUsers, onBack, onShowAnalysis }: PatientChatViewProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const patient = conversation.participants.find(p => p.role === 'patient');
 
@@ -106,12 +108,22 @@ export function PatientChatView({ conversation, currentUser, onSendMessage, allU
     <div className="flex flex-col h-screen bg-secondary">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-4">
+          {onBack && (
+            <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
+                <ArrowLeft className="h-5 w-5" />
+                <span className="sr-only">Back</span>
+            </Button>
+          )}
           <Avatar>
             <AvatarImage src={patient?.avatar} alt={patient?.name} data-ai-hint="patient person" />
             <AvatarFallback>{patient?.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <CardTitle className="text-xl font-headline">{patient?.name}</CardTitle>
         </div>
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={onShowAnalysis}>
+          <BrainCircuit className="h-5 w-5" />
+          <span className="sr-only">Show Analysis</span>
+        </Button>
       </CardHeader>
       
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
