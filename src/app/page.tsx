@@ -94,8 +94,13 @@ export default function Home() {
     
     try {
       const aiResponse = await runLandingChat(text, isFirstMessage);
-      setMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
+      if (aiResponse) {
+        setMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
+      } else {
+        setMessages((prev) => [...prev, { sender: 'ai', text: "I'm not sure how to respond to that. Can you try rephrasing?" }]);
+      }
     } catch (error) {
+      console.error("Landing page chat error:", error);
       setMessages((prev) => [...prev, { sender: 'ai', text: "Apologies, I'm having a little trouble right now. Please try again." }]);
     } finally {
       setIsLoading(false);
