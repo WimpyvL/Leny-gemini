@@ -241,3 +241,21 @@ export const mockEmergencyProtocols: QuickAction[] = [
     { id: 'em2', label: 'Poison Control', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
     { id: 'em3', label: 'Find Urgent Care', icon: 'MapPin', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
 ];
+
+export const mockDoctorRecentSearches: string[] = [
+    'Atrial Fibrillation treatment guidelines',
+    'Patient: Alex - medication history',
+    'Drug interactions for Warfarin',
+];
+
+export const mockDoctorFavoriteActions: QuickAction[] = [
+    { id: 'doc_fav1', label: 'Review Patient Chart', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'doc_fav2', label: 'Prescribe Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
+    { id: 'doc_fav3', label: 'Order Lab Tests', icon: 'FlaskConical', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
+];
+
+export const mockDoctorImmediateAssistance: QuickAction[] = [
+    { id: 'doc_em1', label: 'Consult Specialist', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'doc_em2', label: 'Admit to Hospital', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'doc_em3', label: 'View Protocols', icon: 'BookOpenCheck', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+];
