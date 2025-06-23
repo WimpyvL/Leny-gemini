@@ -98,3 +98,11 @@ export interface QuickAction {
   iconColor?: string;
   cardColor?: string;
 }
+
+export type AiExpert = {
+  specialty: string;
+  name: string;
+  gender: string;
+  personality: string;
+  expert_prompt: string;
+};

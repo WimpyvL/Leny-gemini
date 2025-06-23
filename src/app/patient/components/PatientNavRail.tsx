@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight, BrainCircuit } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import type { User as UserType } from '@/lib/types';
 
-export type PatientView = 'chats' | 'foryou' | 'profile';
+export type PatientView = 'chats' | 'foryou' | 'profile' | 'aiexperts';
 
 interface PatientNavRailProps {
     currentUser: UserType;
@@ -23,6 +23,10 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
         { view: 'chats' as PatientView, icon: MessageSquare, label: 'Chats' },
         { view: 'foryou' as PatientView, icon: Sparkles, label: 'For you' },
     ];
+
+    if (currentUser.role === 'doctor') {
+        navItems.push({ view: 'aiexperts' as PatientView, icon: BrainCircuit, label: 'AI Experts' });
+    }
 
     const commonTooltipProps = isExpanded ? { open: false } : {};
 

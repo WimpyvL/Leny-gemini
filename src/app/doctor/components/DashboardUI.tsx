@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { AiExpertsView } from './AiExpertsView';
 
 interface DashboardUIProps {
   user: User;
@@ -170,6 +171,8 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
         return renderChatView();
       case 'foryou':
         return renderForYouView();
+      case 'aiexperts':
+        return <AiExpertsView />;
       case 'profile':
         return <DoctorProfile user={user} />;
       default:
