@@ -115,6 +115,15 @@ export const mockForYouData: ForYouCardData[] = [
     currentStreak: 4,
     goal: 7,
     cta: 'Continue Streak',
+    progressData: [
+      { date: 'Day 1', value: 1 },
+      { date: 'Day 2', value: 1 },
+      { date: 'Day 3', value: 1 },
+      { date: 'Day 4', value: 1 },
+      { date: 'Day 5', value: 0 },
+      { date: 'Day 6', value: 0 },
+      { date: 'Day 7', value: 0 },
+    ],
   },
   {
     id: 'fy_streak_2',
@@ -126,6 +135,12 @@ export const mockForYouData: ForYouCardData[] = [
     currentStreak: 10,
     goal: 15,
     cta: 'Log Workout',
+     progressData: [
+      { date: 'Week 1', value: 3 },
+      { date: 'Week 2', value: 4 },
+      { date: 'Week 3', value: 3 },
+      { date: 'Week 4', value: 0 },
+    ],
   },
   {
     id: 'fy_1',

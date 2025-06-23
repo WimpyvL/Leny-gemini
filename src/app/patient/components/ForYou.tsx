@@ -1,7 +1,6 @@
 'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { mockForYouData } from '@/lib/mock-data';
 import type { ForYouCardData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -9,9 +8,15 @@ import { ArrowRight, Flame } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 
-function ForYouCard({ card }: { card: ForYouCardData }) {
+function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
     return (
-        <Card className="hover:shadow-md transition-shadow">
+        <Card 
+            onClick={onSelect}
+            className={cn(
+                "hover:shadow-md transition-all cursor-pointer",
+                isSelected ? "shadow-md border-primary ring-2 ring-primary" : "border-card"
+            )}
+        >
             <CardContent className="p-4 flex flex-col gap-3">
                 <div className="flex items-start gap-4">
                     <div className="bg-muted p-2 rounded-lg">
@@ -38,19 +43,26 @@ function ForYouCard({ card }: { card: ForYouCardData }) {
                         {card.type === 'appointment' ? 'On' : 'Received'}: {format(card.timestamp, 'MMM d, yyyy @ p')}
                     </p>
                 )}
-                <Button variant="ghost" size="sm" className="self-end -mr-2 -mb-2 text-primary hover:text-primary">
-                    {card.cta}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <div className="self-end -mr-2 -mb-2">
+                     <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
+                        {card.cta}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
             </CardContent>
         </Card>
     );
 }
 
+interface ForYouProps {
+    forYouData: ForYouCardData[];
+    selectedCardId?: string;
+    onCardSelect: (card: ForYouCardData) => void;
+}
 
-export function ForYou() {
-  const streaks = mockForYouData.filter(item => item.type === 'health_streak');
-  const otherItems = mockForYouData.filter(item => item.type !== 'health_streak');
+export function ForYou({ forYouData, selectedCardId, onCardSelect }: ForYouProps) {
+  const streaks = forYouData.filter(item => item.type === 'health_streak');
+  const otherItems = forYouData.filter(item => item.type !== 'health_streak');
 
   return (
     <div className="h-full flex flex-col bg-card">
@@ -63,7 +75,12 @@ export function ForYou() {
             <div className="space-y-3">
                 <h3 className="text-base font-semibold text-foreground px-1">Your Health Streaks</h3>
                 {streaks.map(card => (
-                  <ForYouCard key={card.id} card={card} />
+                  <ForYouCard 
+                    key={card.id} 
+                    card={card}
+                    isSelected={selectedCardId === card.id}
+                    onSelect={() => onCardSelect(card)}
+                  />
                 ))}
             </div>
         )}
@@ -74,7 +91,12 @@ export function ForYou() {
             <div className="space-y-3">
                  <h3 className="text-base font-semibold text-foreground px-1">Inbox</h3>
                 {otherItems.map(card => (
-                <ForYouCard key={card.id} card={card} />
+                <ForYouCard 
+                    key={card.id} 
+                    card={card} 
+                    isSelected={selectedCardId === card.id}
+                    onSelect={() => onCardSelect(card)}
+                />
                 ))}
             </div>
         )}

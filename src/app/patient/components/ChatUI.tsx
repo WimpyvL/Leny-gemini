@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import type { Conversation, User, Message } from '@/lib/types';
+import React, { useState, useEffect } from 'react';
+import type { Conversation, User, Message, ForYouCardData } from '@/lib/types';
 import { ConversationList } from './ConversationList';
 import { ChatWindow } from './ChatWindow';
-import { mockUsers } from '@/lib/mock-data';
+import { mockUsers, mockForYouData } from '@/lib/mock-data';
 import { PatientNavRail, type PatientView } from './PatientNavRail';
 import { ForYou } from './ForYou';
-import { Sparkles } from 'lucide-react';
+import { ForYouDashboard } from './ForYouDashboard';
 
 interface ChatUIProps {
   user: User;
@@ -18,6 +18,17 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0] || null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
+  const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
+
+  useEffect(() => {
+    // When switching back to chats, clear the selected 'For You' item
+    if (activeView === 'chats') {
+      setSelectedForYouItem(null);
+    } else {
+      // If 'For You' is active, select the first item by default
+      setSelectedForYouItem(mockForYouData.find(item => item.type === 'health_streak') || mockForYouData[0] || null);
+    }
+  }, [activeView]);
 
   const handleSendMessage = (text: string) => {
     if (!selectedConversation) return;
@@ -57,7 +68,11 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
               onSelectConversation={id => setSelectedConversation(conversations.find(c => c.id === id) || null)}
             />
           ) : (
-            <ForYou />
+            <ForYou 
+              forYouData={mockForYouData}
+              selectedCardId={selectedForYouItem?.id}
+              onCardSelect={setSelectedForYouItem}
+            />
           )}
         </div>
         <div className="hidden md:flex flex-col flex-1">
@@ -75,11 +90,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
               </div>
             )
           ) : (
-             <div className="flex flex-col items-center justify-center h-full bg-secondary text-center p-8">
-                <Sparkles className="h-16 w-16 text-primary mb-4" />
-                <h2 className="text-2xl font-bold">Welcome to Your Space</h2>
-                <p className="text-muted-foreground mt-2 max-w-md">This is your personal health dashboard. Select an item from the "For You" list to see more details here.</p>
-            </div>
+             <ForYouDashboard selectedItem={selectedForYouItem} />
           )}
         </div>
       </main>

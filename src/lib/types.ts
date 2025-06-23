@@ -53,4 +53,5 @@ export interface ForYouCardData {
     cta: string;
     currentStreak?: number;
     goal?: number;
+    progressData?: { date: string; value: number }[];
 }
