@@ -128,11 +128,11 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
           <div className="flex items-center gap-4">
-            <Link href="/patient">
-              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Patient View</Button>
+             <Link href="/login">
+              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
             </Link>
-            <Link href="/doctor">
-              <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Provider View</Button>
+            <Link href="/signup">
+              <Button>Sign Up Free</Button>
             </Link>
           </div>
         </nav>
