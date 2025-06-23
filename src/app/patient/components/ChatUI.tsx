@@ -18,17 +18,19 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0] || null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
+  
+  const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
 
   useEffect(() => {
-    // When switching back to chats, clear the selected 'For You' item
     if (activeView === 'chats') {
       setSelectedForYouItem(null);
     } else {
-      // If 'For You' is active, select the first item by default
-      setSelectedForYouItem(mockForYouData.find(item => item.type === 'health_streak') || mockForYouData[0] || null);
+      const firstStreak = forYouData.find(item => item.type === 'health_streak');
+      const firstItem = forYouData[0];
+      setSelectedForYouItem(firstStreak || firstItem || null);
     }
-  }, [activeView]);
+  }, [activeView, forYouData]);
 
   const handleSendMessage = (text: string) => {
     if (!selectedConversation) return;
@@ -51,6 +53,15 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
     setConversations(updatedConversations);
     setSelectedConversation(updatedConversations.find(c => c.id === selectedConversation.id) || null);
   };
+  
+  const handleAddGoal = (newGoal: Omit<ForYouCardData, 'id' | 'type'>) => {
+    const goalToAdd: ForYouCardData = {
+      ...newGoal,
+      id: `fy_goal_${Date.now()}`,
+      type: 'health_streak',
+    };
+    setForYouData(prevData => [goalToAdd, ...prevData]);
+  };
 
   return (
     <div className="flex h-screen w-full bg-background">
@@ -69,9 +80,10 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
             />
           ) : (
             <ForYou 
-              forYouData={mockForYouData}
+              forYouData={forYouData}
               selectedCardId={selectedForYouItem?.id}
               onCardSelect={setSelectedForYouItem}
+              onGoalCreate={handleAddGoal}
             />
           )}
         </div>

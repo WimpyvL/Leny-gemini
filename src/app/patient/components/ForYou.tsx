@@ -1,12 +1,14 @@
 'use client';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { ForYouCardData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { ArrowRight, Flame } from 'lucide-react';
+import { ArrowRight, Flame, PlusCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
+import { GoalCreator } from './GoalCreator';
 
 function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
     return (
@@ -58,47 +60,65 @@ interface ForYouProps {
     forYouData: ForYouCardData[];
     selectedCardId?: string;
     onCardSelect: (card: ForYouCardData) => void;
+    onGoalCreate: (goal: Omit<ForYouCardData, 'id' | 'type'>) => void;
 }
 
-export function ForYou({ forYouData, selectedCardId, onCardSelect }: ForYouProps) {
+export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate }: ForYouProps) {
+  const [isCreatingGoal, setIsCreatingGoal] = useState(false);
+
   const streaks = forYouData.filter(item => item.type === 'health_streak');
   const otherItems = forYouData.filter(item => item.type !== 'health_streak');
 
+  const handleSaveGoal = (goal: Omit<ForYouCardData, 'id' | 'type'>) => {
+    onGoalCreate(goal);
+    setIsCreatingGoal(false);
+  };
+  
   return (
     <div className="h-full flex flex-col bg-card">
-      <div className="p-4 border-b">
+      <div className="p-4 border-b flex justify-between items-center">
         <h2 className="text-xl font-bold font-headline">For You</h2>
-        <p className="text-sm text-muted-foreground">Personalized health insights & reminders.</p>
+        <Button variant="ghost" size="sm" onClick={() => setIsCreatingGoal(true)}>
+          <PlusCircle className="mr-2 h-4 w-4" />
+          New Goal
+        </Button>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {streaks.length > 0 && (
-            <div className="space-y-3">
-                <h3 className="text-base font-semibold text-foreground px-1">Your Health Streaks</h3>
-                {streaks.map(card => (
-                  <ForYouCard 
-                    key={card.id} 
-                    card={card}
-                    isSelected={selectedCardId === card.id}
-                    onSelect={() => onCardSelect(card)}
-                  />
-                ))}
-            </div>
-        )}
-        
-        {streaks.length > 0 && otherItems.length > 0 && <Separator className="my-4" />}
 
-        {otherItems.length > 0 && (
-            <div className="space-y-3">
-                 <h3 className="text-base font-semibold text-foreground px-1">Inbox</h3>
-                {otherItems.map(card => (
-                <ForYouCard 
-                    key={card.id} 
-                    card={card} 
-                    isSelected={selectedCardId === card.id}
-                    onSelect={() => onCardSelect(card)}
-                />
-                ))}
-            </div>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {isCreatingGoal ? (
+          <GoalCreator onSave={handleSaveGoal} onCancel={() => setIsCreatingGoal(false)} />
+        ) : (
+          <>
+            {streaks.length > 0 && (
+                <div className="space-y-3">
+                    <h3 className="text-base font-semibold text-foreground px-1">Your Health Streaks</h3>
+                    {streaks.map(card => (
+                      <ForYouCard 
+                        key={card.id} 
+                        card={card}
+                        isSelected={selectedCardId === card.id}
+                        onSelect={() => onCardSelect(card)}
+                      />
+                    ))}
+                </div>
+            )}
+            
+            {streaks.length > 0 && otherItems.length > 0 && <Separator className="my-4" />}
+
+            {otherItems.length > 0 && (
+                <div className="space-y-3">
+                    <h3 className="text-base font-semibold text-foreground px-1">Inbox</h3>
+                    {otherItems.map(card => (
+                    <ForYouCard 
+                        key={card.id} 
+                        card={card} 
+                        isSelected={selectedCardId === card.id}
+                        onSelect={() => onCardSelect(card)}
+                    />
+                    ))}
+                </div>
+            )}
+          </>
         )}
       </div>
     </div>
