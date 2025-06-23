@@ -1,5 +1,5 @@
-import type { User, Conversation, ForYouCardData } from './types';
-import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell } from 'lucide-react';
+import type { User, Conversation, ForYouCardData, QuickAction } from './types';
+import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell, Pill, BarChart3, Package, Siren, HeartPulse, Zap } from 'lucide-react';
 
 export const mockUsers: User[] = [
   { id: 'assistant', name: 'Leny', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
@@ -140,4 +140,23 @@ export const mockForYouData: ForYouCardData[] = [
     description: 'Stay hydrated! Aim for 8 glasses of water.',
     cta: 'Learn More',
   },
+];
+
+
+export const mockRecentSearches: string[] = [
+    'Drug interactions warfarin amoxicillin',
+    'Chest pain workup 45 year old male',
+    'CURB-65 pneumonia severity',
+];
+
+export const mockFavoriteActions: QuickAction[] = [
+    { id: 'fav1', label: 'Drug Interactions', icon: Pill, isStarred: true, cardColor: 'bg-yellow-100/50', iconColor: 'text-yellow-600' },
+    { id: 'fav2', label: 'CURB-65', icon: BarChart3, isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'fav3', label: 'Sepsis Bundle', icon: Package, isStarred: true, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+];
+
+export const mockEmergencyProtocols: QuickAction[] = [
+    { id: 'em1', label: 'Code Blue', icon: Siren, isStarred: true, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em2', label: 'Sepsis Bundle', icon: Zap, isStarred: true, cardColor: 'bg-orange-100/50', iconColor: 'text-orange-600' },
+    { id: 'em3', label: 'STEMI Protocol', icon: HeartPulse, isStarred: false, cardColor: 'bg-pink-100/50', iconColor: 'text-pink-600' },
 ];

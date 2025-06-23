@@ -72,3 +72,12 @@ export interface ForYouCardData {
     goal?: number;
     progressData?: { date: string; value: number }[];
 }
+
+export interface QuickAction {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  isStarred?: boolean;
+  iconColor?: string;
+  cardColor?: string;
+}
