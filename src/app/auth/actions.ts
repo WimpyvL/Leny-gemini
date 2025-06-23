@@ -17,9 +17,13 @@ export async function login(formData: FormData) {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Firebase Login Error:', error);
-    return redirect('/login?error=Invalid credentials. Please try again.');
+    let errorMessage = 'Invalid credentials. Please try again.';
+    if (error?.code === 'auth/invalid-credential') {
+      errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+    }
+    return redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
   }
 
   // For the prototype, we will just redirect based on a mock role.
@@ -48,9 +52,25 @@ export async function signup(formData: FormData) {
     // with the user's name, role (userType), and other details.
     // e.g., await createUserProfile(user.uid, { name, email, role: userType });
     console.log('User created:', user.uid, { name, userType });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Firebase Signup Error:', error);
-    return redirect('/signup?error=Could not create account. It might already exist.');
+    let errorMessage = 'Could not create account. Please try again.';
+    
+    switch (error.code) {
+        case 'auth/email-already-in-use':
+            errorMessage = 'This email address is already in use by another account.';
+            break;
+        case 'auth/weak-password':
+            errorMessage = 'The password is too weak. It must be at least 6 characters long.';
+            break;
+        case 'auth/invalid-email':
+            errorMessage = 'The email address is not valid.';
+            break;
+        default:
+            errorMessage = 'An unexpected error occurred. Please try again.';
+    }
+
+    return redirect(`/signup?error=${encodeURIComponent(errorMessage)}`);
   }
 
   if (userType === 'doctor') {

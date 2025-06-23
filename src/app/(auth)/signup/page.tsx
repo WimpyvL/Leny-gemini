@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,6 +16,8 @@ import { signup } from '@/app/auth/actions';
 import { auth } from '@/lib/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -28,6 +30,8 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export default function SignupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
   const { toast } = useToast();
 
   const handleGoogleSignIn = async () => {
@@ -57,6 +61,13 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Sign-up Failed</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <div className="grid gap-2">
             <Label htmlFor="name">Full Name</Label>
             <Input id="name" name="name" placeholder="John Doe" required />
