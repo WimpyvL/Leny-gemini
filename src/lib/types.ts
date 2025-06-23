@@ -40,7 +40,7 @@ export type Conversation = {
   doctorId?: string;
 };
 
-export type ForYouCardType = 'appointment' | 'reminder' | 'lab_result' | 'health_tip';
+export type ForYouCardType = 'appointment' | 'reminder' | 'lab_result' | 'health_tip' | 'health_streak';
 
 export interface ForYouCardData {
     id: string;
@@ -51,4 +51,6 @@ export interface ForYouCardData {
     description: string;
     timestamp?: Date;
     cta: string;
+    currentStreak?: number;
+    goal?: number;
 }

@@ -1,5 +1,5 @@
 import type { User, Conversation, ForYouCardData } from './types';
-import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb } from 'lucide-react';
+import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell } from 'lucide-react';
 
 export const mockUsers: User[] = [
   { id: 'user1', name: 'You', avatar: 'Y', avatarColor: 'bg-blue-400', role: 'patient' },
@@ -105,6 +105,28 @@ export const mockConversations: Conversation[] = [
 
 
 export const mockForYouData: ForYouCardData[] = [
+  {
+    id: 'fy_streak_1',
+    type: 'health_streak',
+    icon: Flame,
+    iconColor: 'text-orange-500',
+    title: '7-Day Meditation Streak',
+    description: 'Keep it up! Just 3 more days to reach your goal.',
+    currentStreak: 4,
+    goal: 7,
+    cta: 'Continue Streak',
+  },
+  {
+    id: 'fy_streak_2',
+    type: 'health_streak',
+    icon: Dumbbell,
+    iconColor: 'text-blue-500',
+    title: 'Monthly Workout Goal',
+    description: 'You\'ve completed 10 workouts this month.',
+    currentStreak: 10,
+    goal: 15,
+    cta: 'Log Workout',
+  },
   {
     id: 'fy_1',
     type: 'appointment',
