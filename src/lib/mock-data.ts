@@ -27,6 +27,34 @@ export const mockUsers: User[] = [
     }
   },
   { 
+    id: 'doctor2', 
+    name: 'Dr. David Rodriguez', 
+    avatar: 'DR', 
+    avatarColor: 'bg-purple-500', 
+    role: 'doctor', 
+    icon: 'Stethoscope', 
+    email: 'drdavid@example.com',
+    doctorInfo: {
+      specialty: 'Dermatology',
+      practiceName: 'Clear Skin Partners',
+      practiceAddress: '456 Wellness Ave, Suite 200, Medville, MD 12345',
+    }
+  },
+  { 
+    id: 'doctor3', 
+    name: 'Dr. Jessica Miller', 
+    avatar: 'JM', 
+    avatarColor: 'bg-pink-500', 
+    role: 'doctor', 
+    icon: 'Stethoscope', 
+    email: 'drjessica@example.com',
+    doctorInfo: {
+      specialty: 'Pediatrics',
+      practiceName: 'Happy Kids Pediatrics',
+      practiceAddress: '789 Child Way, Medville, MD 12345',
+    }
+  },
+  { 
     id: 'patient1', 
     name: 'Alex', 
     avatar: 'A', 

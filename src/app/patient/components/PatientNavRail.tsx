@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight, BrainCircuit } from 'lucide-react';
+import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight, BrainCircuit, MapPin } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import type { User as UserType } from '@/lib/types';
 
-export type PatientView = 'chats' | 'foryou' | 'profile' | 'aiexperts';
+export type PatientView = 'chats' | 'foryou' | 'profile' | 'aiexperts' | 'find-doctor';
 
 interface PatientNavRailProps {
     currentUser: UserType;
@@ -20,13 +20,13 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
     const [isExpanded, setIsExpanded] = useState(false);
 
     const navItems = [
-        { view: 'chats' as PatientView, icon: MessageSquare, label: 'Chats' },
-        { view: 'foryou' as PatientView, icon: Sparkles, label: 'For you' },
+        { view: 'chats' as PatientView, icon: MessageSquare, label: 'Chats', roles: ['patient', 'doctor'] },
+        { view: 'foryou' as PatientView, icon: Sparkles, label: 'For you', roles: ['patient', 'doctor'] },
+        { view: 'find-doctor' as PatientView, icon: MapPin, label: 'Find a Doctor', roles: ['patient'] },
+        { view: 'aiexperts' as PatientView, icon: BrainCircuit, label: 'AI Experts', roles: ['doctor'] },
     ];
 
-    if (currentUser.role === 'doctor') {
-        navItems.push({ view: 'aiexperts' as PatientView, icon: BrainCircuit, label: 'AI Experts' });
-    }
+    const filteredNavItems = navItems.filter(item => item.roles.includes(currentUser.role));
 
     const commonTooltipProps = isExpanded ? { open: false } : {};
 
@@ -52,7 +52,7 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
                 </Button>
 
                 <nav className={cn("flex flex-1 flex-col gap-2", isExpanded ? "items-stretch w-full" : "items-center")}>
-                    {navItems.map((item) => (
+                    {filteredNavItems.map((item) => (
                         <div key={item.label}>
                              <Tooltip {...commonTooltipProps}>
                                 <TooltipTrigger asChild>

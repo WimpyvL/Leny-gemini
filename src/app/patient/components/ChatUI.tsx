@@ -14,13 +14,15 @@ import { cn } from '@/lib/utils';
 import { InviteDialog } from './InviteDialog';
 import { useToast } from '@/hooks/use-toast';
 import { AddParticipantDialog } from './AddParticipantDialog';
+import { FindDoctorView } from './FindDoctorView';
 
 interface ChatUIProps {
   user: User;
   conversations: Conversation[];
+  doctors: User[];
 }
 
-export function ChatUI({ user, conversations: initialConversations }: ChatUIProps) {
+export function ChatUI({ user, conversations: initialConversations, doctors }: ChatUIProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [allUsers, setAllUsers] = useState<User[]>(mockUsers);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
@@ -288,6 +290,8 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
         );
       case 'foryou':
         return <ForYouDashboard selectedItem={selectedForYouItem} onBack={() => setSelectedForYouItem(null)}/>;
+      case 'find-doctor':
+        return <FindDoctorView doctors={doctors} />;
       case 'profile':
         return <Profile user={user} />;
       default:
@@ -296,7 +300,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
   }
 
   const showDetailView = (activeView === 'chats' && !!selectedConversation) || (activeView === 'foryou' && !!selectedForYouItem);
-  const showProfile = activeView === 'profile';
+  const fullWidthView = activeView === 'profile' || activeView === 'find-doctor';
 
   return (
     <div className="flex h-screen w-full bg-background">
@@ -321,7 +325,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
         />
       )}
       <main className="flex-1 flex ml-16">
-        {showProfile ? (
+        {fullWidthView ? (
             <div className="flex-1">
               {renderMainContent()}
             </div>

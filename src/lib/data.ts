@@ -3,7 +3,7 @@
 import { mockConversations, mockUsers } from '@/lib/mock-data';
 import type { User, Conversation } from '@/lib/types';
 import { db } from './firebase';
-import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { doc, getDoc, setDoc, getDocs, collection, query, where } from 'firebase/firestore';
 
 // This file acts as a data service layer.
 // In a real application, these functions would fetch data from a database like Firestore.
@@ -70,6 +70,28 @@ export async function getAllUsers(): Promise<User[]> {
     return mockUsers; // Fallback to mock data on error
   }
 }
+
+export async function getDoctors(): Promise<User[]> {
+  console.log('Fetching all doctors from Firestore');
+  try {
+    const usersCollectionRef = collection(db, 'users');
+    const q = query(usersCollectionRef, where("role", "==", "doctor"));
+    const doctorsSnapshot = await getDocs(q);
+
+    if (doctorsSnapshot.empty) {
+      console.warn("No doctors found in Firestore. Falling back to mock data.");
+      return mockUsers.filter(u => u.role === 'doctor');
+    }
+
+    const doctors = doctorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
+    return doctors;
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+    // Fallback to mock data on error
+    return mockUsers.filter(u => u.role === 'doctor');
+  }
+}
+
 
 export async function getConversationsForUser(userId: string): Promise<Conversation[]> {
   console.log(`Fetching conversations for user: ${userId}`);
