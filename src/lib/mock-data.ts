@@ -32,6 +32,7 @@ export const mockUsers: User[] = [
     }
   },
   { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient', email: 'casey@example.com' },
+  { id: 'patient3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'patient', email: 'jordan@example.com' },
 ];
 
 const assistantUser = mockUsers.find(u => u.id === 'assistant')!;

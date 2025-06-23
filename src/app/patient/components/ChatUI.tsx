@@ -11,6 +11,8 @@ import { ForYouDashboard } from './ForYouDashboard';
 import { Profile } from './Profile';
 import { runPatientChat } from '../actions';
 import { cn } from '@/lib/utils';
+import { InviteDialog } from './InviteDialog';
+import { useToast } from '@/hooks/use-toast';
 
 interface ChatUIProps {
   user: User;
@@ -19,9 +21,12 @@ interface ChatUIProps {
 
 export function ChatUI({ user, conversations: initialConversations }: ChatUIProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const [allUsers, setAllUsers] = useState<User[]>(mockUsers);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
   const [isLoading, setIsLoading] = useState(false);
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const { toast } = useToast();
   
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
@@ -112,6 +117,69 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
     setForYouData(prevData => [goalToAdd, ...prevData]);
   };
 
+  const handleSendInvite = (email: string) => {
+    let invitedUser = allUsers.find(u => u.email === email);
+    let currentUsers = allUsers;
+
+    if (invitedUser?.id === user.id) {
+      toast({ title: "You can't invite yourself.", variant: 'destructive' });
+      return;
+    }
+
+    if (!invitedUser) {
+      const newUser: User = {
+        id: `user_${Date.now()}`,
+        name: email.split('@')[0],
+        avatar: email.substring(0, 2).toUpperCase(),
+        avatarColor: 'bg-gray-500',
+        role: 'patient',
+        email: email,
+      };
+      invitedUser = newUser;
+      currentUsers = [...allUsers, newUser];
+      setAllUsers(currentUsers);
+    }
+
+    const existingConversation = conversations.find(c =>
+      c.participants.length === 2 &&
+      c.participants.some(p => p.id === invitedUser!.id) &&
+      c.participants.some(p => p.id === user.id)
+    );
+
+    if (existingConversation) {
+      toast({ title: 'Chat already exists.', description: 'Selecting the existing conversation.' });
+      setSelectedConversation(existingConversation);
+      setIsInviteDialogOpen(false);
+      return;
+    }
+
+    const newConversation: Conversation = {
+      id: `conv_${user.id}_${invitedUser.id}`,
+      title: invitedUser.name,
+      participants: [user, invitedUser],
+      participantString: `Chat with ${invitedUser.name}`,
+      messages: [{
+        id: `msg_system_${Date.now()}`,
+        senderId: 'assistant',
+        text: `You are now connected with ${invitedUser.name}.`,
+        timestamp: new Date(),
+        type: 'user',
+      }],
+      timestamp: new Date(),
+      patientId: user.id,
+      avatar: invitedUser.avatar,
+      avatarColor: invitedUser.avatarColor,
+      icon: invitedUser.icon,
+    };
+
+    const updatedConversations = [newConversation, ...conversations];
+    setConversations(updatedConversations);
+    setSelectedConversation(newConversation);
+    setIsInviteDialogOpen(false);
+    toast({ title: 'Invite Sent!', description: `You can now chat with ${invitedUser.name}.` });
+  };
+
+
   const renderLeftSidebar = () => {
     switch (activeView) {
       case 'chats':
@@ -120,6 +188,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
             conversations={conversations}
             selectedConversationId={selectedConversation?.id}
             onSelectConversation={id => setSelectedConversation(conversations.find(c => c.id === id) || null)}
+            onInviteClick={() => setIsInviteDialogOpen(true)}
           />
         );
       case 'foryou':
@@ -144,7 +213,7 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
             conversation={selectedConversation}
             currentUser={user}
             onSendMessage={handleSendMessage}
-            allUsers={mockUsers}
+            allUsers={allUsers}
             isLoading={isLoading && selectedConversation.participants.some(p => p.id === 'assistant')}
             onBack={() => setSelectedConversation(null)}
           />
@@ -171,6 +240,11 @@ export function ChatUI({ user, conversations: initialConversations }: ChatUIProp
         currentUser={user}
         activeView={activeView}
         onViewChange={setActiveView}
+      />
+      <InviteDialog
+        isOpen={isInviteDialogOpen}
+        onOpenChange={setIsInviteDialogOpen}
+        onInvite={handleSendInvite}
       />
       <main className="flex-1 flex ml-16">
         {showProfile ? (

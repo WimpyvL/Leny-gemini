@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Mic } from 'lucide-react';
+import { ArrowLeft, Mic, UserPlus } from 'lucide-react';
 import { QuickActionsView } from './QuickActionsView';
 import { mockRecentSearches, mockFavoriteActions, mockEmergencyProtocols } from '@/lib/mock-data';
 
@@ -15,9 +15,10 @@ interface ConversationListProps {
   conversations: Conversation[];
   selectedConversationId?: string;
   onSelectConversation: (id: string) => void;
+  onInviteClick: () => void;
 }
 
-export function ConversationList({ conversations, selectedConversationId, onSelectConversation }: ConversationListProps) {
+export function ConversationList({ conversations, selectedConversationId, onSelectConversation, onInviteClick }: ConversationListProps) {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
@@ -33,7 +34,14 @@ export function ConversationList({ conversations, selectedConversationId, onSele
 
   return (
     <div className="h-full w-full md:w-72 flex-shrink-0 flex flex-col bg-card border-r overflow-hidden">
-      <div className="p-4 border-b">
+      <div className="p-4 border-b space-y-4">
+        <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold font-headline">Chats</h2>
+            <Button variant="ghost" size="icon" onClick={onInviteClick}>
+                <UserPlus className="h-5 w-5" />
+                <span className="sr-only">New Chat</span>
+            </Button>
+        </div>
         <div className="relative flex items-center gap-2">
             {isSearchActive && (
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setIsSearchActive(false)}>
@@ -77,7 +85,7 @@ export function ConversationList({ conversations, selectedConversationId, onSele
         >
           <div className="p-2 space-y-1">
             {conversations.map(conv => {
-              const doctor = conv.participants.find(p => p.role === 'doctor' || p.role === 'assistant');
+              const otherUser = conv.participants.find(p => p.id !== 'patient1'); // a bit brittle, but ok for mock
               const lastMessage = conv.messages[conv.messages.length - 1];
 
               return (
@@ -90,13 +98,13 @@ export function ConversationList({ conversations, selectedConversationId, onSele
                   )}
                 >
                   <Avatar className="h-10 w-10 mr-3">
-                    <AvatarImage src={doctor?.avatar} alt={doctor?.name} data-ai-hint="doctor person" />
-                    <AvatarFallback className={cn(doctor?.avatarColor, 'text-white')}>
-                      {doctor?.icon ? <doctor.icon className="h-5 w-5" /> : doctor?.name.charAt(0)}
+                    <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
+                    <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
+                      {otherUser?.icon ? <otherUser.icon className="h-5 w-5" /> : otherUser?.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="w-full overflow-hidden">
-                    <p className="font-semibold text-sm">{doctor?.name}</p>
+                    <p className="font-semibold text-sm">{otherUser?.name}</p>
                     <p className="text-sm text-muted-foreground truncate">{lastMessage?.text || 'No messages yet'}</p>
                   </div>
                 </div>
