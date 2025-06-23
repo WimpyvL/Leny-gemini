@@ -39,3 +39,16 @@ export type Conversation = {
   patientId?: string;
   doctorId?: string;
 };
+
+export type ForYouCardType = 'appointment' | 'reminder' | 'lab_result' | 'health_tip';
+
+export interface ForYouCardData {
+    id: string;
+    type: ForYouCardType;
+    icon: LucideIcon;
+    iconColor: string;
+    title: string;
+    description: string;
+    timestamp?: Date;
+    cta: string;
+}
