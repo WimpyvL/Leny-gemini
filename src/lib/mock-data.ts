@@ -57,14 +57,11 @@ export const mockUsers: User[] = [
   { id: 'patient3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'patient', email: 'jordan@example.com' },
 ];
 
-const assistantUser = mockUsers.find(u => u.id === 'assistant')!;
-const patient1User = mockUsers.find(u => u.id === 'patient1')!;
-const drChenUser = mockUsers.find(u => u.id === 'doctor1')!;
-
 const lenyConversation: Conversation = {
   id: 'conv_leny_patient1',
   title: 'Leny',
-  participants: [patient1User, assistantUser],
+  participants: [], // Will be populated by data layer
+  participantIds: ['patient1', 'assistant'],
   participantString: 'Your AI Health Companion',
   avatar: '',
   icon: 'Bot',

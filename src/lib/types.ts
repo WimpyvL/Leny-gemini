@@ -54,6 +54,7 @@ export type Conversation = {
   id: string;
   title: string;
   participants: User[];
+  participantIds: string[];
   participantString: string;
   messages: Message[];
   timestamp: Date;

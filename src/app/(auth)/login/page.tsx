@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { login } from '@/app/auth/actions';
+import { login, findOrCreateUser } from '@/app/auth/actions';
 import { auth } from '@/lib/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -37,11 +37,23 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-      // For the prototype, we assume all Google sign-ins are for patients.
-      // A real app might check if the user exists and redirect based on their role,
-      // or send them to an onboarding flow.
-      router.push('/patient');
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Find or create the user in our database
+      const { role } = await findOrCreateUser({
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName,
+        avatar: user.photoURL,
+      });
+
+      // Redirect based on the role from our database
+      if (role === 'doctor') {
+        router.push('/doctor');
+      } else {
+        router.push('/patient');
+      }
     } catch (error) {
       console.error("Google Sign-In Error", error);
       toast({

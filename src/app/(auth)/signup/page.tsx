@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { signup } from '@/app/auth/actions';
+import { signup, findOrCreateUser } from '@/app/auth/actions';
 import { auth } from '@/lib/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -37,10 +37,21 @@ export default function SignupPage() {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-      // After signing up with Google, redirect to the patient page.
-      // A real app would redirect to an onboarding flow to select a role (patient/doctor).
-      router.push('/patient');
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const { role } = await findOrCreateUser({
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName,
+        avatar: user.photoURL,
+      });
+
+      if (role === 'doctor') {
+        router.push('/doctor');
+      } else {
+        router.push('/patient');
+      }
     } catch (error) {
       console.error("Google Sign-Up Error", error);
       toast({
