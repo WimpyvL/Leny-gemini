@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import type { User as UserType } from '@/lib/types';
 
-export type PatientView = 'chats' | 'foryou';
+export type PatientView = 'chats' | 'foryou' | 'profile';
 
 interface PatientNavRailProps {
     currentUser: UserType;
@@ -78,9 +78,11 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
                         <TooltipTrigger asChild>
                            <Button
                                 variant="ghost"
+                                onClick={() => onViewChange('profile')}
                                 className={cn(
                                     "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                                    isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center"
+                                    isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
+                                    activeView === 'profile' && "bg-sidebar-accent text-sidebar-accent-foreground"
                                 )}
                            >
                                <Avatar className="h-9 w-9">

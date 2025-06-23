@@ -3,10 +3,27 @@ import type { LucideIcon } from "lucide-react";
 export type User = {
   id: string;
   name: string;
+  email?: string;
+  dob?: string;
   avatar: string;
   avatarColor: string;
   icon?: LucideIcon;
   role: 'patient' | 'doctor' | 'family' | 'assistant';
+  healthInfo?: {
+    height?: string;
+    weight?: string;
+    bloodType?: string;
+    allergies?: string[];
+    conditions?: string[];
+    medications?: { name: string; dosage: string }[];
+  };
+  settings?: {
+    theme?: 'light' | 'dark' | 'system';
+    notifications?: {
+      email?: boolean;
+      push?: boolean;
+    }
+  }
 };
 
 export type Assessment = {

@@ -2,11 +2,63 @@ import type { User, Conversation, ForYouCardData } from './types';
 import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell } from 'lucide-react';
 
 export const mockUsers: User[] = [
-  { id: 'user1', name: 'You', avatar: 'Y', avatarColor: 'bg-blue-400', role: 'patient' },
+  { 
+    id: 'user1', 
+    name: 'You', 
+    avatar: 'Y', 
+    avatarColor: 'bg-blue-400', 
+    role: 'patient',
+    email: 'alex@example.com',
+    dob: '1990-05-15',
+    healthInfo: {
+      height: '5\'10"',
+      weight: '160 lbs',
+      bloodType: 'O+',
+      allergies: ['Peanuts', 'Pollen'],
+      conditions: ['Asthma'],
+      medications: [
+        { name: 'Albuterol', dosage: 'As needed' },
+        { name: 'Singulair', dosage: '10mg daily' },
+      ],
+    },
+    settings: {
+      theme: 'light',
+      notifications: {
+        email: true,
+        push: false,
+      }
+    }
+  },
   { id: 'assistant', name: 'Leny Assistant', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
-  { id: 'doctor1', name: 'Dr. Sarah Chen', avatar: 'SC', avatarColor: 'bg-sky-500', role: 'doctor', icon: Stethoscope },
-  { id: 'patient1', name: 'Alex', avatar: 'A', avatarColor: 'bg-orange-400', role: 'patient' },
-  { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient' },
+  { id: 'doctor1', name: 'Dr. Sarah Chen', avatar: 'SC', avatarColor: 'bg-sky-500', role: 'doctor', icon: Stethoscope, email: 'drchen@example.com' },
+  { 
+    id: 'patient1', 
+    name: 'Alex', 
+    avatar: 'A', 
+    avatarColor: 'bg-orange-400', 
+    role: 'patient',
+    email: 'alex@example.com',
+    dob: '1990-05-15',
+    healthInfo: {
+      height: '5\'10"',
+      weight: '160 lbs',
+      bloodType: 'O+',
+      allergies: ['Peanuts', 'Pollen'],
+      conditions: ['Asthma'],
+      medications: [
+        { name: 'Albuterol', dosage: 'As needed' },
+        { name: 'Singulair', dosage: '10mg daily' },
+      ],
+    },
+    settings: {
+      theme: 'light',
+      notifications: {
+        email: true,
+        push: false,
+      }
+    }
+  },
+  { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient', email: 'casey@example.com' },
 ];
 
 const groupChatParticipants = [
