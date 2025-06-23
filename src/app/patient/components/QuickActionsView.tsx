@@ -4,7 +4,7 @@ import type { QuickAction } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Star, ArrowDown, Rocket, ArrowUp, Siren } from 'lucide-react';
+import { Star, ArrowDown, Rocket, ArrowUp, ShieldAlert } from 'lucide-react';
 import React from 'react';
 
 interface QuickActionsViewProps {
@@ -54,7 +54,7 @@ export function QuickActionsView({ onHide, recentSearches, favorites, emergencyP
 
             <div>
                 <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2 px-1">
-                    <Siren className="h-4 w-4 text-red-500" /> Emergency Protocols
+                    <ShieldAlert className="h-4 w-4 text-red-500" /> Immediate Assistance
                 </h3>
                 <div className="grid grid-cols-3 gap-3">
                     {emergencyProtocols.map(action => <QuickActionCard key={action.id} action={action} />)}
