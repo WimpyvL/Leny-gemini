@@ -1,27 +1,67 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 import { DashboardUI } from "./components/DashboardUI";
-// We are temporarily using mock data to bypass Firebase during development.
-import { mockUsers, mockConversations } from "@/lib/mock-data";
-import type { User } from "@/lib/types";
+import { getUserData } from '@/app/auth/actions';
+import { getConversationsForUser, getAllUsers } from "@/lib/data";
+import type { User, Conversation } from "@/lib/types";
+import { Loader2 } from 'lucide-react';
+import { auth } from '@/lib/firebase';
 
-export default async function DoctorPage() {
-  const doctor = mockUsers.find(u => u.id === 'doctor1');
-  if (!doctor) return <div>Doctor not found.</div>;
 
-  // Manually populate conversations from mock data
-  const findUser = (id: string) => mockUsers.find(u => u.id === id);
-  let userMockConversations = mockConversations.filter(c => c.participantIds.includes(doctor.id));
+export default function DoctorPage() {
+  const { user: authUser, isLoading: isAuthLoading } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-  // The doctor shouldn't see chats with the assistant Leny in their patient list.
-  if (doctor.role === 'doctor') {
-    userMockConversations = userMockConversations.filter(c => !c.participantIds.includes('assistant'));
+  useEffect(() => {
+    if (isAuthLoading) {
+      return;
+    }
+    if (!authUser) {
+      router.push('/login');
+      return;
+    }
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      const userData = await getUserData(authUser.uid);
+
+      if (userData?.role === 'patient') {
+        router.push('/patient');
+        return;
+      }
+      
+      if (userData) {
+        setUser(userData);
+        const [userConversations, allUsersData] = await Promise.all([
+          getConversationsForUser(authUser.uid),
+          getAllUsers(),
+        ]);
+        setConversations(userConversations);
+        setAllUsers(allUsersData);
+      } else {
+        await auth.signOut();
+        router.push('/login');
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [authUser, isAuthLoading, router]);
+
+  if (isLoading || isAuthLoading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
-  const populatedConversations = userMockConversations.map(conv => ({
-    ...conv,
-    participants: conv.participantIds.map(id => findUser(id)).filter((u): u is User => !!u)
-  })).sort((a,b) => b.timestamp.getTime() - a.timestamp.getTime());
-
-  const allUsers = mockUsers;
-
-  return <DashboardUI user={doctor} conversations={populatedConversations} allUsers={allUsers} />;
+  return <DashboardUI user={user} conversations={conversations} allUsers={allUsers} />;
 }

@@ -75,8 +75,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
         title: 'Account Upgraded!',
         description: 'You are now registered as a provider. Redirecting...',
       });
-      // a small delay to allow toast to be seen
-      setTimeout(() => router.push('/doctor'), 1500);
+      router.refresh();
     } else {
       toast({
         title: 'Upgrade Failed',
