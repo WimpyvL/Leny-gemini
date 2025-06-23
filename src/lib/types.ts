@@ -65,7 +65,15 @@ export type Conversation = {
   doctorId?: string;
 };
 
-export type ForYouCardType = 'appointment' | 'reminder' | 'lab_result' | 'health_tip' | 'health_streak';
+export type ForYouCardType = 
+  | 'appointment' 
+  | 'reminder' 
+  | 'lab_result' 
+  | 'health_tip' 
+  | 'health_streak'
+  | 'research_update'
+  | 'industry_news'
+  | 'cme_course';
 
 export interface ForYouCardData {
     id: string;
@@ -82,7 +90,7 @@ export interface ForYouCardData {
 }
 
 export interface QuickAction {
-  id: string;
+  id:string;
   label: string;
   icon: LucideIcon;
   isStarred?: boolean;

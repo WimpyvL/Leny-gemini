@@ -1,5 +1,5 @@
 import type { User, Conversation, ForYouCardData, QuickAction } from './types';
-import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell, Pill, Siren, HeartPulse, NotepadText, CalendarPlus, PhoneCall, MapPin } from 'lucide-react';
+import { Bot, Stethoscope, Users, Calendar, Bell, FlaskConical, Lightbulb, Flame, Dumbbell, Pill, Siren, HeartPulse, NotepadText, CalendarPlus, PhoneCall, MapPin, BookOpenCheck, Newspaper, ClipboardPenLine } from 'lucide-react';
 
 export const mockUsers: User[] = [
   { id: 'assistant', name: 'Leny', avatar: '', icon: Bot, avatarColor: 'bg-primary', role: 'assistant' },
@@ -178,6 +178,49 @@ export const mockForYouData: ForYouCardData[] = [
     title: 'Health Tip of the Day',
     description: 'Stay hydrated! Aim for 8 glasses of water.',
     cta: 'Learn More',
+  },
+];
+
+export const mockDoctorForYouData: ForYouCardData[] = [
+  {
+    id: 'doc_fy_1',
+    type: 'research_update',
+    icon: ClipboardPenLine,
+    iconColor: 'text-blue-600',
+    title: 'New Study on Beta-Blockers in Post-MI Patients',
+    description: 'A recent trial published in NEJM challenges long-standing practices for stable post-MI patients without heart failure.',
+    timestamp: new Date('2024-07-28T09:00:00Z'),
+    cta: 'Read Summary',
+  },
+  {
+    id: 'doc_fy_2',
+    type: 'industry_news',
+    icon: Newspaper,
+    iconColor: 'text-green-600',
+    title: 'FDA Approves New SGLT2 Inhibitor for Heart Failure',
+    description: 'The FDA has expanded the indication for a new SGLT2 inhibitor to include patients with heart failure with preserved ejection fraction (HFpEF).',
+    timestamp: new Date('2024-07-27T14:00:00Z'),
+    cta: 'Review Data',
+  },
+  {
+    id: 'doc_fy_3',
+    type: 'cme_course',
+    icon: BookOpenCheck,
+    iconColor: 'text-purple-600',
+    title: 'Upcoming CME: Advanced Cardiac Imaging',
+    description: 'Earn 5 CME credits with this online course covering the latest in cardiac MRI and CT angiography.',
+    timestamp: new Date('2024-08-15T00:00:00Z'),
+    cta: 'Enroll Now',
+  },
+  {
+    id: 'doc_fy_4',
+    type: 'research_update',
+    icon: ClipboardPenLine,
+    iconColor: 'text-blue-600',
+    title: 'AI in ECG Interpretation Shows Promise',
+    description: 'A new algorithm demonstrates higher accuracy in detecting atrial fibrillation from standard 12-lead ECGs compared to traditional methods.',
+    timestamp: new Date('2024-07-26T11:30:00Z'),
+    cta: 'Explore the Research',
   },
 ];
 

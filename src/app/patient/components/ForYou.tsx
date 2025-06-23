@@ -60,17 +60,18 @@ interface ForYouProps {
     forYouData: ForYouCardData[];
     selectedCardId?: string;
     onCardSelect: (card: ForYouCardData) => void;
-    onGoalCreate: (goal: Omit<ForYouCardData, 'id' | 'type'>) => void;
+    onGoalCreate?: (goal: Omit<ForYouCardData, 'id' | 'type'>) => void;
+    showCreateGoal?: boolean;
 }
 
-export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate }: ForYouProps) {
+export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate, showCreateGoal = true }: ForYouProps) {
   const [isCreatingGoal, setIsCreatingGoal] = useState(false);
 
   const streaks = forYouData.filter(item => item.type === 'health_streak');
   const otherItems = forYouData.filter(item => item.type !== 'health_streak');
 
   const handleSaveGoal = (goal: Omit<ForYouCardData, 'id' | 'type'>) => {
-    onGoalCreate(goal);
+    onGoalCreate?.(goal);
     setIsCreatingGoal(false);
   };
   
@@ -78,14 +79,16 @@ export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate 
     <div className="h-full flex flex-col bg-card">
       <div className="p-4 border-b flex justify-between items-center">
         <h2 className="text-xl font-bold font-headline">For You</h2>
-        <Button variant="ghost" size="sm" onClick={() => setIsCreatingGoal(true)}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Goal
-        </Button>
+        {showCreateGoal && (
+            <Button variant="ghost" size="sm" onClick={() => setIsCreatingGoal(true)}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                New Goal
+            </Button>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-4">
-        {isCreatingGoal ? (
+        {isCreatingGoal && showCreateGoal ? (
           <GoalCreator onSave={handleSaveGoal} onCancel={() => setIsCreatingGoal(false)} />
         ) : (
           <div className="space-y-4">

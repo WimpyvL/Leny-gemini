@@ -9,7 +9,7 @@ import { PatientNavRail, type PatientView } from '@/app/patient/components/Patie
 import { ForYou } from '@/app/patient/components/ForYou';
 import { ForYouDashboard } from '@/app/patient/components/ForYouDashboard';
 import { DoctorProfile } from './DoctorProfile';
-import { mockForYouData } from '@/lib/mock-data';
+import { mockDoctorForYouData } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 
@@ -24,7 +24,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [activeView, setActiveView] = useState<PatientView>('chats');
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
-  const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
+  const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockDoctorForYouData);
   const [isAnalysisSheetOpen, setIsAnalysisSheetOpen] = useState(false);
 
   useEffect(() => {
@@ -74,12 +74,9 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
   const lastPatientMessage = patientMessages[patientMessages.length - 1];
 
   const handleAddGoal = (newGoal: Omit<ForYouCardData, 'id' | 'type'>) => {
-    const goalToAdd: ForYouCardData = {
-      ...newGoal,
-      id: `fy_goal_${Date.now()}`,
-      type: 'health_streak',
-    };
-    setForYouData(prevData => [goalToAdd, ...prevData]);
+    // This is a patient-specific action and won't be used in the doctor view,
+    // but we keep it for component compatibility.
+    console.log("Adding goal (not implemented for doctors):", newGoal);
   };
   
   const handleSelectConversation = (id: string) => {
@@ -138,7 +135,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
               forYouData={forYouData}
               selectedCardId={selectedForYouItem?.id}
               onCardSelect={setSelectedForYouItem}
-              onGoalCreate={handleAddGoal}
+              showCreateGoal={false}
           />
       </div>
       <div className={cn(
