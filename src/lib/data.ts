@@ -1,9 +1,9 @@
 'use server';
 
-import { mockConversations, mockUsers as fallbackUsers } from '@/lib/mock-data';
+import { mockConversations, mockUsers } from '@/lib/mock-data';
 import type { User, Conversation } from '@/lib/types';
 import { db } from './firebase';
-import { doc, getDoc, setDoc, getDocs, collection, query, where, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
 
 // This file acts as a data service layer.
 // In a real application, these functions would fetch data from a database like Firestore.
@@ -27,7 +27,20 @@ export async function getUser(userId: string): Promise<User | undefined> {
     if (userDocSnap.exists()) {
       return { id: userDocSnap.id, ...userDocSnap.data() } as User;
     } else {
-      console.warn(`No user found with ID: ${userId}`);
+      console.warn(`No user found with ID: ${userId}. Checking for mock user to seed database.`);
+
+      const mockUserToCreate = mockUsers.find(u => u.id === userId);
+      
+      if (mockUserToCreate) {
+        console.log(`Found mock user definition for '${userId}'. Creating profile in Firestore.`);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...userData } = mockUserToCreate;
+        await createUserProfile(userId, userData);
+        console.log(`Mock user '${userId}' created successfully.`);
+        return mockUserToCreate;
+      }
+      
+      console.warn(`No mock user definition found for ID: ${userId}`);
       return undefined;
     }
   } catch (error) {
@@ -45,7 +58,7 @@ export async function getAllUsers(): Promise<User[]> {
     
     // Add assistant user if not present
     if (!users.find(u => u.id === 'assistant')) {
-        const assistantUser = fallbackUsers.find(u => u.id === 'assistant');
+        const assistantUser = mockUsers.find(u => u.id === 'assistant');
         if (assistantUser) {
             users.push(assistantUser);
         }
@@ -54,7 +67,7 @@ export async function getAllUsers(): Promise<User[]> {
     return users;
   } catch (error) {
     console.error('Error fetching all users:', error);
-    return fallbackUsers; // Fallback to mock data on error
+    return mockUsers; // Fallback to mock data on error
   }
 }
 
@@ -66,14 +79,14 @@ export async function getConversationsForUser(userId: string): Promise<Conversat
   
   const findUser = (id: string) => allUsers.find(u => u.id === id);
 
-  const user = findUser(userId);
+  const user = await getUser(userId); // This will also create the user if they're a mock user and don't exist
   if (!user) return [];
 
-  let userMockConversations: Conversation[] = [];
-  if (user.role === 'patient') {
-    userMockConversations = mockConversations.filter(c => c.patientId === userId);
-  } else if (user.role === 'doctor') {
-    userMockConversations = mockConversations.filter(c => c.doctorId === userId);
+  let userMockConversations = mockConversations.filter(c => c.participantIds.includes(userId));
+
+  // The doctor shouldn't see chats with the assistant Leny in their patient list.
+  if (user.role === 'doctor') {
+    userMockConversations = userMockConversations.filter(c => !c.participantIds.includes('assistant'));
   }
 
   // Populate participant details from the user list we fetched
@@ -84,5 +97,5 @@ export async function getConversationsForUser(userId: string): Promise<Conversat
     return { ...conv, participants };
   });
 
-  return populatedConversations;
+  return populatedConversations.sort((a,b) => b.timestamp.getTime() - a.timestamp.getTime());
 }

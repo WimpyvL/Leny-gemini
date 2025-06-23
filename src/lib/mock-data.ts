@@ -93,9 +93,40 @@ const lenyConversation: Conversation = {
   ],
 };
 
+const doctorPatientConversation: Conversation = {
+  id: 'conv_doctor1_patient2',
+  title: 'Casey',
+  participants: [], // Populated by data layer
+  participantIds: ['doctor1', 'patient2'],
+  participantString: 'Chat with Casey',
+  avatar: 'C',
+  icon: undefined,
+  avatarColor: 'bg-green-400',
+  timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+  patientId: 'patient2',
+  doctorId: 'doctor1',
+  messages: [
+    {
+      id: 'msg_dp_1',
+      senderId: 'patient2',
+      text: 'Hi Dr. Chen, I had a question about the new medication you prescribed.',
+      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      type: 'user',
+    },
+    {
+      id: 'msg_dp_2',
+      senderId: 'doctor1',
+      text: 'Of course, Casey. What\'s on your mind?',
+      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      type: 'user',
+    },
+  ],
+};
+
 
 export const mockConversations: Conversation[] = [
-  lenyConversation
+  lenyConversation,
+  doctorPatientConversation,
 ];
 
 
