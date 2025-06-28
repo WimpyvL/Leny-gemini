@@ -4,18 +4,69 @@ import type { Conversation } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { QuickActionsView } from './QuickActionsView';
 import { mockRecentSearches, mockFavoriteActions, mockEmergencyProtocols } from '@/lib/mock-data';
+import { formatDistanceToNow } from 'date-fns';
 
 interface ConversationListProps {
   conversations: Conversation[];
   selectedConversationId?: string;
   onSelectConversation: (id: string) => void;
   onInviteClick: () => void;
+}
+
+function ConversationItem({
+  conv,
+  onSelectConversation,
+  selected,
+}: {
+  conv: Conversation;
+  onSelectConversation: (id: string) => void;
+  selected: boolean;
+}) {
+  const [relativeTime, setRelativeTime] = useState('');
+
+  useEffect(() => {
+    const updateRelativeTime = () => {
+      if (conv.timestamp) {
+        setRelativeTime(formatDistanceToNow(conv.timestamp, { addSuffix: true }));
+      }
+    };
+    updateRelativeTime();
+    const interval = setInterval(updateRelativeTime, 60000);
+    return () => clearInterval(interval);
+  }, [conv.timestamp]);
+  
+  const otherUser = conv.participants.find(p => p.id !== 'patient1');
+  const lastMessage = conv.messages[conv.messages.length - 1];
+
+  return (
+    <div
+      onClick={() => onSelectConversation(conv.id)}
+      className={cn(
+        "flex items-center p-2 cursor-pointer hover:bg-accent transition-colors rounded-lg",
+        selected && "bg-accent"
+      )}
+    >
+      <Avatar className="h-10 w-10 mr-3">
+        <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
+        <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
+          {otherUser?.icon ? <span className="text-xl">{otherUser.icon}</span> : otherUser?.name.charAt(0)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="w-full overflow-hidden">
+        <div className="flex justify-between items-baseline">
+            <p className="font-semibold text-sm truncate">{otherUser?.name}</p>
+            <p className="text-xs text-muted-foreground whitespace-nowrap">{relativeTime}</p>
+        </div>
+        <p className="text-sm text-muted-foreground truncate">{lastMessage?.text || 'No messages yet'}</p>
+      </div>
+    </div>
+  );
 }
 
 export function ConversationList({ conversations, selectedConversationId, onSelectConversation, onInviteClick }: ConversationListProps) {
@@ -84,32 +135,14 @@ export function ConversationList({ conversations, selectedConversationId, onSele
           className="h-full overflow-y-auto"
         >
           <div className="p-2 space-y-1">
-            {conversations.map(conv => {
-              const otherUser = conv.participants.find(p => p.id !== 'patient1'); // a bit brittle, but ok for mock
-              const lastMessage = conv.messages[conv.messages.length - 1];
-
-              return (
-                <div
-                  key={conv.id}
-                  onClick={() => onSelectConversation(conv.id)}
-                  className={cn(
-                    "flex items-center p-2 cursor-pointer hover:bg-accent transition-colors rounded-lg",
-                    selectedConversationId === conv.id && "bg-accent"
-                  )}
-                >
-                  <Avatar className="h-10 w-10 mr-3">
-                    <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
-                    <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
-                      {otherUser?.icon ? <span className="text-xl">{otherUser.icon}</span> : otherUser?.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="w-full overflow-hidden">
-                    <p className="font-semibold text-sm">{otherUser?.name}</p>
-                    <p className="text-sm text-muted-foreground truncate">{lastMessage?.text || 'No messages yet'}</p>
-                  </div>
-                </div>
-              );
-            })}
+            {conversations.map(conv => (
+                <ConversationItem 
+                    key={conv.id}
+                    conv={conv}
+                    onSelectConversation={onSelectConversation}
+                    selected={selectedConversationId === conv.id}
+                />
+            ))}
           </div>
         </motion.div>
         
