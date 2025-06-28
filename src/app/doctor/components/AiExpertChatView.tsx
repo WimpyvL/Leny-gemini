@@ -20,6 +20,12 @@ interface AiExpertChatViewProps {
 }
 
 function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Message; isOwnMessage: boolean; sender?: User; expert?: AiExpert }) {
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+  useEffect(() => {
+    setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+  }, [message.timestamp]);
+  
   const getInitials = (name: string) => {
     const parts = name.split(' ');
     if (parts.length > 1) return `${parts[0][0]}${parts[parts.length - 1][0]}`;
@@ -48,7 +54,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{format(message.timestamp, 'p, dd/MM/yy')}</p>
+            <p>{formattedTimestamp}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

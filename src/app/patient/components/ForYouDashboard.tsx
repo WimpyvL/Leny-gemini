@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 import type { ForYouCardData } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -78,7 +79,16 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
 }
 
 function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
+    const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+    useEffect(() => {
+        if (item?.timestamp) {
+            setFormattedTimestamp(format(item.timestamp, 'EEEE, MMMM d, yyyy @ p'));
+        }
+    }, [item?.timestamp]);
+    
     if (!item) return null;
+
      return (
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
@@ -94,7 +104,7 @@ function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () 
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
-                        {item.timestamp && <p className="text-sm text-muted-foreground">{format(item.timestamp, 'EEEE, MMMM d, yyyy @ p')}</p>}
+                        {formattedTimestamp && <p className="text-sm text-muted-foreground">{formattedTimestamp}</p>}
                     </div>
                 </div>
             </CardHeader>

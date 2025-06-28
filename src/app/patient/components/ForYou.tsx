@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { ForYouCardData } from '@/lib/types';
@@ -12,6 +12,15 @@ import { GoalCreator } from './GoalCreator';
 import { Icon } from '@/components/Icon';
 
 function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
+    const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+    useEffect(() => {
+        if (card.timestamp) {
+            const prefix = card.type === 'appointment' ? 'On' : 'Received';
+            setFormattedTimestamp(`${prefix}: ${format(card.timestamp, 'MMM d, yyyy @ p')}`);
+        }
+    }, [card.timestamp, card.type]);
+    
     return (
         <Card 
             onClick={onSelect}
@@ -41,9 +50,9 @@ function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSe
                     </div>
                 )}
 
-                {card.timestamp && (
+                {formattedTimestamp && (
                     <p className="text-xs text-muted-foreground font-medium">
-                        {card.type === 'appointment' ? 'On' : 'Received'}: {format(card.timestamp, 'MMM d, yyyy @ p')}
+                        {formattedTimestamp}
                     </p>
                 )}
                 <div className="self-end -mr-2 -mb-2">

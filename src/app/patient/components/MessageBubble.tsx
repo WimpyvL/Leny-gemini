@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import type { Message, User } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -11,6 +12,12 @@ interface MessageBubbleProps {
 }
 
 export function MessageBubble({ message, isOwnMessage, sender }: MessageBubbleProps) {
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  
+  useEffect(() => {
+    setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+  }, [message.timestamp]);
+  
   return (
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
       {!isOwnMessage && (
@@ -34,7 +41,7 @@ export function MessageBubble({ message, isOwnMessage, sender }: MessageBubblePr
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{format(message.timestamp, 'p, dd/MM/yy')}</p>
+            <p>{formattedTimestamp}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
