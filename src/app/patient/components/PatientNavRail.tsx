@@ -34,15 +34,15 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
         <TooltipProvider delayDuration={0}>
             <div
                 className={cn(
-                    "absolute top-0 left-0 h-screen z-20 flex flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out",
-                    isExpanded ? "w-56 p-4 items-start" : "w-16 p-2 items-center"
+                    "absolute top-0 left-0 h-screen z-20 flex flex-col border-r bg-gradient-to-b from-slate-50 to-slate-100 text-slate-700 transition-all duration-300 ease-in-out",
+                    isExpanded ? "w-56 p-4 items-start" : "w-[72px] p-2 items-center"
                 )}
             >
                 <Button
                     variant="ghost"
                     size="icon"
                     className={cn(
-                        "h-12 w-12 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg mb-4",
+                        "h-12 w-12 text-slate-600 hover:bg-slate-200/50 hover:text-primary rounded-xl mb-4",
                         isExpanded && "self-end"
                     )}
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -60,13 +60,16 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
                                         variant="ghost"
                                         onClick={() => onViewChange(item.view)}
                                         className={cn(
-                                            "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                            "h-12 rounded-xl text-slate-600 hover:bg-primary/10 hover:text-primary relative",
                                             isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
-                                            activeView === item.view && "bg-sidebar-accent text-sidebar-accent-foreground"
+                                            activeView === item.view && "bg-primary/10 text-primary"
                                         )}
                                     >
+                                        {activeView === item.view && (
+                                            <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 h-5 w-1 bg-primary rounded-r-full"></div>
+                                        )}
                                         <item.icon className="h-6 w-6" />
-                                        <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>{item.label}</span>
+                                        <span className={cn("sr-only", isExpanded && "not-sr-only font-semibold")}>{item.label}</span>
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="right">
@@ -84,15 +87,15 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
                                 variant="ghost"
                                 onClick={() => onViewChange('profile')}
                                 className={cn(
-                                    "h-12 rounded-lg text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                    "h-12 rounded-xl text-slate-600 hover:bg-primary/10 hover:text-primary",
                                     isExpanded ? "w-full justify-start px-3 gap-3" : "w-12 justify-center",
-                                    activeView === 'profile' && "bg-sidebar-accent text-sidebar-accent-foreground"
+                                    activeView === 'profile' && "bg-primary/10 text-primary"
                                 )}
                            >
                                <Avatar className="h-9 w-9">
-                                    <AvatarFallback className={cn("text-white", currentUser.avatarColor)}>{currentUser.avatar}</AvatarFallback>
+                                    <AvatarFallback className={cn("text-white font-semibold", currentUser.avatarColor)}>{currentUser.avatar}</AvatarFallback>
                                </Avatar>
-                               <span className={cn("sr-only", isExpanded && "not-sr-only font-medium")}>Profile</span>
+                               <span className={cn("sr-only", isExpanded && "not-sr-only font-semibold")}>Profile</span>
                            </Button>
                         </TooltipTrigger>
                         <TooltipContent side="right">

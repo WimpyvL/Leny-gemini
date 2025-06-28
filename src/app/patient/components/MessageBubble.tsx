@@ -4,26 +4,37 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Icon } from '@/components/Icon';
 
 interface MessageBubbleProps {
   message: Message;
   isOwnMessage: boolean;
   sender?: User;
+  isAiChat?: boolean;
 }
 
-export function MessageBubble({ message, isOwnMessage, sender }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwnMessage, sender, isAiChat }: MessageBubbleProps) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
   
   useEffect(() => {
-    setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+    const updateTimestamp = () => {
+      if (message.timestamp) {
+        setFormattedTimestamp(format(message.timestamp, 'p'));
+      }
+    };
+    updateTimestamp();
   }, [message.timestamp]);
   
+  const isAssistantMessage = sender?.id === 'assistant';
+
   return (
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
-      {!isOwnMessage && (
+      {!isOwnMessage && sender && (
         <Avatar className="h-8 w-8">
-          <AvatarImage src={sender?.avatar} alt={sender?.name} data-ai-hint="person" />
-          <AvatarFallback>{sender?.name.charAt(0)}</AvatarFallback>
+          <AvatarImage src={sender.avatar} alt={sender.name} data-ai-hint="person" />
+          <AvatarFallback className={cn(sender.avatarColor, 'text-white font-semibold')}>
+            {sender.icon ? <Icon name={sender.icon} /> : sender.name.charAt(0)}
+          </AvatarFallback>
         </Avatar>
       )}
       <TooltipProvider delayDuration={100}>
@@ -31,13 +42,15 @@ export function MessageBubble({ message, isOwnMessage, sender }: MessageBubblePr
           <TooltipTrigger asChild>
             <div
               className={cn(
-                "max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-2xl shadow-md",
+                "max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-[1.125rem] shadow-md", // 18px radius
                 isOwnMessage
-                  ? "bg-primary text-primary-foreground rounded-br-none"
-                  : "bg-card text-card-foreground rounded-bl-none"
+                  ? "bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-br-lg"
+                  : isAssistantMessage
+                  ? "bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 border border-sky-200 rounded-bl-lg"
+                  : "bg-slate-50 text-slate-800 border border-slate-200 rounded-bl-lg"
               )}
             >
-              <p className="text-base">{message.text}</p>
+              <p className="text-base whitespace-pre-wrap">{message.text}</p>
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>

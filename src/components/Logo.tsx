@@ -6,7 +6,7 @@ export function Logo() {
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary">
         <span className="text-lg font-bold text-primary-foreground">L</span>
       </div>
-      <h1 className="text-2xl font-bold font-headline text-foreground">Leny</h1>
+      <h1 className="text-2xl font-bold text-foreground">Leny</h1>
     </Link>
   );
 }
