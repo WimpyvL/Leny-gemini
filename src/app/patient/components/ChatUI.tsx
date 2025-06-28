@@ -15,6 +15,7 @@ import { InviteDialog } from './InviteDialog';
 import { useToast } from '@/hooks/use-toast';
 import { AddParticipantDialog } from './AddParticipantDialog';
 import { FindDoctorView } from './FindDoctorView';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ChatUIProps {
   user: User;
@@ -34,11 +35,12 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
   
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // This client-side effect ensures the correct view is shown on initial load
     // for desktop users without causing hydration errors.
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) { // md breakpoint
+    if (isMobile === false) { // isMobile is false for desktop, true for mobile, undefined on server/initial render
       if (activeView === 'chats' && initialConversations.length > 0 && !selectedConversation) {
         setSelectedConversation(initialConversations[0]);
       } else if (activeView === 'foryou' && forYouData.length > 0 && !selectedForYouItem) {
@@ -47,7 +49,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
         setSelectedForYouItem(firstStreak || firstItem || null);
       }
     }
-  }, [activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
+  }, [isMobile, activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
   
   useEffect(() => {
     // When the active view (e.g., Chats, For You) changes, clear any specific
@@ -221,6 +223,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
       id: `conv_${user.id}_${invitedUser.id}`,
       title: invitedUser.name,
       participants: newParticipants,
+      participantIds: newParticipants.map(p => p.id),
       participantString: generateParticipantString(newParticipants, user.id),
       messages: [{
         id: `msg_system_${Date.now()}`,
