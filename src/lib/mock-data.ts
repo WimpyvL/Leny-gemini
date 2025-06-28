@@ -1,11 +1,11 @@
 import type { User, Conversation, ForYouCardData, QuickAction, AiExpert } from './types';
 
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'Leny', avatar: 'L', icon: '🤖', avatarColor: 'bg-primary', role: 'assistant' },
+  { id: 'assistant', name: 'Leny', avatar: '🤖', icon: '🤖', avatarColor: 'bg-primary', role: 'assistant' },
   { 
     id: 'doctor1', 
     name: 'Dr. Sarah Chen', 
-    avatar: 'SC', 
+    avatar: '👩‍⚕️', 
     avatarColor: 'bg-sky-500', 
     role: 'doctor', 
     icon: '👩‍⚕️', 
@@ -85,6 +85,8 @@ export const mockUsers: User[] = [
   { id: 'patient3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'patient', email: 'jordan@example.com' },
 ];
 
+const now = new Date('2024-07-30T10:00:00Z');
+
 const lenyConversation: Conversation = {
   id: 'conv_leny_patient1',
   title: 'Leny',
@@ -94,28 +96,28 @@ const lenyConversation: Conversation = {
   avatar: 'L',
   icon: '🤖',
   avatarColor: 'bg-primary',
-  timestamp: new Date(), // most recent
+  timestamp: new Date(now.getTime() - 1 * 60000), // 1 minute ago
   patientId: 'patient1',
   messages: [
     {
       id: 'msg_leny_1',
       senderId: 'assistant',
       text: 'Hi Alex! I\'m Leny, your personal health companion. I\'m here to help answer questions, track your goals, or just chat. What\'s on your mind today?',
-      timestamp: new Date(),
+      timestamp: new Date(now.getTime() - 3 * 60000), // 3 minutes ago
       type: 'user',
     },
      {
       id: 'msg_leny_2',
       senderId: 'patient1',
       text: 'Hi Leny, I\'ve been having some trouble sleeping lately. Any tips?',
-      timestamp: new Date(),
+      timestamp: new Date(now.getTime() - 2 * 60000), // 2 minutes ago
       type: 'user',
     },
     {
       id: 'msg_leny_3',
       senderId: 'assistant',
       text: 'I\'m sorry to hear that, Alex. Trouble sleeping can be really frustrating. Some people find that creating a relaxing bedtime routine, like reading or listening to calm music, can be helpful. It\'s also often recommended to avoid screens for an hour before bed. Have you tried anything like that?',
-      timestamp: new Date(),
+      timestamp: new Date(now.getTime() - 1 * 60000), // 1 minute ago
       type: 'user',
     },
   ],
@@ -130,7 +132,7 @@ const doctorPatientConversation: Conversation = {
   avatar: 'C',
   icon: undefined,
   avatarColor: 'bg-green-400',
-  timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+  timestamp: new Date(now.getTime() - 24 * 60 * 60000), // 1 day ago
   patientId: 'patient2',
   doctorId: 'doctor1',
   messages: [
@@ -138,14 +140,14 @@ const doctorPatientConversation: Conversation = {
       id: 'msg_dp_1',
       senderId: 'patient2',
       text: 'Hi Dr. Chen, I had a question about the new medication you prescribed.',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      timestamp: new Date(now.getTime() - (24 * 60 + 2) * 60000), // 1 day and 2 mins ago
       type: 'user',
     },
     {
       id: 'msg_dp_2',
       senderId: 'doctor1',
       text: 'Of course, Casey. What\'s on your mind?',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
+      timestamp: new Date(now.getTime() - (24 * 60 + 1) * 60000), // 1 day and 1 min ago
       type: 'user',
     },
   ],
