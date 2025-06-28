@@ -44,10 +44,10 @@ export function MessageBubble({ message, isOwnMessage, sender, isAiChat }: Messa
               className={cn(
                 "max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-[1.125rem] shadow-md", // 18px radius
                 isOwnMessage
-                  ? "bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-br-lg"
+                  ? "bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-br-sm"
                   : isAssistantMessage
-                  ? "bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 border border-sky-200 rounded-bl-lg"
-                  : "bg-slate-50 text-slate-800 border border-slate-200 rounded-bl-lg"
+                  ? "bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 border border-sky-200 rounded-bl-sm"
+                  : "bg-slate-50 text-slate-800 border border-slate-200 rounded-bl-sm"
               )}
             >
               <p className="text-base whitespace-pre-wrap">{message.text}</p>
