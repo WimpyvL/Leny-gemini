@@ -10,7 +10,7 @@ The application is built on a specific, modern technology stack. Please adhere t
 -   **Language:** TypeScript
 -   **UI Library:** React
 -   **Component Framework:** shadcn/ui
--   **Styling:** Tailwind CSS
+-   
 -   **Generative AI:** Genkit
 
 Requests to change this core stack (e.g., to Angular, Vue, or other CSS frameworks) should be avoided.
