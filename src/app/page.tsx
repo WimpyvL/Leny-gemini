@@ -53,8 +53,8 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
-  const [helpTopics, setHelpTopics] = useState<typeof allHelpTopics>([]);
+  const [popularQuestions, setPopularQuestions] = useState<string[] | null>(null);
+  const [helpTopics, setHelpTopics] = useState<(typeof allHelpTopics) | null>(null);
   
   const chatCardRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -220,7 +220,7 @@ export default function Home() {
                         <div className="space-y-2">
                             <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                {helpTopics.map((topic) => (
+                                {helpTopics && helpTopics.map((topic) => (
                                     <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
                                         <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
                                             <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
@@ -234,7 +234,7 @@ export default function Home() {
                         <div className="space-y-2 pt-3">
                             <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
                             <div className="space-y-1.5">
-                                {popularQuestions.map((q, i) => (
+                                {popularQuestions && popularQuestions.map((q, i) => (
                                     <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
                                         <span className="group-hover:underline">{q}</span>
                                         <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
