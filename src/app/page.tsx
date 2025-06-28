@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 const allPopularQuestions = [
   "What should I do about my child's fever?",
@@ -52,6 +54,7 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [devMode, setDevMode] = useState(false);
   
   const [popularQuestions, setPopularQuestions] = useState<string[] | null>(null);
   const [helpTopics, setHelpTopics] = useState<(typeof allHelpTopics) | null>(null);
@@ -60,7 +63,9 @@ export default function Home() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    handleShuffle();
+    // This now runs only on the client, preventing hydration errors
+    setPopularQuestions(shuffleArray(allPopularQuestions).slice(0, 3));
+    setHelpTopics(shuffleArray(allHelpTopics).slice(0, 3));
   }, []);
 
   useEffect(() => {
@@ -133,12 +138,25 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
            <div className="flex items-center gap-4">
-              <Link href="/login">
-                <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
-              </Link>
-              <Link href="/signup">
-                <Button>Sign Up Free</Button>
-              </Link>
+              {devMode ? (
+                <>
+                  <Link href="/patient"><Button variant="outline">Patient View</Button></Link>
+                  <Link href="/doctor"><Button>Doctor View</Button></Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button>Sign Up Free</Button>
+                  </Link>
+                </>
+              )}
+               <div className="flex items-center space-x-2">
+                <Switch id="dev-mode" checked={devMode} onCheckedChange={setDevMode} />
+                <Label htmlFor="dev-mode" className="text-xs text-white/70">Dev</Label>
+              </div>
             </div>
         </nav>
       </header>
