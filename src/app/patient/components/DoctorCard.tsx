@@ -3,13 +3,14 @@ import type { User } from '@/lib/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 export function DoctorCard({ doctor }: { doctor: User }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-start gap-4">
         <Avatar className="h-16 w-16">
-          <AvatarFallback className="text-xl bg-sky-100 text-sky-700">{doctor.avatar}</AvatarFallback>
+          <AvatarFallback className={cn("text-xl text-white", doctor.avatarColor)}>{doctor.avatar}</AvatarFallback>
         </Avatar>
         <div>
           <CardTitle>{doctor.name}</CardTitle>

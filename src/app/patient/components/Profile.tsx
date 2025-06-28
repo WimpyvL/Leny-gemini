@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { upgradeToDoctor } from '@/app/auth/actions';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 
 interface ProfileProps {
@@ -95,7 +96,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   {user.avatar && <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />}
-                  <AvatarFallback className="text-2xl">{user.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback className={cn("text-2xl text-white", user.avatarColor)}>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <CardTitle className="text-2xl font-bold font-headline">{user.name}</CardTitle>

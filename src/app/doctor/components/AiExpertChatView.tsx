@@ -36,7 +36,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
       {!isOwnMessage && (
         <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert?.name || 'AI')}</AvatarFallback>
+          <AvatarFallback className={cn("text-white", expert?.avatarColor)}>{getInitials(expert?.name || 'AI')}</AvatarFallback>
         </Avatar>
       )}
       <TooltipProvider delayDuration={100}>
@@ -120,7 +120,7 @@ export function AiExpertChatView({ expert, messages, currentUser, onSendMessage,
     <div className="flex flex-col h-screen bg-secondary">
       <CardHeader className="flex flex-row items-center gap-4 p-4 border-b bg-card">
           <Avatar className="h-10 w-10">
-            <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert.name)}</AvatarFallback>
+            <AvatarFallback className={cn("text-white", expert.avatarColor)}>{getInitials(expert.name)}</AvatarFallback>
           </Avatar>
           <div>
             <CardTitle className="text-xl font-headline">{expert.name}</CardTitle>
@@ -142,7 +142,7 @@ export function AiExpertChatView({ expert, messages, currentUser, onSendMessage,
           {isLoading && (
              <div className="flex items-end gap-2 justify-start">
                 <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert.name)}</AvatarFallback>
+                    <AvatarFallback className={cn("text-white", expert.avatarColor)}>{getInitials(expert.name)}</AvatarFallback>
                 </Avatar>
                 <div className="max-w-xs p-3 rounded-2xl shadow-md bg-card text-card-foreground rounded-bl-none">
                     <div className="flex items-center gap-2">

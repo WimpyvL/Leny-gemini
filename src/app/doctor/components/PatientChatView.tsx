@@ -31,7 +31,7 @@ function MessageBubble({ message, isOwnMessage, sender }: { message: any; isOwnM
       {!isOwnMessage && (
         <Avatar className="h-8 w-8">
           <AvatarImage src={sender?.avatar} alt={sender?.name} data-ai-hint="person" />
-          <AvatarFallback>{sender?.name.charAt(0)}</AvatarFallback>
+          <AvatarFallback className={cn(sender?.avatarColor, 'text-white')}>{sender?.name.charAt(0)}</AvatarFallback>
         </Avatar>
       )}
       <TooltipProvider delayDuration={100}>
@@ -122,7 +122,7 @@ export function PatientChatView({ conversation, currentUser, onSendMessage, allU
           )}
           <Avatar>
             <AvatarImage src={patient?.avatar} alt={patient?.name} data-ai-hint="patient person" />
-            <AvatarFallback>{patient?.name.charAt(0)}</AvatarFallback>
+            <AvatarFallback className={cn(patient?.avatarColor, 'text-white')}>{patient?.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <CardTitle className="text-xl font-headline">{patient?.name}</CardTitle>
         </div>

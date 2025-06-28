@@ -56,7 +56,7 @@ export function AiExpertList({ experts, selectedExpert, onSelectExpert }: AiExpe
               )}
             >
               <Avatar className="h-10 w-10 mr-3">
-                <AvatarFallback className="bg-muted-foreground/20 text-foreground">
+                <AvatarFallback className={cn("text-white", expert.avatarColor)}>
                     {getInitials(expert.name)}
                 </AvatarFallback>
               </Avatar>

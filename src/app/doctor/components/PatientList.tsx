@@ -70,7 +70,7 @@ export function PatientList({ conversations, selectedConversationId, onSelectCon
                     >
                     <Avatar className="h-10 w-10 mr-3">
                         <AvatarImage src={patient?.avatar} alt={patient?.name} data-ai-hint="patient person" />
-                        <AvatarFallback>{patient?.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className={cn(patient?.avatarColor, 'text-white')}>{patient?.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="w-full overflow-hidden">
                         <p className="font-semibold text-sm">{patient?.name}</p>

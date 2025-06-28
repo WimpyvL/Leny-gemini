@@ -105,4 +105,5 @@ export type AiExpert = {
   gender: string;
   personality: string;
   expert_prompt: string;
+  avatarColor: string;
 };

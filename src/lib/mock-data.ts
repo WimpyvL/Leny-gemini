@@ -96,28 +96,28 @@ const lenyConversation: Conversation = {
   avatar: 'L',
   icon: '🤖',
   avatarColor: 'bg-primary',
-  timestamp: new Date(now.getTime() - 1 * 60000), // 1 minute ago
+  timestamp: new Date('2024-07-30T09:59:00Z'),
   patientId: 'patient1',
   messages: [
     {
       id: 'msg_leny_1',
       senderId: 'assistant',
       text: 'Hi Alex! I\'m Leny, your personal health companion. I\'m here to help answer questions, track your goals, or just chat. What\'s on your mind today?',
-      timestamp: new Date(now.getTime() - 3 * 60000), // 3 minutes ago
+      timestamp: new Date('2024-07-30T09:57:00Z'),
       type: 'user',
     },
      {
       id: 'msg_leny_2',
       senderId: 'patient1',
       text: 'Hi Leny, I\'ve been having some trouble sleeping lately. Any tips?',
-      timestamp: new Date(now.getTime() - 2 * 60000), // 2 minutes ago
+      timestamp: new Date('2024-07-30T09:58:00Z'),
       type: 'user',
     },
     {
       id: 'msg_leny_3',
       senderId: 'assistant',
       text: 'I\'m sorry to hear that, Alex. Trouble sleeping can be really frustrating. Some people find that creating a relaxing bedtime routine, like reading or listening to calm music, can be helpful. It\'s also often recommended to avoid screens for an hour before bed. Have you tried anything like that?',
-      timestamp: new Date(now.getTime() - 1 * 60000), // 1 minute ago
+      timestamp: new Date('2024-07-30T09:59:00Z'),
       type: 'user',
     },
   ],
@@ -132,7 +132,7 @@ const doctorPatientConversation: Conversation = {
   avatar: 'C',
   icon: undefined,
   avatarColor: 'bg-green-400',
-  timestamp: new Date(now.getTime() - 24 * 60 * 60000), // 1 day ago
+  timestamp: new Date('2024-07-29T10:00:00Z'),
   patientId: 'patient2',
   doctorId: 'doctor1',
   messages: [
@@ -140,14 +140,14 @@ const doctorPatientConversation: Conversation = {
       id: 'msg_dp_1',
       senderId: 'patient2',
       text: 'Hi Dr. Chen, I had a question about the new medication you prescribed.',
-      timestamp: new Date(now.getTime() - (24 * 60 + 2) * 60000), // 1 day and 2 mins ago
+      timestamp: new Date('2024-07-29T09:58:00Z'),
       type: 'user',
     },
     {
       id: 'msg_dp_2',
       senderId: 'doctor1',
       text: 'Of course, Casey. What\'s on your mind?',
-      timestamp: new Date(now.getTime() - (24 * 60 + 1) * 60000), // 1 day and 1 min ago
+      timestamp: new Date('2024-07-29T09:59:00Z'),
       type: 'user',
     },
   ],
@@ -318,7 +318,13 @@ export const mockDoctorImmediateAssistance: QuickAction[] = [
     { id: 'doc_em3', label: 'View Protocols', icon: '📚', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
 ];
 
-export const mockAiExperts: AiExpert[] = [
+const expertAvatarColors = [
+    'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-yellow-500', 'bg-lime-500', 'bg-green-500', 'bg-emerald-500', 
+    'bg-teal-500', 'bg-cyan-500', 'bg-sky-500', 'bg-blue-500', 'bg-indigo-500', 'bg-violet-500', 'bg-purple-500', 
+    'bg-fuchsia-500', 'bg-pink-500', 'bg-rose-500'
+];
+
+const expertsRaw: Omit<AiExpert, 'avatarColor'>[] = [
     {
         "specialty": "Neurosurgeon",
         "name": "Dr. Olivia Grant",
@@ -803,3 +809,8 @@ export const mockAiExperts: AiExpert[] = [
         "expert_prompt": "You are Dr. Sophia Reyes, a top-tier Sports Medicine Physician known for being calm and detail-oriented. You speak with authority and care, providing expert-level insights and precise recommendations in your field."
     }
 ];
+
+export const mockAiExperts: AiExpert[] = expertsRaw.map((expert, index) => ({
+    ...expert,
+    avatarColor: expertAvatarColors[index % expertAvatarColors.length],
+}));
