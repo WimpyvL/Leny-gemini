@@ -1,7 +1,8 @@
 import type { User, Conversation, ForYouCardData, QuickAction, AiExpert } from './types';
 
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'Leny', avatar: '🤖', icon: '🤖', avatarColor: 'bg-primary', role: 'assistant' },
+  { id: 'assistant', name: 'General Medical AI', avatar: '🤖', icon: '🤖', avatarColor: 'bg-purple-500', role: 'assistant' },
+  { id: 'health_assistant_2', name: 'Health Assistant', avatar: '🤖', icon: '🤖', avatarColor: 'bg-green-500', role: 'assistant' },
   { 
     id: 'doctor1', 
     name: 'Dr. Sarah Chen', 
@@ -83,80 +84,75 @@ export const mockUsers: User[] = [
   },
   { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient', email: 'casey@example.com' },
   { id: 'patient3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'patient', email: 'jordan@example.com' },
+  { id: 'user_mom', name: 'Mom', avatar: 'M', avatarColor: 'bg-pink-500', role: 'family' },
+  { id: 'user_dad', name: 'Dad', avatar: 'D', avatarColor: 'bg-blue-600', role: 'family' },
 ];
 
 const now = new Date('2024-07-30T10:00:00Z');
 
-const lenyConversation: Conversation = {
-  id: 'conv_leny_patient1',
-  title: 'Leny',
-  participants: [], // Will be populated by data layer
-  participantIds: ['patient1', 'assistant'],
-  participantString: 'Your AI Health Companion',
-  avatar: 'L',
+const generalMedicalAIConv: Conversation = {
+  id: 'conv_general_ai_doctor1',
+  title: 'General Medical AI',
+  participants: [],
+  participantIds: ['doctor1', 'assistant'],
+  participantString: 'New conversation with General Medical AI',
+  avatar: '🤖',
   icon: '🤖',
-  avatarColor: 'bg-primary',
-  timestamp: new Date('2024-07-30T09:59:00Z'),
-  patientId: 'patient1',
-  messages: [
-    {
-      id: 'msg_leny_1',
-      senderId: 'assistant',
-      text: 'Hi Alex! I\'m Leny, your personal health companion. I\'m here to help answer questions, track your goals, or just chat. What\'s on your mind today?',
-      timestamp: new Date('2024-07-30T09:57:00Z'),
-      type: 'user',
-    },
-     {
-      id: 'msg_leny_2',
-      senderId: 'patient1',
-      text: 'Hi Leny, I\'ve been having some trouble sleeping lately. Any tips?',
-      timestamp: new Date('2024-07-30T09:58:00Z'),
-      type: 'user',
-    },
-    {
-      id: 'msg_leny_3',
-      senderId: 'assistant',
-      text: 'I\'m sorry to hear that, Alex. Trouble sleeping can be really frustrating. Some people find that creating a relaxing bedtime routine, like reading or listening to calm music, can be helpful. It\'s also often recommended to avoid screens for an hour before bed. Have you tried anything like that?',
-      timestamp: new Date('2024-07-30T09:59:00Z'),
-      type: 'user',
-    },
-  ],
+  avatarColor: 'bg-purple-500',
+  timestamp: new Date('2024-07-30T10:00:00Z'),
+  patientId: 'doctor1',
+  messages: [],
+  unread: 1,
 };
 
-const doctorPatientConversation: Conversation = {
-  id: 'conv_doctor1_patient2',
-  title: 'Casey',
-  participants: [], // Populated by data layer
+const familyHealthChat: Conversation = {
+  id: 'conv_family_chat',
+  title: 'Family Health Chat',
+  participants: [],
+  participantIds: ['doctor1', 'user_mom', 'user_dad', 'patient1', 'health_assistant_2'],
+  participantString: 'Mom, Dad, Alex + Health Assistant',
+  avatar: '👨‍👩‍👧',
+  icon: '👨‍👩‍👧',
+  avatarColor: 'bg-purple-500',
+  timestamp: new Date('2024-07-30T10:00:00Z'),
+  patientId: 'patient1',
+  messages: [],
+};
+
+const healthAssistantChat: Conversation = {
+  id: 'conv_health_assistant',
+  title: 'Health Assistant',
+  participants: [],
+  participantIds: ['doctor1', 'health_assistant_2'],
+  participantString: 'Ready to help with health questions...',
+  avatar: '🤖',
+  icon: '🤖',
+  avatarColor: 'bg-green-500',
+  timestamp: new Date('2024-07-30T09:55:00Z'),
+  patientId: 'doctor1',
+  messages: [],
+};
+
+const drSarahChenChat: Conversation = {
+  id: 'conv_doctor_self_chat',
+  title: 'Dr. Sarah Chen',
+  participants: [],
   participantIds: ['doctor1', 'patient2'],
-  participantString: 'Chat with Casey',
-  avatar: 'C',
-  icon: undefined,
-  avatarColor: 'bg-green-400',
-  timestamp: new Date('2024-07-29T10:00:00Z'),
+  participantString: 'Lab results discussion.',
+  avatar: '👩‍⚕️',
+  icon: '👩‍⚕️',
+  avatarColor: 'bg-sky-500',
+  timestamp: new Date('2024-07-30T08:00:00Z'),
   patientId: 'patient2',
-  doctorId: 'doctor1',
-  messages: [
-    {
-      id: 'msg_dp_1',
-      senderId: 'patient2',
-      text: 'Hi Dr. Chen, I had a question about the new medication you prescribed.',
-      timestamp: new Date('2024-07-29T09:58:00Z'),
-      type: 'user',
-    },
-    {
-      id: 'msg_dp_2',
-      senderId: 'doctor1',
-      text: 'Of course, Casey. What\'s on your mind?',
-      timestamp: new Date('2024-07-29T09:59:00Z'),
-      type: 'user',
-    },
-  ],
+  messages: [],
 };
 
 
 export const mockConversations: Conversation[] = [
-  lenyConversation,
-  doctorPatientConversation,
+  generalMedicalAIConv,
+  familyHealthChat,
+  healthAssistantChat,
+  drSarahChenChat,
 ];
 
 

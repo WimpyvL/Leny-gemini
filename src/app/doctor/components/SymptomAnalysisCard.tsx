@@ -56,9 +56,11 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
       <>
         {analysis.emergencyDetected && (
           <Alert variant="destructive" className="mb-4">
-            <span className="text-xl">🚨</span>
-            <AlertTitle>Potential Emergency Detected!</AlertTitle>
-            <AlertDescription>{analysis.urgencyReason || 'Urgent action may be required.'}</AlertDescription>
+            <span className="text-xl mr-2">🚨</span>
+            <div>
+              <AlertTitle>Potential Emergency Detected!</AlertTitle>
+              <AlertDescription>{analysis.urgencyReason || 'Urgent action may be required.'}</AlertDescription>
+            </div>
           </Alert>
         )}
         
@@ -94,7 +96,7 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
   };
 
   return (
-    <Card className="h-full">
+    <Card className="h-full border-0 rounded-none bg-transparent">
       <CardHeader>
         <CardTitle>AI-Powered Analysis</CardTitle>
         <CardDescription>Analysis of the latest patient message.</CardDescription>
