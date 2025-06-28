@@ -3,7 +3,6 @@ import type { User } from '@/lib/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Stethoscope, Building, MapPin, MessageSquare } from 'lucide-react';
 
 export function DoctorCard({ doctor }: { doctor: User }) {
   return (
@@ -15,23 +14,23 @@ export function DoctorCard({ doctor }: { doctor: User }) {
         <div>
           <CardTitle>{doctor.name}</CardTitle>
           <CardDescription className="flex items-center gap-2 mt-1">
-            <Stethoscope className="h-4 w-4" /> {doctor.doctorInfo?.specialty}
+            <span>👩‍⚕️</span> {doctor.doctorInfo?.specialty}
           </CardDescription>
         </div>
       </CardHeader>
       <CardContent className="space-y-3 text-sm text-muted-foreground">
         <div className="flex items-center gap-3">
-          <Building className="h-4 w-4 flex-shrink-0" />
+          <span className="flex-shrink-0">🏢</span>
           <span>{doctor.doctorInfo?.practiceName}</span>
         </div>
         <div className="flex items-center gap-3">
-          <MapPin className="h-4 w-4 flex-shrink-0" />
+          <span className="flex-shrink-0">📍</span>
           <span>{doctor.doctorInfo?.practiceAddress}</span>
         </div>
       </CardContent>
       <CardFooter className="gap-2">
         <Button className="w-full">
-          <MessageSquare className="mr-2 h-4 w-4" /> Start a Chat
+          <span className="mr-2">💬</span> Start a Chat
         </Button>
         <Button variant="outline" className="w-full">Request Appointment</Button>
       </CardFooter>

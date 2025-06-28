@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, Sparkles, ChevronsLeft, ChevronsRight, BrainCircuit, MapPin } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -20,10 +20,10 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
     const [isExpanded, setIsExpanded] = useState(false);
 
     const navItems = [
-        { view: 'chats' as PatientView, icon: MessageSquare, label: 'Chats', roles: ['patient', 'doctor'] },
-        { view: 'foryou' as PatientView, icon: Sparkles, label: 'For you', roles: ['patient', 'doctor'] },
-        { view: 'find-doctor' as PatientView, icon: MapPin, label: 'Find a Doctor', roles: ['patient'] },
-        { view: 'aiexperts' as PatientView, icon: BrainCircuit, label: 'AI Experts', roles: ['doctor'] },
+        { view: 'chats' as PatientView, icon: '💬', label: 'Chats', roles: ['patient', 'doctor'] },
+        { view: 'foryou' as PatientView, icon: '✨', label: 'For you', roles: ['patient', 'doctor'] },
+        { view: 'find-doctor' as PatientView, icon: '📍', label: 'Find a Doctor', roles: ['patient'] },
+        { view: 'aiexperts' as PatientView, icon: '🧠', label: 'AI Experts', roles: ['doctor'] },
     ];
 
     const filteredNavItems = navItems.filter(item => item.roles.includes(currentUser.role));
@@ -68,7 +68,7 @@ export function PatientNavRail({ currentUser, activeView, onViewChange }: Patien
                                         {activeView === item.view && (
                                             <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 h-5 w-1 bg-primary rounded-r-full"></div>
                                         )}
-                                        <item.icon className="h-6 w-6" />
+                                        <span className="text-2xl">{item.icon}</span>
                                         <span className={cn("sr-only", isExpanded && "not-sr-only font-semibold")}>{item.label}</span>
                                     </Button>
                                 </TooltipTrigger>

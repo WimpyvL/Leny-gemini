@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Mic, Paperclip } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -175,7 +175,7 @@ export default function Home() {
           <Card ref={chatCardRef} className={cn("w-full shadow-2xl rounded-2xl transition-all duration-300 ease-in-out bg-background/80 backdrop-blur-lg border-white/20", isExpanded ? "max-w-lg" : "max-w-md")}>
             <CardContent className="p-4 space-y-3">
               <div className="relative" onFocus={() => setIsExpanded(true)}>
-                <Paperclip className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">📎</span>
                 <Input 
                   placeholder="Ask me anything..."
                   className="pl-10 pr-20 h-11 rounded-full text-sm"
@@ -185,7 +185,7 @@ export default function Home() {
                 />
                 <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center">
                   <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
-                    <Mic className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">🎤</span>
                   </Button>
                   <Button size="icon" className="rounded-full h-8 w-8" onClick={() => handleSendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
                     <ArrowRight className="h-4 w-4"/>

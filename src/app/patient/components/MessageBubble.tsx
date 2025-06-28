@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Icon } from '@/components/Icon';
 
 interface MessageBubbleProps {
   message: Message;
@@ -33,7 +32,7 @@ export function MessageBubble({ message, isOwnMessage, sender, isAiChat }: Messa
         <Avatar className="h-8 w-8">
           <AvatarImage src={sender.avatar} alt={sender.name} data-ai-hint="person" />
           <AvatarFallback className={cn(sender.avatarColor, 'text-white font-semibold')}>
-            {sender.icon ? <Icon name={sender.icon} /> : sender.name.charAt(0)}
+            {sender.icon ? <span className="text-lg">{sender.icon}</span> : sender.name.charAt(0)}
           </AvatarFallback>
         </Avatar>
       )}

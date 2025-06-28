@@ -7,10 +7,9 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Mic, UserPlus } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { QuickActionsView } from './QuickActionsView';
 import { mockRecentSearches, mockFavoriteActions, mockEmergencyProtocols } from '@/lib/mock-data';
-import { Icon } from '@/components/Icon';
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -39,7 +38,7 @@ export function ConversationList({ conversations, selectedConversationId, onSele
         <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold font-headline">Chats</h2>
             <Button variant="ghost" size="icon" onClick={onInviteClick}>
-                <UserPlus className="h-5 w-5" />
+                <span>➕</span>
                 <span className="sr-only">New Chat</span>
             </Button>
         </div>
@@ -71,7 +70,7 @@ export function ConversationList({ conversations, selectedConversationId, onSele
                 className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full"
                 onClick={handleMicClick}
             >
-                <Mic className="h-5 w-5 text-muted-foreground" />
+                <span className="text-xl text-muted-foreground">🎤</span>
                 <span className="sr-only">Chat with Leny</span>
             </Button>
           </div>
@@ -101,7 +100,7 @@ export function ConversationList({ conversations, selectedConversationId, onSele
                   <Avatar className="h-10 w-10 mr-3">
                     <AvatarImage src={otherUser?.avatar} alt={otherUser?.name} data-ai-hint="doctor person" />
                     <AvatarFallback className={cn(otherUser?.avatarColor, 'text-white')}>
-                      {otherUser?.icon ? <Icon name={otherUser.icon} className="h-5 w-5" /> : otherUser?.name.charAt(0)}
+                      {otherUser?.icon ? <span className="text-xl">{otherUser.icon}</span> : otherUser?.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="w-full overflow-hidden">

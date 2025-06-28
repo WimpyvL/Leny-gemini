@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Search } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { QuickActionsView } from '@/app/patient/components/QuickActionsView';
 import { mockDoctorRecentSearches, mockDoctorFavoriteActions, mockDoctorImmediateAssistance } from '@/lib/mock-data';
 
@@ -35,7 +35,7 @@ export function PatientList({ conversations, selectedConversationId, onSelectCon
               </Button>
             )}
             <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none z-10" />
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground pointer-events-none z-10">🔍</span>
                 <Input 
                   placeholder="Search patients..."
                   className="h-11 rounded-full bg-muted border-none focus-visible:ring-primary text-base pl-10"

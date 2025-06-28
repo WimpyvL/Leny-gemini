@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
-import { Icon } from '@/components/Icon';
 
 interface AssistantSummaryProps {
   assessment: Assessment;
@@ -28,7 +27,7 @@ export function AssistantSummary({ assessment, sender, timestamp }: AssistantSum
         {sender && (
             <Avatar className="h-9 w-9">
                 <AvatarFallback className={cn("text-white", sender.avatarColor)}>
-                    {sender.icon && <Icon name={sender.icon} className="h-5 w-5" />}
+                    {sender.icon && <span className="text-xl">{sender.icon}</span>}
                 </AvatarFallback>
             </Avatar>
         )}

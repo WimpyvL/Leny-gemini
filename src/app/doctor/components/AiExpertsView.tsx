@@ -6,7 +6,6 @@ import { AiExpertChatView } from './AiExpertChatView';
 import { mockAiExperts, mockUsers } from '@/lib/mock-data';
 import type { AiExpert, Message, User } from '@/lib/types';
 import { runExpertChat } from '../actions';
-import { BrainCircuit } from 'lucide-react';
 
 export function AiExpertsView() {
     const [selectedExpert, setSelectedExpert] = useState<AiExpert | null>(mockAiExperts[0]);
@@ -99,7 +98,7 @@ export function AiExpertsView() {
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full text-muted-foreground flex-col gap-4">
-                        <BrainCircuit className="h-16 w-16" />
+                        <span className="text-6xl">🧠</span>
                         <p className="text-lg">Select an AI Expert to start a consultation.</p>
                     </div>
                 )}

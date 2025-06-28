@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Paperclip, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 
 interface MessageInputProps {
   onSendMessage: (text: string) => void;
@@ -38,7 +38,7 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
   return (
     <div className="flex items-end gap-3 bg-white border-2 border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 rounded-3xl p-2 transition-all">
       <Button variant="ghost" size="icon" className="shrink-0 text-slate-500 hover:text-primary rounded-full h-10 w-10" onClick={() => alert('File sharing not implemented yet.')}>
-        <Paperclip />
+        <span>📎</span>
         <span className="sr-only">Attach file</span>
       </Button>
       <Textarea

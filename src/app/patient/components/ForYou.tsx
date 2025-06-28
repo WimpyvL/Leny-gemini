@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/button';
 import type { ForYouCardData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { ArrowRight, Flame, PlusCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { GoalCreator } from './GoalCreator';
-import { Icon } from '@/components/Icon';
 
 function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
     const [formattedTimestamp, setFormattedTimestamp] = useState('');
@@ -32,7 +31,7 @@ function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSe
             <CardContent className="p-4 flex flex-col gap-3">
                 <div className="flex items-start gap-4">
                     <div className="bg-muted p-2 rounded-lg">
-                        <Icon name={card.icon} className={cn("h-6 w-6", card.iconColor)} />
+                        <span className={cn("text-2xl", card.iconColor)}>{card.icon}</span>
                     </div>
                     <div className="flex-1">
                         <h3 className="font-semibold text-card-foreground">{card.title}</h3>
@@ -43,7 +42,7 @@ function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSe
                 {card.type === 'health_streak' && card.currentStreak !== undefined && card.goal !== undefined && (
                     <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
-                            <span className="flex items-center gap-1.5"><Flame className="h-4 w-4 text-orange-400" /> Streak Progress</span>
+                            <span className="flex items-center gap-1.5"><span className="text-orange-400">🔥</span> Streak Progress</span>
                             <span>{card.currentStreak} / {card.goal} {card.title.includes('Workout') ? 'Workouts' : 'Days'}</span>
                         </div>
                         <Progress value={(card.currentStreak / card.goal) * 100} className="h-2" />
@@ -91,7 +90,7 @@ export function ForYou({ forYouData, selectedCardId, onCardSelect, onGoalCreate,
         <h2 className="text-xl font-bold font-headline">For You</h2>
         {showCreateGoal && (
             <Button variant="ghost" size="sm" onClick={() => setIsCreatingGoal(true)}>
-                <PlusCircle className="mr-2 h-4 w-4" />
+                <span className="mr-2">➕</span>
                 New Goal
             </Button>
         )}

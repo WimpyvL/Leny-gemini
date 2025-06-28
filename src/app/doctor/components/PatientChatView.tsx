@@ -4,7 +4,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Paperclip, Send, ArrowLeft, BrainCircuit } from 'lucide-react';
+import { Send, ArrowLeft } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -77,7 +77,7 @@ function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void
   return (
     <div className="flex items-center gap-2">
       <Button variant="ghost" size="icon" className="shrink-0" onClick={() => alert('File sharing not implemented yet.')}>
-        <Paperclip className="text-foreground/70" />
+        <span className="text-foreground/70 text-xl">📎</span>
         <span className="sr-only">Attach file</span>
       </Button>
       <Textarea
@@ -127,7 +127,7 @@ export function PatientChatView({ conversation, currentUser, onSendMessage, allU
           <CardTitle className="text-xl font-headline">{patient?.name}</CardTitle>
         </div>
         <Button variant="ghost" size="icon" className="lg:hidden" onClick={onShowAnalysis}>
-          <BrainCircuit className="h-5 w-5" />
+          <span className="text-xl">🧠</span>
           <span className="sr-only">Show Analysis</span>
         </Button>
       </CardHeader>

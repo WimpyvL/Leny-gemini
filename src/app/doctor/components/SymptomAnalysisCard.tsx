@@ -6,7 +6,6 @@ import type { Message } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, List, HeartPulse, ShieldCheck, BrainCircuit } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface SymptomAnalysisCardProps {
@@ -46,7 +45,7 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
     if (!analysis) {
       return (
         <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-full p-8">
-            <BrainCircuit className="h-12 w-12 mb-4" />
+            <span className="text-5xl mb-4">🧠</span>
             <p className="text-lg font-medium">No Analysis Available</p>
             <p className="text-sm">Select a patient with recent messages to begin AI analysis.</p>
         </div>
@@ -57,7 +56,7 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
       <>
         {analysis.emergencyDetected && (
           <Alert variant="destructive" className="mb-4">
-            <AlertTriangle className="h-4 w-4" />
+            <span className="text-xl">🚨</span>
             <AlertTitle>Potential Emergency Detected!</AlertTitle>
             <AlertDescription>{analysis.urgencyReason || 'Urgent action may be required.'}</AlertDescription>
           </Alert>
@@ -66,7 +65,7 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
         <div className="space-y-4">
           <div>
             <h3 className="flex items-center gap-2 text-lg font-semibold font-headline">
-              <List />
+              <span>📝</span>
               Extracted Symptoms
             </h3>
             <div className="flex flex-wrap gap-2 mt-2">
@@ -82,7 +81,7 @@ export function SymptomAnalysisCard({ lastPatientMessage }: SymptomAnalysisCardP
 
           <div>
             <h3 className="flex items-center gap-2 text-lg font-semibold font-headline">
-              {analysis.emergencyDetected ? <HeartPulse className="text-destructive"/> : <ShieldCheck className="text-green-400" />}
+              {analysis.emergencyDetected ? <span className="text-destructive">🫀</span> : <span className="text-green-400">✅</span>}
               Urgency Level
             </h3>
             <p className="text-sm text-muted-foreground mt-1">

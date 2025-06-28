@@ -1,10 +1,10 @@
+'use client';
 import type { Message, User } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AssistantSummary } from './AssistantSummary';
 import { useEffect, useState } from 'react';
-import { Icon } from '@/components/Icon';
 
 interface MessageBubbleProps {
   message: Message;
@@ -33,7 +33,7 @@ export function MessageBubble({ message, isOwnMessage, sender, currentUser }: Me
       {!isOwnMessage && userForAvatar && (
         <Avatar className="h-9 w-9">
           <AvatarFallback className={cn("text-white", userForAvatar.avatarColor)}>
-            {userForAvatar.icon ? <Icon name={userForAvatar.icon} className="h-5 w-5" /> : userForAvatar.avatar}
+            {userForAvatar.icon ? <span className="text-xl">{userForAvatar.icon}</span> : userForAvatar.avatar}
             </AvatarFallback>
         </Avatar>
       )}

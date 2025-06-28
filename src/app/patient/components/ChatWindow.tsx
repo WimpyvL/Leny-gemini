@@ -9,7 +9,6 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/Icon';
 
 interface ChatWindowProps {
   conversation: Conversation;
@@ -51,7 +50,7 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
           <Avatar className="h-12 w-12">
             <AvatarImage src={!isGroupChat ? otherParticipants[0]?.avatar : undefined} alt={conversation.title} data-ai-hint="doctor person" />
             <AvatarFallback className={cn(conversation.avatarColor, 'text-white font-bold')}>
-              {conversation.icon ? <Icon name={conversation.icon} className="h-6 w-6" /> : conversation.title.charAt(0)}
+              {conversation.icon ? <span className="text-2xl">{conversation.icon}</span> : conversation.title.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div className="overflow-hidden">
@@ -94,7 +93,7 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
             <div className="flex items-end gap-2 justify-start">
               <Avatar className="h-8 w-8">
                 <AvatarFallback className={cn(assistantUser.avatarColor, 'text-white')}>
-                  {assistantUser.icon ? <Icon name={assistantUser.icon} className="h-5 w-5" /> : assistantUser.avatar}
+                  {assistantUser.icon ? <span className="text-xl">{assistantUser.icon}</span> : assistantUser.avatar}
                 </AvatarFallback>
               </Avatar>
               <div className="max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-2xl shadow-md bg-card text-card-foreground rounded-bl-none">

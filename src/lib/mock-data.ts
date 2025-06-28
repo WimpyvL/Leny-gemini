@@ -1,14 +1,14 @@
 import type { User, Conversation, ForYouCardData, QuickAction, AiExpert } from './types';
 
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'Leny', avatar: '', icon: 'Bot', avatarColor: 'bg-primary', role: 'assistant' },
+  { id: 'assistant', name: 'Leny', avatar: 'L', icon: '🤖', avatarColor: 'bg-primary', role: 'assistant' },
   { 
     id: 'doctor1', 
     name: 'Dr. Sarah Chen', 
     avatar: 'SC', 
     avatarColor: 'bg-sky-500', 
     role: 'doctor', 
-    icon: 'Stethoscope', 
+    icon: '👩‍⚕️', 
     email: 'drchen@example.com',
     doctorInfo: {
       specialty: 'Cardiology',
@@ -32,7 +32,7 @@ export const mockUsers: User[] = [
     avatar: 'DR', 
     avatarColor: 'bg-purple-500', 
     role: 'doctor', 
-    icon: 'Stethoscope', 
+    icon: '👩‍⚕️', 
     email: 'drdavid@example.com',
     doctorInfo: {
       specialty: 'Dermatology',
@@ -46,7 +46,7 @@ export const mockUsers: User[] = [
     avatar: 'JM', 
     avatarColor: 'bg-pink-500', 
     role: 'doctor', 
-    icon: 'Stethoscope', 
+    icon: '👩‍⚕️', 
     email: 'drjessica@example.com',
     doctorInfo: {
       specialty: 'Pediatrics',
@@ -91,8 +91,8 @@ const lenyConversation: Conversation = {
   participants: [], // Will be populated by data layer
   participantIds: ['patient1', 'assistant'],
   participantString: 'Your AI Health Companion',
-  avatar: '',
-  icon: 'Bot',
+  avatar: 'L',
+  icon: '🤖',
   avatarColor: 'bg-primary',
   timestamp: new Date(), // most recent
   patientId: 'patient1',
@@ -162,7 +162,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_streak_1',
     type: 'health_streak',
-    icon: 'Flame',
+    icon: '🔥',
     iconColor: 'text-orange-500',
     title: '7-Day Meditation Streak',
     description: 'Keep it up! Just 3 more days to reach your goal.',
@@ -182,7 +182,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_streak_2',
     type: 'health_streak',
-    icon: 'Dumbbell',
+    icon: '🏋️',
     iconColor: 'text-blue-500',
     title: 'Monthly Workout Goal',
     description: 'You\'ve completed 10 workouts this month.',
@@ -199,7 +199,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_1',
     type: 'appointment',
-    icon: 'Calendar',
+    icon: '🗓️',
     iconColor: 'text-blue-500',
     title: 'Upcoming Appointment',
     description: 'Cardiology check-up with Dr. Sarah Chen.',
@@ -209,7 +209,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_2',
     type: 'reminder',
-    icon: 'Bell',
+    icon: '🔔',
     iconColor: 'text-orange-500',
     title: 'Medication Reminder',
     description: 'Take your daily multivitamin.',
@@ -218,7 +218,7 @@ export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_3',
     type: 'lab_result',
-    icon: 'FlaskConical',
+    icon: '🧪',
     iconColor: 'text-purple-500',
     title: 'New Lab Results',
     description: 'Your recent blood test results are available.',
@@ -228,7 +228,7 @@ export const mockForYouData: ForYouCardData[] = [
     {
     id: 'fy_4',
     type: 'health_tip',
-    icon: 'Lightbulb',
+    icon: '💡',
     iconColor: 'text-green-500',
     title: 'Health Tip of the Day',
     description: 'Stay hydrated! Aim for 8 glasses of water.',
@@ -240,7 +240,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_1',
     type: 'research_update',
-    icon: 'ClipboardPenLine',
+    icon: '📋',
     iconColor: 'text-blue-600',
     title: 'New Study on Beta-Blockers in Post-MI Patients',
     description: 'A recent trial published in NEJM challenges long-standing practices for stable post-MI patients without heart failure.',
@@ -250,7 +250,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_2',
     type: 'industry_news',
-    icon: 'Newspaper',
+    icon: '📰',
     iconColor: 'text-green-600',
     title: 'FDA Approves New SGLT2 Inhibitor for Heart Failure',
     description: 'The FDA has expanded the indication for a new SGLT2 inhibitor to include patients with heart failure with preserved ejection fraction (HFpEF).',
@@ -260,7 +260,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_3',
     type: 'cme_course',
-    icon: 'BookOpenCheck',
+    icon: '📚',
     iconColor: 'text-purple-600',
     title: 'Upcoming CME: Advanced Cardiac Imaging',
     description: 'Earn 5 CME credits with this online course covering the latest in cardiac MRI and CT angiography.',
@@ -270,7 +270,7 @@ export const mockDoctorForYouData: ForYouCardData[] = [
   {
     id: 'doc_fy_4',
     type: 'research_update',
-    icon: 'ClipboardPenLine',
+    icon: '📋',
     iconColor: 'text-blue-600',
     title: 'AI in ECG Interpretation Shows Promise',
     description: 'A new algorithm demonstrates higher accuracy in detecting atrial fibrillation from standard 12-lead ECGs compared to traditional methods.',
@@ -287,15 +287,15 @@ export const mockRecentSearches: string[] = [
 ];
 
 export const mockFavoriteActions: QuickAction[] = [
-    { id: 'fav1', label: 'Log Symptoms', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
-    { id: 'fav2', label: 'Track Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
-    { id: 'fav3', label: 'Book Appointment', icon: 'CalendarPlus', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
+    { id: 'fav1', label: 'Log Symptoms', icon: '📝', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'fav2', label: 'Track Medication', icon: '💊', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
+    { id: 'fav3', label: 'Book Appointment', icon: '📅', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
 ];
 
 export const mockEmergencyProtocols: QuickAction[] = [
-    { id: 'em1', label: 'Call 911', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em2', label: 'Poison Control', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em3', label: 'Find Urgent Care', icon: 'MapPin', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em1', label: 'Call 911', icon: '🚨', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em2', label: 'Poison Control', icon: '📞', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'em3', label: 'Find Urgent Care', icon: '📍', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
 ];
 
 export const mockDoctorRecentSearches: string[] = [
@@ -305,15 +305,15 @@ export const mockDoctorRecentSearches: string[] = [
 ];
 
 export const mockDoctorFavoriteActions: QuickAction[] = [
-    { id: 'doc_fav1', label: 'Review Patient Chart', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
-    { id: 'doc_fav2', label: 'Prescribe Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
-    { id: 'doc_fav3', label: 'Order Lab Tests', icon: 'FlaskConical', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
+    { id: 'doc_fav1', label: 'Review Patient Chart', icon: '📝', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'doc_fav2', label: 'Prescribe Medication', icon: '💊', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
+    { id: 'doc_fav3', label: 'Order Lab Tests', icon: '🧪', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
 ];
 
 export const mockDoctorImmediateAssistance: QuickAction[] = [
-    { id: 'doc_em1', label: 'Consult Specialist', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'doc_em2', label: 'Admit to Hospital', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'doc_em3', label: 'View Protocols', icon: 'BookOpenCheck', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'doc_em1', label: 'Consult Specialist', icon: '📞', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'doc_em2', label: 'Admit to Hospital', icon: '🚨', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'doc_em3', label: 'View Protocols', icon: '📚', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
 ];
 
 export const mockAiExperts: AiExpert[] = [

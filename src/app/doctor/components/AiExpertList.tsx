@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
 
 interface AiExpertListProps {
   experts: AiExpert[];
@@ -35,7 +34,7 @@ export function AiExpertList({ experts, selectedExpert, onSelectExpert }: AiExpe
       <div className="p-4 border-b space-y-4">
         <h2 className="text-xl font-bold font-headline">AI Experts</h2>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xl text-muted-foreground">🔍</span>
           <Input
             placeholder="Search by name or specialty..."
             className="h-11 rounded-full bg-muted border-none focus-visible:ring-primary text-base pl-10"
