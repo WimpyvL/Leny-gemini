@@ -12,13 +12,18 @@ import { GoalCreator } from './GoalCreator';
 
 function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSelected: boolean, onSelect: () => void }) {
     const [formattedTimestamp, setFormattedTimestamp] = useState('');
+    const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
-        if (card.timestamp) {
+        setHasMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (hasMounted && card.timestamp) {
             const prefix = card.type === 'appointment' ? 'On' : 'Received';
             setFormattedTimestamp(`${prefix}: ${format(card.timestamp, 'MMM d, yyyy @ p')}`);
         }
-    }, [card.timestamp, card.type]);
+    }, [card.timestamp, card.type, hasMounted]);
     
     return (
         <Card 
@@ -49,7 +54,7 @@ function ForYouCard({ card, isSelected, onSelect }: { card: ForYouCardData, isSe
                     </div>
                 )}
 
-                {formattedTimestamp && (
+                {hasMounted && formattedTimestamp && (
                     <p className="text-xs text-muted-foreground font-medium">
                         {formattedTimestamp}
                     </p>

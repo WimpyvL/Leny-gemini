@@ -5,7 +5,7 @@ import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Send, BrainCircuit } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -21,10 +21,17 @@ interface AiExpertChatViewProps {
 
 function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Message; isOwnMessage: boolean; sender?: User; expert?: AiExpert }) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
-  }, [message.timestamp]);
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasMounted) {
+      setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+    }
+  }, [message.timestamp, hasMounted]);
   
   const getInitials = (name: string) => {
     const parts = name.split(' ');
@@ -54,7 +61,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{formattedTimestamp}</p>
+            <p>{hasMounted ? formattedTimestamp : ''}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

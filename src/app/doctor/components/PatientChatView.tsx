@@ -20,10 +20,17 @@ interface PatientChatViewProps {
 
 function MessageBubble({ message, isOwnMessage, sender }: { message: any; isOwnMessage: boolean; sender?: User }) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
     
   useEffect(() => {
-    setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
-  }, [message.timestamp]);
+    if (hasMounted) {
+      setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+    }
+  }, [message.timestamp, hasMounted]);
   
   return (
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
@@ -48,7 +55,7 @@ function MessageBubble({ message, isOwnMessage, sender }: { message: any; isOwnM
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{formattedTimestamp}</p>
+            <p>{hasMounted ? formattedTimestamp : ''}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

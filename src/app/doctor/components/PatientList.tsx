@@ -21,8 +21,15 @@ function ConversationItem({
   selected: boolean;
 }) {
   const [relativeTime, setRelativeTime] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+
     const updateRelativeTime = () => {
       if (conv.timestamp) {
         const dist = formatDistanceToNow(conv.timestamp, { addSuffix: true });
@@ -36,7 +43,7 @@ function ConversationItem({
     updateRelativeTime();
     const interval = setInterval(updateRelativeTime, 60000);
     return () => clearInterval(interval);
-  }, [conv.timestamp]);
+  }, [conv.timestamp, hasMounted]);
   
   const otherParticipants = conv.participants.filter(p => p.id !== 'doctor1');
 
@@ -66,7 +73,7 @@ function ConversationItem({
         <div className="flex items-baseline justify-between">
           <p className="font-semibold text-foreground truncate">{conv.title}</p>
           <p className="text-xs text-muted-foreground whitespace-nowrap">
-            {relativeTime}
+            {hasMounted ? relativeTime : ''}
           </p>
         </div>
         <p className="text-sm text-muted-foreground truncate">{conv.participantString}</p>

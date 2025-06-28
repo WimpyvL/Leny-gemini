@@ -79,12 +79,17 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
 
 function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
     const [formattedTimestamp, setFormattedTimestamp] = useState('');
+    const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
-        if (item?.timestamp) {
+        setHasMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (hasMounted && item?.timestamp) {
             setFormattedTimestamp(format(item.timestamp, 'EEEE, MMMM d, yyyy @ p'));
         }
-    }, [item?.timestamp]);
+    }, [item?.timestamp, hasMounted]);
     
     if (!item) return null;
 
@@ -103,7 +108,7 @@ function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () 
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
-                        {formattedTimestamp && <p className="text-sm text-muted-foreground">{formattedTimestamp}</p>}
+                        {hasMounted && formattedTimestamp && <p className="text-sm text-muted-foreground">{formattedTimestamp}</p>}
                     </div>
                 </div>
             </CardHeader>

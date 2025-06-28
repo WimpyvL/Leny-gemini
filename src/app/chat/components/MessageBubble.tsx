@@ -15,12 +15,17 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message, isOwnMessage, sender, currentUser }: MessageBubbleProps) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    if (message.timestamp) {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasMounted && message.timestamp) {
       setFormattedTimestamp(format(message.timestamp, 'p'));
     }
-  }, [message.timestamp]);
+  }, [message.timestamp, hasMounted]);
   
   if (message.type === 'assessment' && message.assessment) {
     return <AssistantSummary assessment={message.assessment} sender={sender} timestamp={message.timestamp} />;
@@ -50,7 +55,7 @@ export function MessageBubble({ message, isOwnMessage, sender, currentUser }: Me
             <p className="text-base whitespace-pre-wrap">{message.text}</p>
         </div>
         <p className="text-xs text-muted-foreground">
-            {formattedTimestamp}
+            {hasMounted ? formattedTimestamp : ''}
         </p>
       </div>
       {isOwnMessage && userForAvatar && (

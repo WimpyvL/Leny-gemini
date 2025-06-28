@@ -14,15 +14,22 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message, isOwnMessage, sender, isAiChat }: MessageBubbleProps) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
   
   useEffect(() => {
-    const updateTimestamp = () => {
-      if (message.timestamp) {
-        setFormattedTimestamp(format(message.timestamp, 'p'));
-      }
-    };
-    updateTimestamp();
-  }, [message.timestamp]);
+    setHasMounted(true);
+  }, []);
+  
+  useEffect(() => {
+    if (hasMounted) {
+      const updateTimestamp = () => {
+        if (message.timestamp) {
+          setFormattedTimestamp(format(message.timestamp, 'p'));
+        }
+      };
+      updateTimestamp();
+    }
+  }, [message.timestamp, hasMounted]);
   
   const isAssistantMessage = sender?.id === 'assistant';
 
@@ -53,7 +60,7 @@ export function MessageBubble({ message, isOwnMessage, sender, isAiChat }: Messa
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{formattedTimestamp}</p>
+            <p>{hasMounted ? formattedTimestamp : ''}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

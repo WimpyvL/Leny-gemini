@@ -15,12 +15,17 @@ interface AssistantSummaryProps {
 
 export function AssistantSummary({ assessment, sender, timestamp }: AssistantSummaryProps) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    if (timestamp) {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasMounted && timestamp) {
       setFormattedTimestamp(format(timestamp, 'p'));
     }
-  }, [timestamp]);
+  }, [timestamp, hasMounted]);
 
   return (
     <div className="flex items-start gap-3">
@@ -34,7 +39,7 @@ export function AssistantSummary({ assessment, sender, timestamp }: AssistantSum
         <div className="w-full">
             <p className="text-xs text-muted-foreground font-semibold flex justify-between w-full">
                 <span>{sender?.name}</span>
-                <span>{formattedTimestamp}</span>
+                <span>{hasMounted ? formattedTimestamp : ''}</span>
             </p>
             <Card className="bg-secondary mt-1 border-secondary-foreground/20">
             <CardContent className="p-4 space-y-3">
