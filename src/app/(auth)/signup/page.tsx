@@ -42,7 +42,7 @@ export default function SignupPage() {
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    const userType = formData.get('userType') as 'patient' | 'doctor';
+    const userType = formData.get('userType') as 'user' | 'expert';
   
     if (!name || !email || !password || !userType) {
       setError('All fields are required.');
@@ -60,10 +60,10 @@ export default function SignupPage() {
         role: userType,
       });
 
-      if (userType === 'doctor') {
-        router.push('/doctor');
+      if (userType === 'expert') {
+        router.push('/expert');
       } else {
-        router.push('/patient');
+        router.push('/user');
       }
     } catch (err: any) {
         console.error(err.code, err.message);
@@ -92,10 +92,10 @@ export default function SignupPage() {
         avatar: googleUser.photoURL,
       });
 
-      if (appUser.role === 'doctor') {
-        router.push('/doctor');
+      if (appUser.role === 'expert') {
+        router.push('/expert');
       } else {
-        router.push('/patient');
+        router.push('/user');
       }
     } catch (err: any) {
       console.error(err);
@@ -144,14 +144,14 @@ export default function SignupPage() {
           </div>
           <div className="grid gap-2">
             <Label>I am a...</Label>
-            <RadioGroup defaultValue="patient" name="userType" className="flex gap-4" disabled={isLoading}>
+            <RadioGroup defaultValue="user" name="userType" className="flex gap-4" disabled={isLoading}>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="patient" id="r-patient" />
-                <Label htmlFor="r-patient">Patient</Label>
+                <RadioGroupItem value="user" id="r-user" />
+                <Label htmlFor="r-user">General User</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="doctor" id="r-doctor" />
-                <Label htmlFor="r-doctor">Doctor / Provider</Label>
+                <RadioGroupItem value="expert" id="r-expert" />
+                <Label htmlFor="r-expert">Expert / Consultant</Label>
               </div>
             </RadioGroup>
           </div>

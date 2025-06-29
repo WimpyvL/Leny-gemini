@@ -80,24 +80,24 @@ export async function getAllUsers(): Promise<User[]> {
   }
 }
 
-export async function getDoctors(): Promise<User[]> {
-  console.log('Fetching all doctors from Firestore');
+export async function getExperts(): Promise<User[]> {
+  console.log('Fetching all experts from Firestore');
   try {
     const usersCollectionRef = collection(db, 'users');
-    const q = query(usersCollectionRef, where("role", "==", "doctor"));
-    const doctorsSnapshot = await getDocs(q);
+    const q = query(usersCollectionRef, where("role", "==", "expert"));
+    const expertsSnapshot = await getDocs(q);
 
-    if (doctorsSnapshot.empty) {
-      console.warn("No doctors found in Firestore. Falling back to mock data.");
-      return mockUsers.filter(u => u.role === 'doctor');
+    if (expertsSnapshot.empty) {
+      console.warn("No experts found in Firestore. Falling back to mock data.");
+      return mockUsers.filter(u => u.role === 'expert');
     }
 
-    const doctors = doctorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
-    return doctors;
+    const experts = expertsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
+    return experts;
   } catch (error) {
-    console.error('Error fetching doctors:', error);
+    console.error('Error fetching experts:', error);
     // Fallback to mock data on error
-    return mockUsers.filter(u => u.role === 'doctor');
+    return mockUsers.filter(u => u.role === 'expert');
   }
 }
 
@@ -115,8 +115,8 @@ export async function getConversationsForUser(userId: string): Promise<Conversat
 
   let userMockConversations = mockConversations.filter(c => c.participantIds.includes(userId));
 
-  // The doctor shouldn't see chats with the assistant Leny in their patient list.
-  if (user.role === 'doctor') {
+  // The expert shouldn't see chats with the assistant S.A.N.I in their user list.
+  if (user.role === 'expert') {
     userMockConversations = userMockConversations.filter(c => !c.participantIds.includes('assistant'));
   }
 

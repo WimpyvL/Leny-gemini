@@ -17,22 +17,22 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 const allPopularQuestions = [
-  "What should I do about my child's fever?",
-  "Is this chest pain serious?",
-  "What are the safe foods during pregnancy?",
-  "What are the symptoms of the flu?",
-  "How can I lower my cholesterol?",
-  "Best exercises for weight loss?",
-  "How to treat a sprained ankle?",
-  "Signs of a heart attack to watch for.",
+  "How can I improve my team's productivity?",
+  "What are the basics of stock market investing?",
+  "Explain the theory of relativity in simple terms.",
+  "How do I create a personal budget?",
+  "What's the best way to learn a new language?",
+  "Give me a 5-step plan to start a small business.",
+  "How can I negotiate a higher salary?",
+  "What are the ethical implications of AI?",
 ];
 
 const allHelpTopics = [
-  { initials: 'RA', text: 'Draft nutrition plan with Raya', color: 'bg-green-500' },
-  { initials: 'AL', text: 'Create workout routine with Alex', color: 'bg-blue-500' },
-  { initials: 'MY', text: 'Mental health check with Dr. Myles', color: 'bg-purple-500' },
-  { initials: 'SK', text: 'Get skincare advice from Dr. Chloe', color: 'bg-pink-500' },
-  { initials: 'PT', text: 'Discuss physical therapy with Jordan', color: 'bg-yellow-500' },
+  { initials: '🚀', text: 'Get startup advice from a Venture Capitalist', color: 'bg-green-500' },
+  { initials: '📈', text: 'Create a marketing plan with a CMO', color: 'bg-blue-500' },
+  { initials: '💡', text: 'Brainstorm new ideas with an Innovator', color: 'bg-purple-500' },
+  { initials: '💰', text: 'Get financial advice from a CFO', color: 'bg-pink-500' },
+  { initials: '👥', text: 'Improve team dynamics with a Leadership Coach', color: 'bg-yellow-500' },
 ];
 
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -117,21 +117,22 @@ export default function Home() {
   }
 
   const handleHelpTopicClick = (topicText: string) => {
-    handleSendMessage(`I'd like to get help with: ${topicText}`);
+    handleSendMessage(`I'd like to: ${topicText}`);
   };
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
-       <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none">
-          <iframe
-            className="h-full w-full"
-            src="https://www.youtube.com/embed/EiYMmakg6-s?autoplay=1&mute=1&controls=0&loop=1&playlist=EiYMmakg6-s&end=50&playsinline=1&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="background video"
-          ></iframe>
-          <div className="absolute inset-0 bg-black/40" />
+       <div className="absolute inset-0 h-full w-full bg-gray-800 z-0 pointer-events-none">
+          <video
+            className="h-full w-full object-cover"
+            src="https://cdn.pixabay.com/video/2024/05/29/211342-949039352_large.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+          </video>
+          <div className="absolute inset-0 bg-black/60" />
        </div>
       
       <header className="relative z-10 p-4 sm:p-6">
@@ -140,8 +141,8 @@ export default function Home() {
            <div className="flex items-center gap-4">
               {devMode ? (
                 <>
-                  <Link href="/patient"><Button variant="outline">Patient View</Button></Link>
-                  <Link href="/doctor"><Button>Doctor View</Button></Link>
+                  <Link href="/user"><Button variant="outline">User View</Button></Link>
+                  <Link href="/expert"><Button>Expert View</Button></Link>
                 </>
               ) : (
                 <>
@@ -165,10 +166,10 @@ export default function Home() {
         <div className="w-full max-w-lg space-y-4">
           <div className="space-y-1 text-left">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white/90">
-              Because every question matters to someone
+              Unlock expertise on demand.
             </h1>
             <p className="text-sm text-white/70">
-              Include those you trust in the conversation
+              Connect with AI-powered experts for insights on any topic.
             </p>
           </div>
           

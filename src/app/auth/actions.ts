@@ -23,13 +23,13 @@ export async function findOrCreateUser(userData: {
   }
 
   // If user does not exist, create a new profile.
-  // We'll default new Google signups to 'patient' role.
+  // We'll default new Google signups to 'user' role.
   const newUser: Omit<User, 'id'> = {
     name: name || 'New User',
     email: email || '',
     avatar: avatar || name?.substring(0,2).toUpperCase() || '??',
     avatarColor: `bg-blue-500`, // Default color
-    role: 'patient',
+    role: 'user',
   };
 
   await createUserProfile(uid, newUser);
@@ -50,7 +50,7 @@ export async function getUserData(uid: string): Promise<User | undefined> {
     return await getUser(uid);
 }
 
-export async function upgradeToDoctor(uid: string): Promise<{ success: boolean; error?: string }> {
+export async function upgradeToExpert(uid: string): Promise<{ success: boolean; error?: string }> {
   try {
     const user = await getUser(uid);
     if (!user) {
@@ -58,24 +58,24 @@ export async function upgradeToDoctor(uid: string): Promise<{ success: boolean; 
     }
 
     await updateUser(uid, {
-      role: 'doctor',
-      doctorInfo: {
-        specialty: 'General Practice',
-        licenseNumber: '',
-        practiceName: '',
-        practiceAddress: '',
-        officeHours: '',
-        bio: `Joined as a new provider. Formerly ${user.name}.`,
+      role: 'expert',
+      expertInfo: {
+        specialty: 'General Consultant',
+        title: user.name,
+        bio: `Joined as a new expert.`,
+        officeHours: 'Mon-Fri, 9:00 AM - 5:00 PM',
+        practiceAddress: '123 Innovation Drive',
+        practiceName: 'Solutions Inc.',
       }
     });
 
     // Revalidate paths to ensure data is fresh
-    revalidatePath('/patient');
-    revalidatePath('/doctor');
+    revalidatePath('/user');
+    revalidatePath('/expert');
 
     return { success: true };
   } catch (error) {
-    console.error("Failed to upgrade user to doctor:", error);
+    console.error("Failed to upgrade user to expert:", error);
     return { success: false, error: "An unexpected error occurred during the upgrade process." };
   }
 }

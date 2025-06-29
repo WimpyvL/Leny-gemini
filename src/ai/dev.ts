@@ -3,5 +3,5 @@ import { config } from 'dotenv';
 config();
 
 import '@/ai/flows/landing-chat-flow.ts';
-import '@/ai/flows/patient-chat-flow.ts';
-import '@/ai/flows/medical-query-flow.ts';
+import '@/ai/flows/user-chat-flow.ts';
+import '@/ai/flows/query-flow.ts';

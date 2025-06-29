@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Leny',
-  description: 'Because every question matters to someone.',
+  title: 'S.A.N.I',
+  description: 'Smart Artificial Network Intelligence',
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head>
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>

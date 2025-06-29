@@ -51,10 +51,10 @@ export default function LoginPage() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = await getUserData(userCredential.user.uid);
-      if (user?.role === 'doctor') {
-        router.push('/doctor');
+      if (user?.role === 'expert') {
+        router.push('/expert');
       } else {
-        router.push('/patient');
+        router.push('/user');
       }
     } catch (err: any) {
       console.error(err.code, err.message);
@@ -81,10 +81,10 @@ export default function LoginPage() {
         avatar: googleUser.photoURL,
       });
 
-      if (appUser.role === 'doctor') {
-        router.push('/doctor');
+      if (appUser.role === 'expert') {
+        router.push('/expert');
       } else {
-        router.push('/patient');
+        router.push('/user');
       }
     } catch (err: any) {
       console.error(err);

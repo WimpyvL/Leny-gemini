@@ -1,5 +1,6 @@
-import type { LucideIcon } from "lucide-react";
 import { z } from 'zod';
+
+export type UserRole = 'user' | 'expert' | 'assistant';
 
 export type User = {
   id: string;
@@ -9,18 +10,10 @@ export type User = {
   avatar: string;
   avatarColor: string;
   icon?: string;
-  role: 'patient' | 'doctor' | 'family' | 'assistant';
-  healthInfo?: {
-    height?: string;
-    weight?: string;
-    bloodType?: string;
-    allergies?: string[];
-    conditions?: string[];
-    medications?: { name: string; dosage: string }[];
-  };
-  doctorInfo?: {
+  role: UserRole;
+  expertInfo?: {
     specialty?: string;
-    licenseNumber?: string;
+    title?: string;
     practiceName?: string;
     practiceAddress?: string;
     officeHours?: string;
@@ -35,20 +28,12 @@ export type User = {
   }
 };
 
-export type Assessment = {
-  title: string;
-  summary: string[];
-  recommendations: string;
-  suggestions: string[];
-}
-
 export type Message = {
   id: string;
   text?: string;
   senderId: string;
   timestamp: Date;
-  type: 'user' | 'assessment';
-  assessment?: Assessment;
+  type: 'user';
 };
 
 export type Conversation = {
@@ -63,19 +48,16 @@ export type Conversation = {
   avatar: string;
   avatarColor: string;
   icon?: string;
-  patientId?: string;
-  doctorId?: string;
+  userId?: string;
+  expertId?: string;
 };
 
 export type ForYouCardType = 
-  | 'appointment' 
+  | 'consultation' 
   | 'reminder' 
-  | 'lab_result' 
-  | 'health_tip' 
-  | 'health_streak'
-  | 'research_update'
-  | 'industry_news'
-  | 'cme_course';
+  | 'insight' 
+  | 'tip' 
+  | 'goal_streak';
 
 export interface ForYouCardData {
     id: string;
@@ -103,109 +85,21 @@ export interface QuickAction {
 export type AiExpert = {
   specialty: string;
   name: string;
-  gender: string;
-  personality: string;
   expert_prompt: string;
   avatarColor: string;
 };
 
-export enum ContextType {
-    SYMPTOM = "symptom",
-    DIAGNOSIS = "diagnosis",
-    MEDICATION = "medication",
-    TEST_RESULT = "test_result",
-    TREATMENT_PLAN = "treatment_plan",
-    TRIAGE = "triage",
-    FOLLOW_UP = "follow_up",
-    LOGISTICS = "logistics",
-    OTHER = "other",
-}
-
-export enum UserType {
-    PATIENT = "patient",
-    PROVIDER = "provider",
-}
-
-export enum MedicalSpecialty {
-    // Primary Care
-    FAMILY_MEDICINE = "family_medicine",
-    INTERNAL_MEDICINE = "internal_medicine",
-    PEDIATRICS = "pediatrics",
-    GERIATRICS = "geriatrics",
-    
-    // Emergency & Critical Care
-    EMERGENCY_MEDICINE = "emergency_medicine",
-    CRITICAL_CARE = "critical_care",
-    TRAUMA_SURGERY = "trauma_surgery",
-    
-    // Surgical Specialties
-    GENERAL_SURGERY = "general_surgery",
-    ORTHOPEDICS = "orthopedics",
-    NEUROSURGERY = "neurosurgery",
-    CARDIOTHORACIC_SURGERY = "cardiothoracic_surgery",
-    PLASTIC_SURGERY = "plastic_surgery",
-    UROLOGY = "urology",
-    
-    // Medical Specialties
-    CARDIOLOGY = "cardiology",
-    GASTROENTEROLOGY = "gastroenterology",
-    NEUROLOGY = "neurology",
-    PULMONOLOGY = "pulmonology",
-    NEPHROLOGY = "nephrology",
-    ENDOCRINOLOGY = "endocrinology",
-    HEMATOLOGY_ONCOLOGY = "hematology_oncology",
-    RHEUMATOLOGY = "rheumatology",
-    INFECTIOUS_DISEASE = "infectious_disease",
-    ALLERGY_IMMUNOLOGY = "allergy_immunology",
-    
-    // Women's Health
-    OBSTETRICS_GYNECOLOGY = "obstetrics_gynecology",
-    MATERNAL_FETAL_MEDICINE = "maternal_fetal_medicine",
-    
-    // Mental Health
-    PSYCHIATRY = "psychiatry",
-    PSYCHOLOGY = "psychology",
-    ADDICTION_MEDICINE = "addiction_medicine",
-    
-    // Diagnostic & Imaging
-    RADIOLOGY = "radiology",
-    PATHOLOGY = "pathology",
-    NUCLEAR_MEDICINE = "nuclear_medicine",
-    
-    // Specialized Care
-    DERMATOLOGY = "dermatology",
-    OPHTHALMOLOGY = "ophthalmology",
-    OTOLARYNGOLOGY = "otolaryngology",
-    ANESTHESIOLOGY = "anesthesiology",
-    PAIN_MANAGEMENT = "pain_management",
-    PALLIATIVE_CARE = "palliative_care",
-    SPORTS_MEDICINE = "sports_medicine",
-    OCCUPATIONAL_MEDICINE = "occupational_medicine",
-}
-
-export interface Classification {
-    context: ContextType;
-    specialty: MedicalSpecialty;
-    hasRedFlags: boolean;
-    reason?: string;
-}
-
-export const MedicalQueryInputSchema = z.object({
-  text: z.string().describe('The medical query text from the user.'),
-  userType: z.custom<UserType>().describe('The type of user (patient or provider).'),
-  specialtyHint: z.custom<MedicalSpecialty>().optional().describe('A hint for the medical specialty.'),
+export const QueryInputSchema = z.object({
+  text: z.string().describe('The query text from the user.'),
+  userRole: z.custom<UserRole>().describe('The role of the user (user or expert).'),
   conversationHistory: z.array(z.string()).optional().describe('Previous messages in the conversation for context.'),
 });
-export type MedicalQueryInput = z.infer<typeof MedicalQueryInputSchema>;
+export type QueryInput = z.infer<typeof QueryInputSchema>;
 
-export const FormattedClinicalResponseSchema = z.object({
-  content: z.string().describe('The formatted clinical response text for the user.'),
+export const FormattedResponseSchema = z.object({
+  content: z.string().describe('The formatted response text for the user.'),
   metadata: z.object({
-    classification: z.custom<Classification>().describe('The classification of the query.'),
-    retrievedKnowledge: z.string().optional().describe('Summary of knowledge retrieved for the query.'),
     responseMode: z.enum(['consumer', 'professional']).describe('The mode used for the response.'),
   }),
-  escalationTriggered: z.boolean().describe('Whether an escalation for emergency was triggered.'),
-  sources: z.array(z.string()).optional().describe('A list of sources or citations used.'),
 });
-export type FormattedClinicalResponse = z.infer<typeof FormattedClinicalResponseSchema>;
+export type FormattedResponse = z.infer<typeof FormattedResponseSchema>;
