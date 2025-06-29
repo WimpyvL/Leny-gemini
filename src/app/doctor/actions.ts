@@ -1,5 +1,6 @@
 'use server';
-import { processMedicalQuery, type MedicalQueryInput, type FormattedClinicalResponse } from '@/ai/flows/medical-query-flow';
+import { processMedicalQuery } from '@/ai/flows/medical-query-flow';
+import type { MedicalQueryInput, FormattedClinicalResponse } from '@/lib/types';
 import { getExpertChatResponse } from '@/ai/flows/expert-chat-flow';
 import { analyzeSymptoms, type AnalyzeSymptomsOutput } from '@/ai/flows/analyze-symptoms';
 

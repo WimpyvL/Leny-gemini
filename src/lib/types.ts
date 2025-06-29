@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { z } from 'zod';
 
 export type User = {
   id: string;
@@ -181,3 +182,30 @@ export enum MedicalSpecialty {
     SPORTS_MEDICINE = "sports_medicine",
     OCCUPATIONAL_MEDICINE = "occupational_medicine",
 }
+
+export interface Classification {
+    context: ContextType;
+    specialty: MedicalSpecialty;
+    hasRedFlags: boolean;
+    reason?: string;
+}
+
+export const MedicalQueryInputSchema = z.object({
+  text: z.string().describe('The medical query text from the user.'),
+  userType: z.custom<UserType>().describe('The type of user (patient or provider).'),
+  specialtyHint: z.custom<MedicalSpecialty>().optional().describe('A hint for the medical specialty.'),
+  conversationHistory: z.array(z.string()).optional().describe('Previous messages in the conversation for context.'),
+});
+export type MedicalQueryInput = z.infer<typeof MedicalQueryInputSchema>;
+
+export const FormattedClinicalResponseSchema = z.object({
+  content: z.string().describe('The formatted clinical response text for the user.'),
+  metadata: z.object({
+    classification: z.custom<Classification>().describe('The classification of the query.'),
+    retrievedKnowledge: z.string().optional().describe('Summary of knowledge retrieved for the query.'),
+    responseMode: z.enum(['consumer', 'professional']).describe('The mode used for the response.'),
+  }),
+  escalationTriggered: z.boolean().describe('Whether an escalation for emergency was triggered.'),
+  sources: z.array(z.string()).optional().describe('A list of sources or citations used.'),
+});
+export type FormattedClinicalResponse = z.infer<typeof FormattedClinicalResponseSchema>;

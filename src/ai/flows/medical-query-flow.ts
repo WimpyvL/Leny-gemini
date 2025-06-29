@@ -4,39 +4,22 @@
  *
  * - processMedicalQuery - A function that handles a medical query, providing context-aware,
  *   role-specific (patient vs. provider) responses.
- * - MedicalQueryInput - The input type for the processMedicalQuery function.
- * - FormattedClinicalResponse - The return type for the processMedicalQuery function.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import {
-  classifyQuery,
-  type Classification,
-} from '@/lib/medical/context-classifier';
+import { classifyQuery } from '@/lib/medical/context-classifier';
 import { retrieveMedicalKnowledge } from '@/lib/medical/medical-knowledge-db';
 import { getAgentConfig } from '@/lib/medical/agent-configs';
-import type { UserType, MedicalSpecialty } from '@/lib/types';
-
-export const MedicalQueryInputSchema = z.object({
-  text: z.string().describe('The medical query text from the user.'),
-  userType: z.custom<UserType>().describe('The type of user (patient or provider).'),
-  specialtyHint: z.custom<MedicalSpecialty>().optional().describe('A hint for the medical specialty.'),
-  conversationHistory: z.array(z.string()).optional().describe('Previous messages in the conversation for context.'),
-});
-export type MedicalQueryInput = z.infer<typeof MedicalQueryInputSchema>;
-
-export const FormattedClinicalResponseSchema = z.object({
-  content: z.string().describe('The formatted clinical response text for the user.'),
-  metadata: z.object({
-    classification: z.custom<Classification>().describe('The classification of the query.'),
-    retrievedKnowledge: z.string().optional().describe('Summary of knowledge retrieved for the query.'),
-    responseMode: z.enum(['consumer', 'professional']).describe('The mode used for the response.'),
-  }),
-  escalationTriggered: z.boolean().describe('Whether an escalation for emergency was triggered.'),
-  sources: z.array(z.string()).optional().describe('A list of sources or citations used.'),
-});
-export type FormattedClinicalResponse = z.infer<typeof FormattedClinicalResponseSchema>;
+import { 
+  type UserType, 
+  type MedicalSpecialty, 
+  type Classification, 
+  type MedicalQueryInput, 
+  type FormattedClinicalResponse,
+  MedicalQueryInputSchema,
+  FormattedClinicalResponseSchema,
+} from '@/lib/types';
 
 
 // Main exported function to be called from server actions

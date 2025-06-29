@@ -2,7 +2,7 @@
  * @fileOverview Context Classification Module for Leny Medical AI System
  * Classifies user queries into medical context types, specialties, and detects red flags.
  */
-import { ContextType, MedicalSpecialty } from '@/lib/types';
+import { ContextType, MedicalSpecialty, type Classification } from '@/lib/types';
 
 // Red Flag Keywords for Escalation - Comprehensive Emergency Indicators
 const RED_FLAG_KEYWORDS = {
@@ -205,13 +205,6 @@ const SPECIALTY_PATTERNS: Record<MedicalSpecialty, RegExp> = {
   [MedicalSpecialty.SPORTS_MEDICINE]: /\b(sports injury|concussion)\b/i,
   [MedicalSpecialty.OCCUPATIONAL_MEDICINE]: /\b(work injury|occupational health)\b/i,
 };
-
-export interface Classification {
-    context: ContextType;
-    specialty: MedicalSpecialty;
-    hasRedFlags: boolean;
-    reason?: string;
-}
 
 function hasRedFlags(text: string): { detected: boolean; reason?: string } {
   const textLower = text.toLowerCase();

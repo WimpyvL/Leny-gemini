@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import type { Conversation, User } from '@/lib/types';
-import type { FormattedClinicalResponse } from '@/ai/flows/medical-query-flow';
+import type { Conversation, User, FormattedClinicalResponse } from '@/lib/types';
 import { runMedicalQuery } from '../actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
