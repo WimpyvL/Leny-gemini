@@ -155,7 +155,6 @@ const CONTEXT_PATTERNS: Record<ContextType, RegExp> = {
   [ContextType.DIAGNOSIS]: /\b(diagnosed with|have|told i have|condition|disease|disorder|diabetes|hypertension|arthritis|asthma)\b/i,
   [ContextType.MEDICATION]: /\b(taking|prescribed|medication|drug|pill|side effects?|adverse|metformin|lisinopril|ibuprofen)\b/i,
   [ContextType.TEST_RESULT]: /\b(test|lab|blood work|mri|ct|x-ray|ultrasound|results?|showed|found|elevated|high|low|abnormal)\b/i,
-...
   [ContextType.TREATMENT_PLAN]: /\b(how to treat|treatment|therapy|what should i do|next steps|manage|management)\b/i,
   [ContextType.TRIAGE]: /\b(should i|do i need to|go to|see|visit|emergency|urgent|er|hospital|serious|worried|concerned)\b/i,
   [ContextType.FOLLOW_UP]: /\b(follow up|check in|next|appointment)\b/i,
