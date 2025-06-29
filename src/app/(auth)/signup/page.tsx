@@ -60,7 +60,7 @@ export default function SignupPage() {
         role: userType,
       });
 
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
         console.error(err.code, err.message);
         if (err.code === 'auth/email-already-in-use') {
@@ -90,7 +90,7 @@ export default function SignupPage() {
         // We'll default to 'user' and they can change it later if needed.
       });
 
-      router.push('/');
+      router.push('/dashboard');
 
     } catch (err: any) {
       console.error(err);

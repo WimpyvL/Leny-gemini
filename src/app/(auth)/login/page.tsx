@@ -51,7 +51,7 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
       console.error(err.code, err.message);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
@@ -76,7 +76,7 @@ export default function LoginPage() {
         name: googleUser.displayName,
         avatar: googleUser.photoURL,
       });
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
