@@ -27,23 +27,23 @@ export async function findOrCreateUser(userData: {
   const newUser: Omit<User, 'id'> = {
     name: name || 'New User',
     email: email || '',
-    avatar: avatar || name?.substring(0,2).toUpperCase() || '??',
-    avatarColor: `bg-blue-500`, // Default color
+    avatar: avatar || `https://placehold.co/100x100.png`,
     role: 'user',
   };
 
   await createUserProfile(uid, newUser);
-
+  
+  revalidatePath('/');
   return { id: uid, ...newUser };
 }
 
-export async function createNewUser(uid: string, data: Omit<User, 'id' | 'avatar' | 'avatarColor'>) {
+export async function createNewUser(uid: string, data: Omit<User, 'id' | 'avatar'>) {
     const newUser: Omit<User, 'id'> = {
         ...data,
-        avatar: data.name.substring(0,2).toUpperCase(),
-        avatarColor: 'bg-green-500',
+        avatar: `https://placehold.co/100x100.png`,
     };
     await createUserProfile(uid, newUser);
+    revalidatePath('/');
 }
 
 export async function getUserData(uid: string): Promise<User | undefined> {
@@ -69,9 +69,8 @@ export async function upgradeToExpert(uid: string): Promise<{ success: boolean; 
       }
     });
 
-    // Revalidate paths to ensure data is fresh
-    revalidatePath('/user');
-    revalidatePath('/expert');
+    // Revalidate the root path to reload the dashboard with the new role
+    revalidatePath('/');
 
     return { success: true };
   } catch (error) {

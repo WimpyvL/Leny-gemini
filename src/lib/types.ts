@@ -7,9 +7,7 @@ export type User = {
   name: string;
   email?: string;
   dob?: string;
-  avatar: string;
-  avatarColor: string;
-  icon?: string;
+  avatar: string; // URL to an image
   role: UserRole;
   expertInfo?: {
     specialty?: string;
@@ -39,17 +37,11 @@ export type Message = {
 export type Conversation = {
   id: string;
   title: string;
-  participants: User[];
   participantIds: string[];
   participantString: string;
   messages: Message[];
   timestamp: Date;
   unread?: number;
-  avatar: string;
-  avatarColor: string;
-  icon?: string;
-  userId?: string;
-  expertId?: string;
 };
 
 export type ForYouCardType = 
@@ -86,7 +78,6 @@ export type AiExpert = {
   specialty: string;
   name: string;
   expert_prompt: string;
-  avatarColor: string;
 };
 
 export const QueryInputSchema = z.object({

@@ -18,6 +18,7 @@ import { AlertTriangle, Loader2 } from 'lucide-react';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { findOrCreateUser, getUserData } from '@/app/auth/actions';
+import { Logo } from '@/components/Logo';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -49,13 +50,8 @@ export default function LoginPage() {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = await getUserData(userCredential.user.uid);
-      if (user?.role === 'expert') {
-        router.push('/expert');
-      } else {
-        router.push('/user');
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/');
     } catch (err: any) {
       console.error(err.code, err.message);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
@@ -74,18 +70,13 @@ export default function LoginPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       const googleUser = result.user;
-      const appUser = await findOrCreateUser({
+      await findOrCreateUser({
         uid: googleUser.uid,
         email: googleUser.email,
         name: googleUser.displayName,
         avatar: googleUser.photoURL,
       });
-
-      if (appUser.role === 'expert') {
-        router.push('/expert');
-      } else {
-        router.push('/user');
-      }
+      router.push('/');
     } catch (err: any) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
@@ -96,12 +87,12 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm border-border/50">
       <form onSubmit={handleEmailLogin}>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Welcome Back</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Sign in to continue your journey with S.A.N.I.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -150,9 +141,9 @@ export default function LoginPage() {
             Sign in with Google
           </Button>
 
-          <div className="text-center text-sm">
+          <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline">
+            <Link href="/signup" className="underline text-foreground hover:text-primary">
               Sign up
             </Link>
           </div>

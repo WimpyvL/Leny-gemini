@@ -32,6 +32,7 @@ export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userType, setUserType] = useState<'user' | 'expert'>('user');
 
   const handleEmailSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,7 +43,6 @@ export default function SignupPage() {
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    const userType = formData.get('userType') as 'user' | 'expert';
   
     if (!name || !email || !password || !userType) {
       setError('All fields are required.');
@@ -60,11 +60,7 @@ export default function SignupPage() {
         role: userType,
       });
 
-      if (userType === 'expert') {
-        router.push('/expert');
-      } else {
-        router.push('/user');
-      }
+      router.push('/');
     } catch (err: any) {
         console.error(err.code, err.message);
         if (err.code === 'auth/email-already-in-use') {
@@ -85,18 +81,17 @@ export default function SignupPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       const googleUser = result.user;
-      const appUser = await findOrCreateUser({
+      await findOrCreateUser({
         uid: googleUser.uid,
         email: googleUser.email,
         name: googleUser.displayName,
         avatar: googleUser.photoURL,
+        // When signing up with Google, we don't know the role yet. 
+        // We'll default to 'user' and they can change it later if needed.
       });
 
-      if (appUser.role === 'expert') {
-        router.push('/expert');
-      } else {
-        router.push('/user');
-      }
+      router.push('/');
+
     } catch (err: any) {
       console.error(err);
       if (err.code !== 'auth/popup-closed-by-user') {
@@ -107,12 +102,12 @@ export default function SignupPage() {
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="w-full max-w-sm border-border/50">
       <form onSubmit={handleEmailSignup}>
-        <CardHeader>
-          <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Create an Account</CardTitle>
           <CardDescription>
-            Enter your information to create an account
+            Join S.A.N.I. and start exploring the world of AI.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -143,8 +138,8 @@ export default function SignupPage() {
             <Input id="password" name="password" type="password" required disabled={isLoading} />
           </div>
           <div className="grid gap-2">
-            <Label>I am a...</Label>
-            <RadioGroup defaultValue="user" name="userType" className="flex gap-4" disabled={isLoading}>
+            <Label>I want to join as a...</Label>
+            <RadioGroup defaultValue="user" name="userType" className="flex gap-4" disabled={isLoading} onValueChange={(value) => setUserType(value as 'user' | 'expert')}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="user" id="r-user" />
                 <Label htmlFor="r-user">General User</Label>
@@ -166,7 +161,7 @@ export default function SignupPage() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                Or sign up with
               </span>
             </div>
           </div>
@@ -176,9 +171,9 @@ export default function SignupPage() {
             Sign up with Google
           </Button>
         </CardContent>
-        <div className="mb-6 text-center text-sm">
+        <div className="mb-6 text-center text-sm text-muted-foreground">
           Already have an account?{' '}
-          <Link href="/login" className="underline">
+          <Link href="/login" className="underline text-foreground hover:text-primary">
             Sign in
           </Link>
         </div>

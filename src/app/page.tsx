@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Bot, Mic } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -13,8 +13,6 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 
 const allPopularQuestions = [
   "How can AI improve my team's productivity?",
@@ -54,7 +52,6 @@ export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [devMode, setDevMode] = useState(false);
   
   const [popularQuestions, setPopularQuestions] = useState<string[] | null>(null);
   const [helpTopics, setHelpTopics] = useState<(typeof allHelpTopics) | null>(null);
@@ -122,53 +119,41 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
-       <div className="absolute inset-0 h-full w-full bg-gray-800 z-0 pointer-events-none">
+       <div className="absolute inset-0 h-full w-full z-0 pointer-events-none">
+          {/* Replace with a more appropriate video or image for S.A.N.I */}
           <video
             className="h-full w-full object-cover"
-            src="https://cdn.pixabay.com/video/2024/05/29/211342-949039352_large.mp4"
+            src="https://cdn.pixabay.com/video/2024/02/12/198815-912061379_large.mp4"
             autoPlay
             loop
             muted
             playsInline
           >
           </video>
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-black/70" />
        </div>
       
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
           <Logo />
            <div className="flex items-center gap-4">
-              {devMode ? (
-                <>
-                  <Link href="/user"><Button variant="outline">User View</Button></Link>
-                  <Link href="/expert"><Button>Expert View</Button></Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">Login</Button>
-                  </Link>
-                  <Link href="/signup">
-                    <Button>Sign Up Free</Button>
-                  </Link>
-                </>
-              )}
-               <div className="flex items-center space-x-2">
-                <Switch id="dev-mode" checked={devMode} onCheckedChange={setDevMode} />
-                <Label htmlFor="dev-mode" className="text-xs text-white/70">Dev</Label>
-              </div>
+              <Link href="/login">
+                <Button variant="outline" className="text-white border-white/20 bg-white/10 hover:bg-white/20 hover:text-white backdrop-blur-sm">Login</Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="backdrop-blur-sm">Sign Up Free</Button>
+              </Link>
             </div>
         </nav>
       </header>
 
-      <main className="relative z-10 flex-1 flex flex-col items-start justify-start p-4 sm:p-6 md:p-8">
+      <main className="relative z-10 flex-1 flex flex-col items-start justify-center p-4 sm:p-6 md:p-8">
         <div className="w-full max-w-lg space-y-4">
           <div className="space-y-1 text-left">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white/90">
-              Bridging the gap between people and AI.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+              Bridge the gap between people and AI.
             </h1>
-            <p className="text-sm text-white/70">
+            <p className="text-lg text-white/70">
               S.A.N.I. makes artificial intelligence accessible, understandable, and genuinely useful.
             </p>
           </div>
@@ -176,26 +161,26 @@ export default function Home() {
           <Card ref={chatCardRef} className={cn("w-full shadow-2xl rounded-2xl transition-all duration-300 ease-in-out bg-background/80 backdrop-blur-lg border-white/20", isExpanded ? "max-w-lg" : "max-w-md")}>
             <CardContent className="p-4 space-y-3">
               <div className="relative" onFocus={() => setIsExpanded(true)}>
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">📎</span>
+                <Bot className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5"/>
                 <Input 
                   placeholder="Ask S.A.N.I. anything..."
-                  className="pl-10 pr-20 h-11 rounded-full text-sm"
+                  className="pl-11 pr-20 h-12 rounded-full text-base"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSendMessage(inputValue); } }}
                 />
-                <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center">
-                  <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
-                    <span className="text-muted-foreground">🎤</span>
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+                  <Button variant="ghost" size="icon" className="rounded-full h-9 w-9">
+                    <Mic className="h-5 w-5 text-muted-foreground"/>
                   </Button>
-                  <Button size="icon" className="rounded-full h-8 w-8" onClick={() => handleSendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
-                    <ArrowRight className="h-4 w-4"/>
+                  <Button size="icon" className="rounded-full h-9 w-9" onClick={() => handleSendMessage(inputValue)} disabled={isLoading || !inputValue.trim()}>
+                    <ArrowRight className="h-5 w-5"/>
                   </Button>
                 </div>
               </div>
               
               <AnimatePresence>
-                {isExpanded ? (
+                {isExpanded && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
@@ -234,7 +219,7 @@ export default function Home() {
                       </ScrollArea>
                     ) : (
                       <>
-                        <Separator className="my-2" />
+                        <Separator className="my-3" />
                         
                         <div className="space-y-2">
                             <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
@@ -254,22 +239,21 @@ export default function Home() {
                             <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
                             <div className="space-y-1.5">
                                 {popularQuestions && popularQuestions.map((q, i) => (
-                                    <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
+                                    <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-sm hover:text-primary cursor-pointer group">
                                         <span className="group-hover:underline">{q}</span>
-                                        <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
+                                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
                                     </div>
                                 ))}
                             </div>
                             <div className="text-right">
-                                <Button variant="link" size="sm" className={cn("text-xs text-muted-foreground transition-all", isExpanded && "animate-pulse font-semibold text-primary")} onClick={handleShuffle}>more</Button>
+                                <Button variant="link" size="sm" className="text-xs text-muted-foreground" onClick={handleShuffle}>more</Button>
                             </div>
                         </div>
                       </>
                     )}
                   </motion.div>
-                ) : null}
+                )}
               </AnimatePresence>
-
             </CardContent>
           </Card>
         </div>

@@ -1,14 +1,34 @@
 import type { User, Conversation, ForYouCardData, QuickAction, AiExpert } from './types';
 
+// Use a fixed date for all timestamps to prevent hydration errors
+const now = new Date('2024-08-01T10:00:00Z');
+
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'S.A.N.I.', avatar: '🤖', icon: '🤖', avatarColor: 'bg-purple-500', role: 'assistant' },
+  { 
+    id: 'assistant', 
+    name: 'S.A.N.I.', 
+    avatar: '🤖', 
+    role: 'assistant' 
+  },
+  { 
+    id: 'user1', 
+    name: 'Alex Rivera', 
+    avatar: 'https://placehold.co/100x100/7E57C2/FFFFFF.png', 
+    role: 'user',
+    email: 'alex.rivera@example.com',
+    settings: {
+        theme: 'dark',
+        notifications: {
+            email: true,
+            push: false,
+        }
+    }
+  },
   { 
     id: 'expert1', 
     name: 'Dr. Evelyn Reed', 
-    avatar: 'ER', 
-    avatarColor: 'bg-sky-500', 
+    avatar: 'https://placehold.co/100x100/42A5F5/FFFFFF.png', 
     role: 'expert', 
-    icon: '💼', 
     email: 'evelyn.reed@example.com',
     expertInfo: {
       specialty: 'Venture Capital & Startups',
@@ -27,12 +47,17 @@ export const mockUsers: User[] = [
     }
   },
   { 
+    id: 'user2', 
+    name: 'Casey Lee', 
+    avatar: 'https://placehold.co/100x100/66BB6A/FFFFFF.png', 
+    role: 'user', 
+    email: 'casey.lee@example.com' 
+  },
+  { 
     id: 'expert2', 
     name: 'Marcus Thorne', 
-    avatar: 'MT', 
-    avatarColor: 'bg-purple-500', 
+    avatar: 'https://placehold.co/100x100/AB47BC/FFFFFF.png', 
     role: 'expert', 
-    icon: '📈', 
     email: 'marcus.thorne@example.com',
     expertInfo: {
       specialty: 'Marketing & Branding',
@@ -41,39 +66,22 @@ export const mockUsers: User[] = [
     }
   },
   { 
-    id: 'user1', 
-    name: 'Alex', 
-    avatar: 'A', 
-    avatarColor: 'bg-blue-500', 
-    role: 'user',
-    email: 'alex@example.com',
-    dob: '1990-05-15',
-    settings: {
-      theme: 'dark',
-      notifications: {
-        email: true,
-        push: false,
-      }
-    }
+    id: 'user3', 
+    name: 'Jordan Garcia', 
+    avatar: 'https://placehold.co/100x100/26A69A/FFFFFF.png', 
+    role: 'user', 
+    email: 'jordan.garcia@example.com' 
   },
-  { id: 'user2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'user', email: 'casey@example.com' },
-  { id: 'user3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'user', email: 'jordan@example.com' },
 ];
 
-const now = new Date();
 
 export const mockConversations: Conversation[] = [
   {
     id: 'conv_sani_user1',
     title: 'S.A.N.I.',
-    participants: [],
     participantIds: ['user1', 'assistant'],
     participantString: 'Your AI Companion',
-    avatar: '🤖',
-    icon: '🤖',
-    avatarColor: 'bg-purple-500',
     timestamp: new Date(now.getTime() - 5 * 60 * 1000), // 5 minutes ago
-    userId: 'user1',
     messages: [
       {
         id: 'msg_sani_1',
@@ -83,24 +91,18 @@ export const mockConversations: Conversation[] = [
         type: 'user',
       }
     ],
-    unread: 1,
   },
   {
     id: 'conv_expert1_user1',
     title: 'Dr. Evelyn Reed',
-    participants: [],
     participantIds: ['user1', 'expert1'],
     participantString: 'Startup funding advice',
-    avatar: 'ER',
-    icon: '💼',
-    avatarColor: 'bg-sky-500',
     timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000), // 1 hour ago
-    userId: 'user1',
     messages: [
        {
         id: 'msg_expert1_1',
         senderId: 'expert1',
-        text: "Alex, thanks for reaching out. Let's discuss your pitch deck.",
+        text: "Alex, thanks for reaching out. Let's discuss your pitch deck. I have some initial thoughts on the market analysis section.",
         timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000),
         type: 'user',
       }
@@ -109,24 +111,35 @@ export const mockConversations: Conversation[] = [
    {
     id: 'conv_group_chat',
     title: 'Project Phoenix Team',
-    participants: [],
     participantIds: ['user1', 'user2', 'user3', 'expert2'],
     participantString: 'Casey, Jordan, Marcus...',
-    avatar: '👥',
-    icon: '👥',
-    avatarColor: 'bg-gray-500',
     timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
-    userId: 'user1',
     messages: [
        {
         id: 'msg_group_1',
         senderId: 'expert2',
-        text: "Team, let's sync on the marketing campaign deliverables for Q3.",
+        text: "Team, let's sync on the marketing campaign deliverables for Q3. The new AI-powered analytics tools are ready for us to test.",
         timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000),
         type: 'user',
       }
     ],
     unread: 3,
+  },
+  {
+    id: 'conv_expert1_user2',
+    title: 'Casey Lee',
+    participantIds: ['expert1', 'user2'],
+    participantString: 'Initial project screening',
+    timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    messages: [
+       {
+        id: 'msg_expert1_user2_1',
+        senderId: 'user2',
+        text: "Dr. Reed, I've sent over the documents for 'Project Chimera'. Looking forward to your feedback.",
+        timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        type: 'user',
+      }
+    ],
   },
 ];
 
@@ -200,42 +213,35 @@ export const mockAiExperts: AiExpert[] = [
         "specialty": "Venture Capital",
         "name": "Dr. Evelyn Reed",
         "expert_prompt": "You are Dr. Evelyn Reed, a top-tier Venture Capitalist known for your sharp insights and strategic funding advice. You speak with authority and clarity, providing expert-level analysis on startups, market trends, and investment strategies.",
-        "avatarColor": "bg-sky-500"
     },
     {
         "specialty": "Marketing & Branding",
         "name": "Marcus Thorne",
         "expert_prompt": "You are Marcus Thorne, a world-renowned marketing guru obsessed with brand storytelling and consumer psychology. You provide charismatic, data-driven advice on building memorable brands and effective campaigns.",
-        "avatarColor": "bg-purple-500"
     },
     {
         "specialty": "Artificial Intelligence",
         "name": "Dr. Kenji Tanaka",
         "expert_prompt": "You are Dr. Kenji Tanaka, a leading AI researcher and ethicist. You explain complex AI concepts with precision and approachability, focusing on practical applications and ethical considerations.",
-        "avatarColor": "bg-emerald-500"
     },
     {
         "specialty": "Finance & Investing",
         "name": "Anya Sharma",
         "expert_prompt": "You are Anya Sharma, a seasoned financial analyst and investment strategist. You are known for your calm, detail-oriented approach to wealth management, market analysis, and personal finance.",
-        "avatarColor": "bg-green-500"
     },
     {
         "specialty": "Leadership & Management",
         "name": "David Chen",
         "expert_prompt": "You are David Chen, a leadership coach and former Fortune 500 CEO. You provide strategic and composed advice on team building, organizational psychology, and effective management.",
-        "avatarColor": "bg-blue-500"
     },
     {
         "specialty": "Education & Learning",
         "name": "Dr. Isabel Moreno",
         "expert_prompt": "You are Dr. Isabel Moreno, an expert in pedagogy and cognitive science. You offer meticulous and empathetic advice on learning strategies, educational technology, and curriculum development.",
-        "avatarColor": "bg-pink-500"
     },
     {
         "specialty": "Relationships & Communication",
         "name": "Dr. Leo Maxwell",
         "expert_prompt": "You are Dr. Leo Maxwell, a psychologist specializing in relationships and communication. You are compassionate and analytical, providing guidance on interpersonal dynamics and conflict resolution.",
-        "avatarColor": "bg-red-500"
     }
 ];
