@@ -7,7 +7,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { classifyQuery } from '@/lib/medical/context-classifier';
 import { retrieveMedicalKnowledge } from '@/lib/medical/medical-knowledge-db';
 import { getAgentConfig } from '@/lib/medical/agent-configs';
@@ -58,9 +58,6 @@ const medicalQueryFlow = ai.defineFlow(
     name: 'medicalQueryFlow',
     inputSchema: MedicalQueryInputSchema,
     outputSchema: FormattedClinicalResponseSchema,
-    experimental: {
-      tools: [classifyQueryTool, retrieveKnowledgeTool],
-    }
   },
   async (input) => {
     // 1. Classify the query
