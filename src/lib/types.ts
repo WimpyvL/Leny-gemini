@@ -107,3 +107,77 @@ export type AiExpert = {
   expert_prompt: string;
   avatarColor: string;
 };
+
+export enum ContextType {
+    SYMPTOM = "symptom",
+    DIAGNOSIS = "diagnosis",
+    MEDICATION = "medication",
+    TEST_RESULT = "test_result",
+    TREATMENT_PLAN = "treatment_plan",
+    TRIAGE = "triage",
+    FOLLOW_UP = "follow_up",
+    LOGISTICS = "logistics",
+    OTHER = "other",
+}
+
+export enum UserType {
+    PATIENT = "patient",
+    PROVIDER = "provider",
+}
+
+export enum MedicalSpecialty {
+    // Primary Care
+    FAMILY_MEDICINE = "family_medicine",
+    INTERNAL_MEDICINE = "internal_medicine",
+    PEDIATRICS = "pediatrics",
+    GERIATRICS = "geriatrics",
+    
+    // Emergency & Critical Care
+    EMERGENCY_MEDICINE = "emergency_medicine",
+    CRITICAL_CARE = "critical_care",
+    TRAUMA_SURGERY = "trauma_surgery",
+    
+    // Surgical Specialties
+    GENERAL_SURGERY = "general_surgery",
+    ORTHOPEDICS = "orthopedics",
+    NEUROSURGERY = "neurosurgery",
+    CARDIOTHORACIC_SURGERY = "cardiothoracic_surgery",
+    PLASTIC_SURGERY = "plastic_surgery",
+    UROLOGY = "urology",
+    
+    // Medical Specialties
+    CARDIOLOGY = "cardiology",
+    GASTROENTEROLOGY = "gastroenterology",
+    NEUROLOGY = "neurology",
+    PULMONOLOGY = "pulmonology",
+    NEPHROLOGY = "nephrology",
+    ENDOCRINOLOGY = "endocrinology",
+    HEMATOLOGY_ONCOLOGY = "hematology_oncology",
+    RHEUMATOLOGY = "rheumatology",
+    INFECTIOUS_DISEASE = "infectious_disease",
+    ALLERGY_IMMUNOLOGY = "allergy_immunology",
+    
+    // Women's Health
+    OBSTETRICS_GYNECOLOGY = "obstetrics_gynecology",
+    MATERNAL_FETAL_MEDICINE = "maternal_fetal_medicine",
+    
+    // Mental Health
+    PSYCHIATRY = "psychiatry",
+    PSYCHOLOGY = "psychology",
+    ADDICTION_MEDICINE = "addiction_medicine",
+    
+    // Diagnostic & Imaging
+    RADIOLOGY = "radiology",
+    PATHOLOGY = "pathology",
+    NUCLEAR_MEDICINE = "nuclear_medicine",
+    
+    // Specialized Care
+    DERMATOLOGY = "dermatology",
+    OPHTHALMOLOGY = "ophthalmology",
+    OTOLARYNGOLOGY = "otolaryngology",
+    ANESTHESIOLOGY = "anesthesiology",
+    PAIN_MANAGEMENT = "pain_management",
+    PALLIATIVE_CARE = "palliative_care",
+    SPORTS_MEDICINE = "sports_medicine",
+    OCCUPATIONAL_MEDICINE = "occupational_medicine",
+}
