@@ -17,22 +17,22 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 const allPopularQuestions = [
-  "How can I improve my team's productivity?",
-  "What are the basics of stock market investing?",
-  "Explain the theory of relativity in simple terms.",
-  "How do I create a personal budget?",
-  "What's the best way to learn a new language?",
-  "Give me a 5-step plan to start a small business.",
-  "How can I negotiate a higher salary?",
-  "What are the ethical implications of AI?",
+  "How can AI improve my team's productivity?",
+  "Explain how large language models work in simple terms.",
+  "What are the ethical implications of widespread AI?",
+  "How can I use AI to help me learn a new skill faster?",
+  "What are some free AI tools I can use today?",
+  "Give me a 5-step plan to integrate AI into my small business.",
+  "How does generative AI create images?",
+  "What is prompt engineering?",
 ];
 
 const allHelpTopics = [
-  { initials: '🚀', text: 'Get startup advice from a Venture Capitalist', color: 'bg-green-500' },
-  { initials: '📈', text: 'Create a marketing plan with a CMO', color: 'bg-blue-500' },
-  { initials: '💡', text: 'Brainstorm new ideas with an Innovator', color: 'bg-purple-500' },
-  { initials: '💰', text: 'Get financial advice from a CFO', color: 'bg-pink-500' },
-  { initials: '👥', text: 'Improve team dynamics with a Leadership Coach', color: 'bg-yellow-500' },
+  { initials: '🚀', text: 'Get startup advice supercharged by AI', color: 'bg-green-500' },
+  { initials: '📈', text: 'Generate a marketing plan with a virtual CMO', color: 'bg-blue-500' },
+  { initials: '💡', text: 'Brainstorm new ideas with a creative AI partner', color: 'bg-purple-500' },
+  { initials: '💰', text: 'Analyze financial data with an AI assistant', color: 'bg-pink-500' },
+  { initials: '👥', text: 'Learn to build better prompts for any AI', color: 'bg-yellow-500' },
 ];
 
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -117,7 +117,7 @@ export default function Home() {
   }
 
   const handleHelpTopicClick = (topicText: string) => {
-    handleSendMessage(`I'd like to: ${topicText}`);
+    handleSendMessage(topicText);
   };
 
   return (
@@ -166,10 +166,10 @@ export default function Home() {
         <div className="w-full max-w-lg space-y-4">
           <div className="space-y-1 text-left">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white/90">
-              Unlock expertise on demand.
+              Bridging the gap between people and AI.
             </h1>
             <p className="text-sm text-white/70">
-              Connect with AI-powered experts for insights on any topic.
+              S.A.N.I. makes artificial intelligence accessible, understandable, and genuinely useful.
             </p>
           </div>
           
@@ -178,7 +178,7 @@ export default function Home() {
               <div className="relative" onFocus={() => setIsExpanded(true)}>
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">📎</span>
                 <Input 
-                  placeholder="Ask me anything..."
+                  placeholder="Ask S.A.N.I. anything..."
                   className="pl-10 pr-20 h-11 rounded-full text-sm"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}

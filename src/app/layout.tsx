@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: 'S.A.N.I',
-  description: 'Smart Artificial Network Intelligence',
+  description: 'Bridging the gap between humans and AI.',
 };
 
 export default function RootLayout({
