@@ -1,7 +1,6 @@
 
 'use client';
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Mic, Paperclip } from "lucide-react";
@@ -14,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
+import { useRouter } from "next/navigation";
 
 const allPopularQuestions = [
   "What should I do about my child's fever?",
@@ -49,6 +49,7 @@ type Message = {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -134,12 +135,8 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
           <div className="flex items-center gap-2">
-            <Button asChild>
-                <Link href="/patient">Patient View</Link>
-            </Button>
-            <Button asChild variant="outline">
-                <Link href="/doctor">Doctor View</Link>
-            </Button>
+            <Button onClick={() => router.push('/patient')}>Patient View</Button>
+            <Button variant="outline" onClick={() => router.push('/doctor')}>Doctor View</Button>
           </div>
         </nav>
       </header>
