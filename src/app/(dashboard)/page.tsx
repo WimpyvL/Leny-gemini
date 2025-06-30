@@ -5,17 +5,19 @@ import { DashboardUI } from "./components/DashboardUI";
 import type { User } from "@/lib/types";
 import { useState, useEffect } from "react";
 
-// This component receives appUser from the layout and searchParams from Next.js
+// This component now fetches its own data and handles dev_role
 export default function DashboardPage({
-  appUser: initialAppUser,
   searchParams,
 }: {
-  appUser: User;
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const [appUser, setAppUser] = useState(initialAppUser);
+  const [appUser, setAppUser] = useState<User | null>(null);
 
   useEffect(() => {
+    // Default to the 'user' role mock user for development.
+    const initialAppUser = mockUsers.find(u => u.id === 'user1');
+    if (!initialAppUser) return;
+
     const devRole = searchParams?.dev_role;
     if (devRole === 'expert' || devRole === 'user') {
       const newUser = { ...initialAppUser, role: devRole as 'user' | 'expert' };
@@ -33,11 +35,15 @@ export default function DashboardPage({
     } else {
       setAppUser(initialAppUser);
     }
-  }, [searchParams, initialAppUser]);
+  }, [searchParams]);
   
   if (!appUser) {
-    // This should technically be handled by the layout, but it's good practice to check
-    return <div>Loading...</div>;
+    // This will show while the user state is being set in useEffect
+    return (
+        <div className="flex h-screen w-full items-center justify-center bg-background">
+            <div className="text-xl">Loading dashboard...</div>
+        </div>
+    );
   }
   
   const userConversations = mockConversations.filter(c => 
