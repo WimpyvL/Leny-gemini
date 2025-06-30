@@ -23,7 +23,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { upgradeToDoctor } from '@/app/auth/actions';
 import { useToast } from '@/hooks/use-toast';
 
 
@@ -69,21 +68,12 @@ export function Profile({ user: initialUser }: ProfileProps) {
 
   const handleUpgrade = async () => {
     setIsUpgrading(true);
-    const result = await upgradeToDoctor(user.id);
-    if (result.success) {
-      toast({
-        title: 'Account Upgraded!',
-        description: 'You are now registered as a provider. Redirecting...',
-      });
-      router.refresh();
-    } else {
-      toast({
-        title: 'Upgrade Failed',
-        description: result.error,
-        variant: 'destructive',
-      });
-      setIsUpgrading(false);
-    }
+    toast({
+      title: 'Feature Disabled',
+      description: 'Account upgrades are not available as authentication is disabled.',
+      variant: 'destructive',
+    });
+    setTimeout(() => setIsUpgrading(false), 1000);
   };
 
   return (

@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,10 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, Loader2 } from 'lucide-react';
-import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { createNewUser, findOrCreateUser } from '@/app/auth/actions';
+import { AlertTriangle } from 'lucide-react';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -29,86 +25,11 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function SignupPage() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleEmailSignup = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    
-    const formData = new FormData(event.currentTarget);
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const userType = formData.get('userType') as 'patient' | 'doctor';
-  
-    if (!name || !email || !password || !userType) {
-      setError('All fields are required.');
-      setIsLoading(false);
-      return;
-    }
-    
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
-      
-      await createNewUser(uid, {
-        name,
-        email,
-        role: userType,
-      });
-
-      if (userType === 'doctor') {
-        router.push('/doctor');
-      } else {
-        router.push('/patient');
-      }
-    } catch (err: any) {
-        console.error(err.code, err.message);
-        if (err.code === 'auth/email-already-in-use') {
-            setError('This email address is already in use.');
-        } else if (err.code === 'auth/weak-password') {
-            setError('The password is too weak. Please use at least 6 characters.');
-        } else {
-            setError('An unexpected error occurred. Please try again.');
-        }
-        setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setError(null);
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const googleUser = result.user;
-      const appUser = await findOrCreateUser({
-        uid: googleUser.uid,
-        email: googleUser.email,
-        name: googleUser.displayName,
-        avatar: googleUser.photoURL,
-      });
-
-      if (appUser.role === 'doctor') {
-        router.push('/doctor');
-      } else {
-        router.push('/patient');
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-          setError('Failed to sign in with Google. Please try again.');
-      }
-      setIsLoading(false);
-    }
-  };
+  const [error] = useState<string | null>('Authentication has been temporarily disabled for development.');
 
   return (
     <Card className="mx-auto max-w-sm">
-      <form onSubmit={handleEmailSignup}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
@@ -119,13 +40,13 @@ export default function SignupPage() {
           {error && (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Sign-up Failed</AlertTitle>
+              <AlertTitle>Auth Disabled</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           <div className="grid gap-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input id="name" name="name" placeholder="John Doe" required disabled={isLoading} />
+            <Input id="name" name="name" placeholder="John Doe" required disabled />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -135,16 +56,16 @@ export default function SignupPage() {
               name="email"
               placeholder="m@example.com"
               required
-              disabled={isLoading}
+              disabled
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" required disabled={isLoading} />
+            <Input id="password" name="password" type="password" required disabled />
           </div>
           <div className="grid gap-2">
             <Label>I am a...</Label>
-            <RadioGroup defaultValue="patient" name="userType" className="flex gap-4" disabled={isLoading}>
+            <RadioGroup defaultValue="patient" name="userType" className="flex gap-4" disabled>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="patient" id="r-patient" />
                 <Label htmlFor="r-patient">Patient</Label>
@@ -155,8 +76,7 @@ export default function SignupPage() {
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="w-full mt-4" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="submit" className="w-full mt-4" disabled>
             Create an account
           </Button>
 
@@ -171,8 +91,8 @@ export default function SignupPage() {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full mt-2" type="button" onClick={handleGoogleSignIn} disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+          <Button variant="outline" className="w-full mt-2" type="button" disabled>
+            <GoogleIcon className="mr-2 h-4 w-4" />
             Sign up with Google
           </Button>
         </CardContent>

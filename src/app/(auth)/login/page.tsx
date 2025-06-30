@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,10 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, Loader2 } from 'lucide-react';
-import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { findOrCreateUser, getUserData } from '@/app/auth/actions';
+import { AlertTriangle } from 'lucide-react';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -29,75 +25,11 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-
-    if (!email || !password) {
-      setError('Email and password are required.');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = await getUserData(userCredential.user.uid);
-      if (user?.role === 'doctor') {
-        router.push('/doctor');
-      } else {
-        router.push('/patient');
-      }
-    } catch (err: any) {
-      console.error(err.code, err.message);
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-          setError('Invalid email or password. Please try again.');
-      } else {
-          setError('An unexpected error occurred. Please try again.');
-      }
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setError(null);
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const googleUser = result.user;
-      const appUser = await findOrCreateUser({
-        uid: googleUser.uid,
-        email: googleUser.email,
-        name: googleUser.displayName,
-        avatar: googleUser.photoURL,
-      });
-
-      if (appUser.role === 'doctor') {
-        router.push('/doctor');
-      } else {
-        router.push('/patient');
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-          setError('Failed to sign in with Google. Please try again.');
-      }
-      setIsLoading(false);
-    }
-  };
+  const [error] = useState<string | null>('Authentication has been temporarily disabled for development.');
 
   return (
     <Card className="w-full max-w-sm">
-      <form onSubmit={handleEmailLogin}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -108,7 +40,7 @@ export default function LoginPage() {
           {error && (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Login Failed</AlertTitle>
+              <AlertTitle>Auth Disabled</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -120,17 +52,16 @@ export default function LoginPage() {
               name="email"
               placeholder="m@example.com"
               required
-              disabled={isLoading}
+              disabled
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" name="password" required disabled={isLoading} />
+            <Input id="password" type="password" name="password" required disabled />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full" type="submit" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button className="w-full" type="submit" disabled>
             Sign in
           </Button>
 
@@ -145,8 +76,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" type="button" onClick={handleGoogleSignIn} disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon className="mr-2 h-4 w-4" />}
+          <Button variant="outline" className="w-full" type="button" disabled>
+            <GoogleIcon className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button>
 
