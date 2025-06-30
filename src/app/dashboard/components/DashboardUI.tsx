@@ -4,7 +4,6 @@ import { Sidebar } from '@/app/dashboard/components/Sidebar';
 import { ConversationList } from '@/app/dashboard/components/ConversationList';
 import { ChatWindow } from '@/app/dashboard/components/ChatWindow';
 import type { Conversation, User, Message } from '@/lib/types';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { runQuery } from '@/app/actions';
 import { mockUsers } from '@/lib/mock-data';
@@ -21,7 +20,6 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
   const [allUsers, setAllUsers] = useState<User[]>(initialAllUsers);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const isMobile = useIsMobile();
 
   const selectedConversation = conversations.find(c => c.id === selectedConversationId) || null;
 
@@ -93,8 +91,8 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
     <div className="flex h-screen w-full bg-background text-sm">
       <Sidebar user={user} />
       <div className={cn(
-        "w-full md:w-[320px] flex-shrink-0 border-r bg-card flex-col",
-        showDetailView && isMobile ? "hidden" : "flex"
+        "w-full flex-shrink-0 border-r bg-card flex-col md:w-[320px]",
+        showDetailView ? "hidden md:flex" : "flex"
       )}>
         <ConversationList
             conversations={conversations}
@@ -105,7 +103,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
         />
       </div>
       <main className={cn(
-        "flex-1 flex flex-col min-w-0",
+        "flex-1 flex-col min-w-0",
         showDetailView ? "flex" : "hidden md:flex"
       )}>
         {selectedConversation ? (
