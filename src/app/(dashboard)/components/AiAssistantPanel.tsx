@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useTransition } from 'react';
 import type { Conversation, User, FormattedResponse } from '@/lib/types';
-import { runQuery } from '@/app/user/actions';
+import { runQuery } from '@/app/actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';

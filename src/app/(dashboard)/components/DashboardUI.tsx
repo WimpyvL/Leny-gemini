@@ -6,7 +6,7 @@ import { ChatWindow } from './ChatWindow';
 import type { Conversation, User, Message } from '@/lib/types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { runUserQuery } from '@/app/user/actions';
+import { runQuery } from '@/app/actions';
 import { mockUsers } from '@/lib/mock-data';
 import { AiAssistantPanel } from './AiAssistantPanel';
 
@@ -55,11 +55,15 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       setIsLoading(true);
       try {
         const conversationHistory = selectedConversation.messages.slice(-5).map(m => m.text || '');
-        const aiResponse = await runUserQuery(text, conversationHistory);
+        const aiResponse = await runQuery({
+          text,
+          userRole: user.role,
+          conversationHistory
+        });
 
         const aiMessage: Message = {
           id: `msg_ai_${Date.now()}`,
-          text: aiResponse,
+          text: aiResponse.content,
           senderId: 'assistant',
           timestamp: new Date(),
           type: 'user',
