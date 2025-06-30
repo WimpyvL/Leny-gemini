@@ -17,7 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { findOrCreateUser, getUserData } from '@/app/auth/actions';
+import { findOrCreateUser } from '@/app/auth/actions';
 import { Logo } from '@/components/Logo';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (

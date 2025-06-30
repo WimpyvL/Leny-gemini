@@ -140,19 +140,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
-       <div className="absolute inset-0 h-full w-full z-0 pointer-events-none">
-          {/* Replace with a more appropriate video or image for S.A.N.I */}
-          <video
-            className="h-full w-full object-cover"
-            src="https://cdn.pixabay.com/video/2024/02/12/198815-912061379_large.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-          >
-          </video>
-          <div className="absolute inset-0 bg-black/70" />
-       </div>
+       <div className="absolute inset-0 h-full w-full z-0 pointer-events-none bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900" />
       
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
