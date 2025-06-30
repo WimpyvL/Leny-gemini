@@ -3,9 +3,33 @@
 import { mockUsers, mockConversations } from "@/lib/mock-data";
 import { DashboardUI } from "./components/DashboardUI";
 import type { User } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 // This component receives appUser from the layout
-export default function DashboardPage({ appUser }: { appUser: User }) {
+export default function DashboardPage({ appUser: initialAppUser }: { appUser: User }) {
+  const searchParams = useSearchParams();
+  const [appUser, setAppUser] = useState(initialAppUser);
+
+  useEffect(() => {
+    const devRole = searchParams.get('dev_role');
+    if (devRole === 'expert' || devRole === 'user') {
+      const newUser = { ...initialAppUser, role: devRole as ('user' | 'expert') };
+      if (devRole === 'expert' && !newUser.expertInfo) {
+        newUser.expertInfo = {
+            specialty: 'General Consultant',
+            title: newUser.name,
+            bio: `Viewing in expert developer mode.`,
+            officeHours: 'Mon-Fri, 9:00 AM - 5:00 PM',
+            practiceAddress: '123 Innovation Drive',
+            practiceName: 'Solutions Inc.',
+        };
+      }
+      setAppUser(newUser);
+    } else {
+        setAppUser(initialAppUser);
+    }
+  }, [searchParams, initialAppUser]);
   
   if (!appUser) {
     // This should technically be handled by the layout, but it's good practice to check
