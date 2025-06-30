@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, Mic } from "lucide-react";
@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
-import { useAuth } from "@/hooks/use-auth";
+// import { useAuth } from "@/hooks/use-auth";
 
 const allPopularQuestions = [
   "How can AI improve my team's productivity?",
@@ -61,15 +61,15 @@ export default function Home() {
   const chatCardRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { user, isLoading: isAuthLoading } = useAuth();
-  const router = useRouter();
+  // const { user, isLoading: isAuthLoading } = useAuth();
+  // const router = useRouter();
 
-  useEffect(() => {
-    // Redirect logged-in users to the dashboard
-    if (!isAuthLoading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, isAuthLoading, router]);
+  // useEffect(() => {
+  //   // Redirect logged-in users to the dashboard
+  //   if (!isAuthLoading && user) {
+  //     router.push('/dashboard');
+  //   }
+  // }, [user, isAuthLoading, router]);
 
   useEffect(() => {
     // This now runs only on the client, preventing hydration errors
@@ -129,14 +129,14 @@ export default function Home() {
     handleSendMessage(topicText);
   };
 
-  // Don't render the page for logged-in users, let the redirect handle it.
-  if (isAuthLoading || user) {
-    return (
-        <div className="flex h-screen w-full items-center justify-center bg-background">
-            <div className="text-xl">Loading...</div>
-        </div>
-    );
-  }
+  // // Don't render the page for logged-in users, let the redirect handle it.
+  // if (isAuthLoading || user) {
+  //   return (
+  //       <div className="flex h-screen w-full items-center justify-center bg-background">
+  //           <div className="text-xl">Loading...</div>
+  //       </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
@@ -161,8 +161,8 @@ export default function Home() {
               <Link href="/login">
                 <Button variant="outline" className="text-white border-white/20 bg-white/10 hover:bg-white/20 hover:text-white backdrop-blur-sm">Login</Button>
               </Link>
-              <Link href="/signup">
-                <Button className="backdrop-blur-sm">Sign Up Free</Button>
+              <Link href="/dashboard">
+                <Button className="backdrop-blur-sm">Dashboard</Button>
               </Link>
             </div>
         </nav>
