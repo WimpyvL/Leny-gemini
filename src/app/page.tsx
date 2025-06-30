@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from "next/link";
@@ -132,6 +133,14 @@ export default function Home() {
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
           <Logo />
+          <div className="flex items-center gap-2">
+            <Button asChild>
+                <Link href="/patient">Patient View</Link>
+            </Button>
+            <Button asChild variant="outline">
+                <Link href="/doctor">Doctor View</Link>
+            </Button>
+          </div>
         </nav>
       </header>
 
