@@ -21,7 +21,7 @@ const ExpertChatOutputSchema = z.object({
   confidenceInEvidence: z.string().describe('The overall strength of the evidence (e.g., High, Moderate, Low) with a brief justification.'),
   clinicalBottomLine: z.string().describe('A clear, actionable conclusion based on the evidence.'),
   contraryOrUnanswered: z.string().describe('Any significant counter-evidence or areas where evidence is lacking.'),
-  quickActions: z.array(z.string()).describe('A list of 3-4 suggested next replies or questions for the doctor to ask the expert.'),
+  quickActions: z.array(z.string()).describe('A list of 3-4 suggested, brief, actionable next steps for the doctor to take (e.g., "Order EKG and Troponin", "Administer aspirin").'),
   citations: z.array(z.object({
     term: z.string().describe('The exact term or phrase from the response text to be cited.'),
     source: z.string().describe('A brief definition, source, or link for the cited term. Should be concise enough for a tooltip.'),
@@ -49,7 +49,7 @@ For the doctor's query below, structure your response with the following section
 3.  **Clinical Bottom Line**: Provide a clear, actionable conclusion based on the evidence. State what the evidence supports doing.
 4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking.
 
-After your structured response, you MUST generate a list of 3-4 relevant "quick actions". These should be insightful follow-up questions or next steps for clinical investigation that the doctor might want to take.
+After your structured response, you MUST generate a list of 3-4 brief, actionable next steps for the doctor (e.g., "Order STAT CBC & Chem-7", "Request immediate imaging", "Consult cardiology guidelines"). These should be clinical actions, not conversational replies.
 
 Finally, identify key terms (acronyms, study names, drug classes, etc.) within your entire response and provide brief definitions or sources for them in the 'citations' field. For example, if you mention 'NEJM', add a citation with the term 'NEJM' and the source 'New England Journal of Medicine'.
 
