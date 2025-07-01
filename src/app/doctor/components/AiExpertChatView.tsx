@@ -1,18 +1,17 @@
 'use client';
 import type { AiExpert, Message, User } from '@/lib/types';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { CardHeader, CardTitle, CardDescription, Card, CardFooter } from '@/components/ui/card';
+import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Send, BrainCircuit, AlertTriangle, Users } from 'lucide-react';
+import { Send, AlertTriangle, Users } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
-import { mockAiExperts } from '@/lib/mock-data';
 import { ConsultExpertDialog } from './ConsultExpertDialog';
 import { TextWithCitations } from './TextWithCitations';
 
@@ -24,7 +23,6 @@ interface AiExpertChatViewProps {
   onSendMessage: (text: string) => void;
   isLoading: boolean;
   suggestion: ExpertRouterOutput | null;
-  onConsultExpert: (expertId: string, summary: string) => void;
   onConsultAnotherExpert: (expert: AiExpert) => void;
 }
 
@@ -92,7 +90,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
   );
 }
 
-function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void }) {
+function MessageInput({ onSendMessage, expertName }: { onSendMessage: (text: string) => void, expertName: string }) {
   const [text, setText] = useState('');
 
   const handleSend = () => {
@@ -115,7 +113,7 @@ function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder={`Message ${'Dr. ' + (text.includes(' ') ? text.split(' ')[1] : text)}...`}
+        placeholder={`Message ${expertName}...`}
         rows={1}
         className="resize-none max-h-24 bg-input"
       />
@@ -127,7 +125,7 @@ function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void
   );
 }
 
-export function AiExpertChatView({ expert, allExperts, messages, currentUser, onSendMessage, isLoading, suggestion, onConsultExpert, onConsultAnotherExpert }: AiExpertChatViewProps) {
+export function AiExpertChatView({ expert, allExperts, messages, currentUser, onSendMessage, isLoading, suggestion, onConsultAnotherExpert }: AiExpertChatViewProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isConsulting, setIsConsulting] = useState(false);
   
@@ -145,8 +143,6 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
     if (parts.length > 1) return `${parts[0][0]}${parts[parts.length - 1][0]}`;
     return name.substring(0, 2);
   };
-
-  const suggestedExpertInfo = suggestion?.suggestedExpertId ? mockAiExperts.find(e => e.id === suggestion.suggestedExpertId) : null;
 
   const getExpertForMessage = (message: Message): AiExpert | undefined => {
     if(message.senderId === currentUser.id) return undefined;
@@ -230,31 +226,9 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
                     <AlertDescription>{suggestion.urgencyReason}</AlertDescription>
                 </Alert>
             )}
-            {suggestedExpertInfo && (
-                <Card className="bg-accent">
-                    <CardHeader className="p-4">
-                        <CardDescription>Suggested Consultation</CardDescription>
-                        <CardTitle className="flex items-center gap-3">
-                           <Avatar className="h-10 w-10">
-                                <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(suggestedExpertInfo.name)}</AvatarFallback>
-                           </Avatar>
-                           <div>
-                            {suggestedExpertInfo.name}
-                            <p className="text-sm font-normal text-muted-foreground">{suggestedExpertInfo.specialty}</p>
-                           </div>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardFooter className="p-4 pt-0">
-                         <Button className="w-full" onClick={() => onConsultExpert(suggestedExpertInfo.id, suggestion.summaryForExpert)}>
-                            <Users className="mr-2 h-4 w-4"/>
-                            Consult {suggestedExpertInfo.name}
-                        </Button>
-                    </CardFooter>
-                </Card>
-            )}
              {suggestion.quickActions.length > 0 && (
                 <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">Quick Actions</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">Suggested Actions</p>
                     <div className="flex flex-wrap gap-2">
                         {suggestion.quickActions.map((action, index) => (
                             <Button key={index} variant="outline" size="sm" onClick={() => onSendMessage(action)}>
@@ -268,7 +242,7 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
       )}
 
       <div className="p-4 border-t bg-card">
-        <MessageInput onSendMessage={onSendMessage} />
+        <MessageInput onSendMessage={onSendMessage} expertName={expert.name}/>
       </div>
     </div>
   );

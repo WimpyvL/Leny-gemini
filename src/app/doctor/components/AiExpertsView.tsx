@@ -65,6 +65,7 @@ export function AiExpertsView() {
         try {
             if (selectedExpert.id === 'leny-router') {
                 const result = await runExpertRouter(toHistory(newMessages), mockAiExperts);
+                
                 const aiMessage: Message = {
                     id: `msg_ai_${Date.now()}`,
                     text: result.response,
@@ -74,6 +75,14 @@ export function AiExpertsView() {
                 };
                 setMessages(prev => [...prev, aiMessage]);
                 setSuggestion(result);
+
+                if (result.suggestedExpertId) {
+                    // Wait so the user can see Leny's analysis before switching
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    await handleConsultExpert(result.suggestedExpertId, result.summaryForExpert);
+                } else {
+                    setIsLoading(false);
+                }
             } else {
                 const result = await runExpertChat(text, selectedExpert.expert_prompt);
                 const aiMessage: Message = {
@@ -91,6 +100,7 @@ export function AiExpertsView() {
                     quickActions: result.quickActions,
                 };
                 setMessages(prev => [...prev, aiMessage]);
+                setIsLoading(false);
             }
         } catch (error) {
             console.error('Error in expert chat:', error);
@@ -102,7 +112,6 @@ export function AiExpertsView() {
                 type: 'user',
             };
             setMessages(prev => [...prev, errorMessage]);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -224,7 +233,6 @@ export function AiExpertsView() {
                         onSendMessage={handleSendMessage}
                         isLoading={isLoading}
                         suggestion={suggestion}
-                        onConsultExpert={handleConsultExpert}
                         onConsultAnotherExpert={handleConsultAnotherExpert}
                         allExperts={mockAiExperts}
                     />
