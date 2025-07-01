@@ -24,7 +24,10 @@ const ExpertConsultationInputSchema = z.object({
 export type ExpertConsultationInput = z.infer<typeof ExpertConsultationInputSchema>;
 
 const ExpertConsultationOutputSchema = z.object({
-  response: z.string().describe('The new expert\'s insightful response based on the history.'),
+  evidenceSummary: z.string().describe('A brief synthesis of relevant clinical evidence from high-quality sources.'),
+  confidenceInEvidence: z.string().describe('The overall strength of the evidence (e.g., High, Moderate, Low) with a brief justification.'),
+  clinicalBottomLine: z.string().describe('A clear, actionable conclusion based on the evidence.'),
+  contraryOrUnanswered: z.string().describe('Any significant counter-evidence or areas where evidence is lacking.'),
   quickActions: z.array(z.string()).describe('A list of 3-4 suggested next replies or questions for the doctor to ask.'),
 });
 export type ExpertConsultationOutput = z.infer<typeof ExpertConsultationOutputSchema>;
@@ -41,17 +44,23 @@ const prompt = ai.definePrompt({
   prompt: `{{consultant.expert_prompt}}
 
 You have been asked for a one-time consultation on an ongoing conversation between a doctor and another AI expert.
-Your task is to review the entire conversation history below and provide your unique, specialized opinion in a single, concise message.
-Focus on adding new value from your perspective.
+Your task is to review the entire conversation history below and provide your unique, specialized opinion in the structured OpenEvidence.com style: data-driven, and grounded in clinical evidence. Avoid conversational filler.
 
-After your main response, you MUST generate a list of 3-4 relevant "quick actions". These should be short, follow-up questions or comments that the doctor might want to say next to continue the conversation productively.
+Structure your response with the following sections:
+
+1.  **Evidence Summary**: Briefly synthesize the most relevant clinical evidence from high-quality sources that addresses the core clinical question in the history.
+2.  **Confidence in Evidence**: State the overall strength of the evidence (e.g., High, Moderate, Low) and briefly justify why.
+3.  **Clinical Bottom Line**: Provide a clear, actionable conclusion based on the evidence, adding new value from your specific specialty.
+4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking that haven't been discussed.
+
+After your structured response, you MUST generate a list of 3-4 relevant "quick actions". These should be insightful follow-up questions or next steps for clinical investigation.
 
 Conversation History:
 {{#each history}}
 - {{senderName}}: {{text}}
 {{/each}}
 
-Your Consultation Summary:
+Your Structured Consultation:
   `,
 });
 

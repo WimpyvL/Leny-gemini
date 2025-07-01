@@ -41,6 +41,13 @@ export type Assessment = {
   suggestions: string[];
 }
 
+export type StructuredResponse = {
+  evidenceSummary: string;
+  confidenceInEvidence: string;
+  clinicalBottomLine: string;
+  contraryOrUnanswered: string;
+};
+
 export type Message = {
   id: string;
   text?: string;
@@ -49,6 +56,7 @@ export type Message = {
   type: 'user' | 'assessment';
   assessment?: Assessment;
   quickActions?: string[];
+  structuredResponse?: StructuredResponse;
 };
 
 export type Conversation = {

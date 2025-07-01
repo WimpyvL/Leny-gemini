@@ -34,6 +34,29 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
     return name.substring(0, 2);
   };
   
+  const renderStructuredResponse = (response: import('@/lib/types').StructuredResponse) => {
+    return (
+      <div className="space-y-3 text-sm">
+        <div>
+          <h4 className="font-bold text-card-foreground">Evidence Summary</h4>
+          <p className="text-card-foreground/90">{response.evidenceSummary}</p>
+        </div>
+        <div>
+          <h4 className="font-bold text-card-foreground">Confidence in Evidence</h4>
+          <p className="text-card-foreground/90">{response.confidenceInEvidence}</p>
+        </div>
+        <div>
+          <h4 className="font-bold text-card-foreground">Clinical Bottom Line</h4>
+          <p className="text-card-foreground/90">{response.clinicalBottomLine}</p>
+        </div>
+        <div>
+          <h4 className="font-bold text-card-foreground">Contrary or Unanswered Questions</h4>
+          <p className="text-card-foreground/90">{response.contraryOrUnanswered}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
       {!isOwnMessage && (
@@ -52,7 +75,11 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
                   : "bg-card text-card-foreground rounded-bl-none"
               )}
             >
-              <p className="text-base whitespace-pre-wrap">{message.text}</p>
+              {message.structuredResponse ? (
+                renderStructuredResponse(message.structuredResponse)
+              ) : (
+                <p className="text-base whitespace-pre-wrap">{message.text}</p>
+              )}
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>

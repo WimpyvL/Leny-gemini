@@ -17,7 +17,10 @@ const ExpertChatInputSchema = z.object({
 export type ExpertChatInput = z.infer<typeof ExpertChatInputSchema>;
 
 const ExpertChatOutputSchema = z.object({
-  response: z.string().describe('A specialized and helpful AI response from the expert.'),
+  evidenceSummary: z.string().describe('A brief synthesis of relevant clinical evidence from high-quality sources.'),
+  confidenceInEvidence: z.string().describe('The overall strength of the evidence (e.g., High, Moderate, Low) with a brief justification.'),
+  clinicalBottomLine: z.string().describe('A clear, actionable conclusion based on the evidence.'),
+  contraryOrUnanswered: z.string().describe('Any significant counter-evidence or areas where evidence is lacking.'),
   quickActions: z.array(z.string()).describe('A list of 3-4 suggested next replies or questions for the doctor to ask the expert.'),
 });
 export type ExpertChatOutput = z.infer<typeof ExpertChatOutputSchema>;
@@ -33,9 +36,16 @@ const prompt = ai.definePrompt({
   output: {schema: ExpertChatOutputSchema},
   prompt: `{{expertPrompt}}
 
-You are conversing with a human doctor who is seeking your expert opinion. Provide a concise, insightful, and actionable response based on your specialty.
+You are an AI medical expert providing an evidence-based consultation to a human doctor. Your responses must emulate the style of OpenEvidence.com: data-driven, structured, and grounded in clinical evidence. Avoid conversational filler.
 
-After your main response, you MUST generate a list of 3-4 relevant "quick actions". These should be short, follow-up questions or comments that the doctor might want to say next to continue the conversation productively.
+For the doctor's query below, structure your response with the following sections:
+
+1.  **Evidence Summary**: Briefly synthesize the most relevant clinical evidence from high-quality sources (e.g., RCTs, meta-analyses, major guidelines) that addresses the query.
+2.  **Confidence in Evidence**: State the overall strength of the evidence (e.g., High, Moderate, Low) and briefly justify why (e.g., "Based on multiple large, well-conducted RCTs").
+3.  **Clinical Bottom Line**: Provide a clear, actionable conclusion based on the evidence. State what the evidence supports doing.
+4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking.
+
+After your structured response, you MUST generate a list of 3-4 relevant "quick actions". These should be insightful follow-up questions or next steps for clinical investigation that the doctor might want to take.
 
 Doctor's message: {{{message}}}
   `,

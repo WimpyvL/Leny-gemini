@@ -78,7 +78,12 @@ export function AiExpertsView() {
                 const result = await runExpertChat(text, selectedExpert.expert_prompt);
                 const aiMessage: Message = {
                     id: `msg_ai_${Date.now()}`,
-                    text: result.response,
+                    structuredResponse: {
+                      evidenceSummary: result.evidenceSummary,
+                      confidenceInEvidence: result.confidenceInEvidence,
+                      clinicalBottomLine: result.clinicalBottomLine,
+                      contraryOrUnanswered: result.contraryOrUnanswered,
+                    },
                     senderId: selectedExpert.id,
                     timestamp: new Date(),
                     type: 'user',
@@ -123,7 +128,12 @@ export function AiExpertsView() {
             const result = await runExpertChat(summary, expert.expert_prompt);
             const aiMessage: Message = {
                 id: `msg_ai_initial_${Date.now()}`,
-                text: result.response,
+                structuredResponse: {
+                    evidenceSummary: result.evidenceSummary,
+                    confidenceInEvidence: result.confidenceInEvidence,
+                    clinicalBottomLine: result.clinicalBottomLine,
+                    contraryOrUnanswered: result.contraryOrUnanswered,
+                },
                 senderId: expert.id,
                 timestamp: new Date(),
                 type: 'user',
@@ -164,7 +174,12 @@ export function AiExpertsView() {
             
             const expertMessage: Message = {
                 id: `msg_consult_${Date.now()}`,
-                text: consultationResponse.response,
+                structuredResponse: {
+                    evidenceSummary: consultationResponse.evidenceSummary,
+                    confidenceInEvidence: consultationResponse.confidenceInEvidence,
+                    clinicalBottomLine: consultationResponse.clinicalBottomLine,
+                    contraryOrUnanswered: consultationResponse.contraryOrUnanswered,
+                },
                 senderId: consultant.id,
                 timestamp: new Date(),
                 type: 'user',

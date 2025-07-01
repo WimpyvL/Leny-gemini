@@ -29,7 +29,10 @@ export async function runExpertChat(message: string, expertPrompt: string): Prom
   } catch (error) {
     console.error('Error in expert chat:', error);
     return {
-      response: "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment.",
+      evidenceSummary: 'An error occurred while fetching the analysis.',
+      confidenceInEvidence: 'N/A',
+      clinicalBottomLine: "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment.",
+      contraryOrUnanswered: 'N/A',
       quickActions: [],
     };
   }
@@ -64,7 +67,7 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
         }
         return {
             senderName,
-            text: msg.text || '',
+            text: msg.structuredResponse ? JSON.stringify(msg.structuredResponse) : msg.text || '',
         };
     });
 
@@ -81,7 +84,10 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
     } catch (error) {
         console.error('Error in expert consultation flow:', error);
         return {
-            response: "I'm sorry, I encountered an error during the consultation.",
+            evidenceSummary: 'An error occurred during the consultation.',
+            confidenceInEvidence: 'N/A',
+            clinicalBottomLine: "I'm sorry, I encountered an error during the consultation.",
+            contraryOrUnanswered: 'N/A',
             quickActions: []
         };
     }
