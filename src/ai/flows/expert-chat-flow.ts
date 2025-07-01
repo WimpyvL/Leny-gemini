@@ -52,9 +52,9 @@ For the doctor's query below, structure your response with the following section
 3.  **Clinical Bottom Line**: Provide a clear, actionable conclusion based on the evidence. State what the evidence supports doing.
 4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking.
 
-After your structured response, you MUST generate a list of 3-4 brief, actionable next steps for the doctor. For each action, provide a short 'keyword' (e.g., "Order EKG") and the 'fullAction' text (e.g., "Order a 12-lead EKG and check Troponin levels."). These should be clinical actions, not conversational replies.
+After your structured response, you MUST generate a list of 3-4 brief, actionable clinical next steps for the doctor. For each action, provide a short 'keyword' (e.g., "Order STAT CBC & Chem-7") and the 'fullAction' text (e.g., "Order a STAT complete blood count and chemistry panel."). These should be clinical actions, not conversational replies.
 
-Finally, identify key terms (acronyms, study names, drug classes, etc.) within your entire response and provide brief definitions or sources for them in the 'citations' field. For example, if you mention 'NEJM', add a citation with the term 'NEJM' and the source 'New England Journal of Medicine'.
+Finally, to ensure clinical validity, identify key terms, studies, or concepts (e.g., 'ACC/AHA guidelines', 'PRODIGY trial', 'SGLT2 inhibitors') within your response. For each, provide a citation with the term and its source (e.g., 'PRODIGY trial' -> 'Published in JAMA, 2022, this trial evaluated...'). This adds credibility and allows the doctor to verify the information.
 
 Doctor's message: {{{message}}}
   `,
