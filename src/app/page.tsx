@@ -122,15 +122,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
-       <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none">
-          <iframe
-            className="h-full w-full"
-            src="https://www.youtube.com/embed/EiYMmakg6-s?autoplay=1&mute=1&controls=0&loop=1&playlist=EiYMmakg6-s&end=50&playsinline=1&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="background video"
-          ></iframe>
+       <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none" style={{ zoom: '110%' }}>
+          <video
+            className="h-full w-full object-cover"
+            src="/father.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
           <div className="absolute inset-0 bg-black/40" />
        </div>
       
