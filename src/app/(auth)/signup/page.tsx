@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,8 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -24,16 +24,32 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default function SignupPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const [error] = useState<string | null>('Authentication has been temporarily disabled for development.');
+export default function SignupPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Mock signup logic: any credentials work
+    toast({
+      title: 'Account Created!',
+      description: "You've been successfully signed up. Please log in.",
+    });
+    router.push('/login');
+  };
+
+  const handleGoogleSignup = () => {
+    // Mock Google signup
+    toast({
+      title: 'Account Created!',
+      description: "You've been successfully signed up with Google. Please log in.",
+    });
+    router.push('/login');
+  };
 
   return (
     <Card className="mx-auto max-w-sm">
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
@@ -41,16 +57,9 @@ export default function SignupPage({
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Auth Disabled</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
           <div className="grid gap-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input id="name" name="name" placeholder="John Doe" required disabled />
+            <Input id="name" name="name" placeholder="John Doe" required />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -60,16 +69,15 @@ export default function SignupPage({
               name="email"
               placeholder="m@example.com"
               required
-              disabled
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" required disabled />
+            <Input id="password" name="password" type="password" required />
           </div>
           <div className="grid gap-2">
             <Label>I am a...</Label>
-            <RadioGroup defaultValue="patient" name="userType" className="flex gap-4" disabled>
+            <RadioGroup defaultValue="patient" name="userType" className="flex gap-4">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="patient" id="r-patient" />
                 <Label htmlFor="r-patient">Patient</Label>
@@ -80,7 +88,7 @@ export default function SignupPage({
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="w-full mt-4" disabled>
+          <Button type="submit" className="w-full mt-4">
             Create an account
           </Button>
 
@@ -95,7 +103,7 @@ export default function SignupPage({
             </div>
           </div>
 
-          <Button variant="outline" className="w-full mt-2" type="button" disabled>
+          <Button variant="outline" className="w-full mt-2" type="button" onClick={handleGoogleSignup}>
             <GoogleIcon className="mr-2 h-4 w-4" />
             Sign up with Google
           </Button>

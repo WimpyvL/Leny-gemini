@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,8 +13,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -24,48 +23,63 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const [error] = useState<string | null>('Authentication has been temporarily disabled for development.');
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Mock login logic: any credentials work
+    // Redirect to doctor view if email contains 'doctor', otherwise patient view
+    if (email.toLowerCase().includes('doctor')) {
+      router.push('/doctor');
+    } else {
+      router.push('/patient');
+    }
+  };
+  
+  const handleGoogleLogin = () => {
+    // For mock purposes, this will log in as a patient.
+    router.push('/patient');
+  }
 
   return (
     <Card className="w-full max-w-sm">
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Enter any credentials. Use 'doctor' in the email to access the doctor view.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Auth Disabled</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               name="email"
-              placeholder="m@example.com"
+              placeholder="doctor@example.com"
               required
-              disabled
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" name="password" required disabled />
+            <Input 
+              id="password" 
+              type="password" 
+              name="password" 
+              required 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full" type="submit" disabled>
+          <Button className="w-full" type="submit">
             Sign in
           </Button>
 
@@ -80,7 +94,7 @@ export default function LoginPage({
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" type="button" disabled>
+          <Button variant="outline" className="w-full" type="button" onClick={handleGoogleLogin}>
             <GoogleIcon className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button>
