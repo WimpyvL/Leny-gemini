@@ -38,10 +38,8 @@ export function AiExpertsView() {
             type: 'user',
           }
         ]);
-        // Reset suggestions when manually changing expert
-        if (expert.id !== 'leny-router') {
-          setSuggestion(null);
-        }
+        // Always reset suggestions when a new expert is selected to start a clean chat
+        setSuggestion(null);
     };
     
     // Initial message from Leny
