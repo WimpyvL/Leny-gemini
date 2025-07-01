@@ -25,7 +25,7 @@ interface DashboardUIProps {
 export function DashboardUI({ user, conversations: initialConversations, allUsers }: DashboardUIProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [activeView, setActiveView] = useState<PatientView>('chats');
+  const [activeView, setActiveView] = useState<PatientView>('aiexperts');
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockDoctorForYouData);
   const [isAnalysisSheetOpen, setIsAnalysisSheetOpen] = useState(false);
