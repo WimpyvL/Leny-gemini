@@ -157,14 +157,24 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
       
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
         <div className="space-y-4">
-          {messages.map((message, index) => (
-            <MessageBubble
-              key={index}
-              message={message}
-              isOwnMessage={message.senderId === currentUser.id}
-              sender={currentUser}
-              expert={getExpertForMessage(message)}
-            />
+          {messages.map((message) => (
+            <div key={message.id}>
+              <MessageBubble
+                message={message}
+                isOwnMessage={message.senderId === currentUser.id}
+                sender={currentUser}
+                expert={getExpertForMessage(message)}
+              />
+              {message.quickActions && message.quickActions.length > 0 && message.senderId !== currentUser.id && (
+                <div className="flex flex-wrap gap-2 mt-2 ml-10">
+                  {message.quickActions.map((action, i) => (
+                    <Button key={i} variant="outline" size="sm" onClick={() => onSendMessage(action)}>
+                      {action}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
           {isLoading && (
              <div className="flex items-end gap-2 justify-start">

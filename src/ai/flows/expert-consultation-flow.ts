@@ -25,6 +25,7 @@ export type ExpertConsultationInput = z.infer<typeof ExpertConsultationInputSche
 
 const ExpertConsultationOutputSchema = z.object({
   response: z.string().describe('The new expert\'s insightful response based on the history.'),
+  quickActions: z.array(z.string()).describe('A list of 3-4 suggested next replies or questions for the doctor to ask.'),
 });
 export type ExpertConsultationOutput = z.infer<typeof ExpertConsultationOutputSchema>;
 
@@ -42,6 +43,8 @@ const prompt = ai.definePrompt({
 You have been asked for a one-time consultation on an ongoing conversation between a doctor and another AI expert.
 Your task is to review the entire conversation history below and provide your unique, specialized opinion in a single, concise message.
 Focus on adding new value from your perspective.
+
+After your main response, you MUST generate a list of 3-4 relevant "quick actions". These should be short, follow-up questions or comments that the doctor might want to say next to continue the conversation productively.
 
 Conversation History:
 {{#each history}}

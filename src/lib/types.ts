@@ -48,6 +48,7 @@ export type Message = {
   timestamp: Date;
   type: 'user' | 'assessment';
   assessment?: Assessment;
+  quickActions?: string[];
 };
 
 export type Conversation = {

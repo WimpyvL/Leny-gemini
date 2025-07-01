@@ -1,11 +1,11 @@
 'use server';
 import { analyzeSymptoms } from '@/ai/flows/analyze-symptoms';
-import { getExpertChatResponse } from '@/ai/flows/expert-chat-flow';
+import { getExpertChatResponse, type ExpertChatOutput } from '@/ai/flows/expert-chat-flow';
 import type { AnalyzeSymptomsOutput } from '@/ai/flows/analyze-symptoms';
 import { routeExpert } from '@/ai/flows/expert-router-flow';
 import type { ExpertRouterInput, ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
 import type { AiExpert, Message, User } from '@/lib/types';
-import { getExpertConsultation } from '@/ai/flows/expert-consultation-flow';
+import { getExpertConsultation, type ExpertConsultationOutput } from '@/ai/flows/expert-consultation-flow';
 
 
 export async function runAnalysis(message: string): Promise<AnalyzeSymptomsOutput> {
@@ -22,13 +22,16 @@ export async function runAnalysis(message: string): Promise<AnalyzeSymptomsOutpu
   }
 }
 
-export async function runExpertChat(message: string, expertPrompt: string): Promise<string> {
+export async function runExpertChat(message: string, expertPrompt: string): Promise<ExpertChatOutput> {
   try {
     const result = await getExpertChatResponse({ message, expertPrompt });
-    return result.response;
+    return result;
   } catch (error) {
     console.error('Error in expert chat:', error);
-    return "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment.";
+    return {
+      response: "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment.",
+      quickActions: [],
+    };
   }
 }
 
@@ -50,7 +53,7 @@ export async function runExpertRouter(history: ExpertRouterInput['history'], exp
   }
 }
 
-export async function runExpertConsultation(history: Message[], consultant: AiExpert, allExperts: AiExpert[], currentUser: User): Promise<string> {
+export async function runExpertConsultation(history: Message[], consultant: AiExpert, allExperts: AiExpert[], currentUser: User): Promise<ExpertConsultationOutput> {
     const formattedHistory = history.map(msg => {
         let senderName = '';
         if (msg.senderId === currentUser.id) {
@@ -74,9 +77,12 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
                 expert_prompt: consultant.expert_prompt,
             },
         });
-        return result.response;
+        return result;
     } catch (error) {
         console.error('Error in expert consultation flow:', error);
-        return "I'm sorry, I encountered an error during the consultation.";
+        return {
+            response: "I'm sorry, I encountered an error during the consultation.",
+            quickActions: []
+        };
     }
 }

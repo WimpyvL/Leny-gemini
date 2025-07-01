@@ -75,13 +75,14 @@ export function AiExpertsView() {
                 setMessages(prev => [...prev, aiMessage]);
                 setSuggestion(result);
             } else {
-                const aiResponse = await runExpertChat(text, selectedExpert.expert_prompt);
+                const result = await runExpertChat(text, selectedExpert.expert_prompt);
                 const aiMessage: Message = {
                     id: `msg_ai_${Date.now()}`,
-                    text: aiResponse,
+                    text: result.response,
                     senderId: selectedExpert.id,
                     timestamp: new Date(),
                     type: 'user',
+                    quickActions: result.quickActions,
                 };
                 setMessages(prev => [...prev, aiMessage]);
             }
@@ -119,13 +120,14 @@ export function AiExpertsView() {
         setMessages([initialMessage]);
         
         try {
-            const aiResponse = await runExpertChat(summary, expert.expert_prompt);
+            const result = await runExpertChat(summary, expert.expert_prompt);
             const aiMessage: Message = {
                 id: `msg_ai_initial_${Date.now()}`,
-                text: aiResponse,
+                text: result.response,
                 senderId: expert.id,
                 timestamp: new Date(),
                 type: 'user',
+                quickActions: result.quickActions,
             };
             setMessages(prev => [...prev, aiMessage]);
         } catch (error) {
@@ -162,10 +164,11 @@ export function AiExpertsView() {
             
             const expertMessage: Message = {
                 id: `msg_consult_${Date.now()}`,
-                text: consultationResponse,
+                text: consultationResponse.response,
                 senderId: consultant.id,
                 timestamp: new Date(),
                 type: 'user',
+                quickActions: consultationResponse.quickActions,
             };
             setMessages(prev => [...prev, expertMessage]);
 
