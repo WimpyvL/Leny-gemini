@@ -191,11 +191,20 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
               />
               {message.quickActions && message.quickActions.length > 0 && message.senderId !== currentUser.id && (
                 <div className="flex flex-wrap gap-2 mt-2 ml-10">
-                  {message.quickActions.map((action, i) => (
-                    <Button key={i} variant="outline" size="sm" onClick={() => onSendMessage(action)}>
-                      {action}
-                    </Button>
-                  ))}
+                  <TooltipProvider>
+                    {message.quickActions.map((action, i) => (
+                      <Tooltip key={i}>
+                        <TooltipTrigger asChild>
+                          <Button variant="outline" size="sm" onClick={() => onSendMessage(action.fullAction)}>
+                            {action.keyword}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{action.fullAction}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ))}
+                  </TooltipProvider>
                 </div>
               )}
             </div>
@@ -229,13 +238,22 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
              {suggestion.quickActions.length > 0 && (
                 <div>
                     <p className="text-sm font-medium text-muted-foreground mb-2">Suggested Actions</p>
-                    <div className="flex flex-wrap gap-2">
-                        {suggestion.quickActions.map((action, index) => (
-                            <Button key={index} variant="outline" size="sm" onClick={() => onSendMessage(action)}>
-                                {action}
-                            </Button>
-                        ))}
-                    </div>
+                    <TooltipProvider>
+                      <div className="flex flex-wrap gap-2">
+                          {suggestion.quickActions.map((action, index) => (
+                              <Tooltip key={index}>
+                                <TooltipTrigger asChild>
+                                  <Button variant="outline" size="sm" onClick={() => onSendMessage(action.fullAction)}>
+                                      {action.keyword}
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>{action.fullAction}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                          ))}
+                      </div>
+                    </TooltipProvider>
                 </div>
             )}
         </div>

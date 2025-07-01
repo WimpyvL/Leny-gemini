@@ -54,6 +54,11 @@ export type StructuredResponse = {
   citations?: Citation[];
 };
 
+export type QuickActionItem = {
+  keyword: string;
+  fullAction: string;
+};
+
 export type Message = {
   id: string;
   text?: string;
@@ -61,7 +66,7 @@ export type Message = {
   timestamp: Date;
   type: 'user' | 'assessment';
   assessment?: Assessment;
-  quickActions?: string[];
+  quickActions?: QuickActionItem[];
   structuredResponse?: StructuredResponse;
 };
 

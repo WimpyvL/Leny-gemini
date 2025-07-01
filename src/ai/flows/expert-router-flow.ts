@@ -29,7 +29,10 @@ const ExpertRouterOutputSchema = z.object({
   suggestedExpertId: z.string().optional().describe('The ID of the suggested expert from the provided list.'),
   isUrgent: z.boolean().describe('Whether the situation described in the chat is urgent.'),
   urgencyReason: z.string().optional().describe('The reason why the situation is considered urgent.'),
-  quickActions: z.array(z.string()).describe('A list of suggested quick actions for the doctor to take.'),
+  quickActions: z.array(z.object({
+    keyword: z.string().describe('A short keyword or phrase for the action (e.g., "Order EKG", "Administer Aspirin").'),
+    fullAction: z.string().describe('The complete, clinical action to be taken (e.g., "Order a 12-lead EKG and check Troponin levels.").'),
+  })).describe('A list of suggested quick actions for the doctor to take.'),
   summaryForExpert: z.string().describe('A concise summary of the conversation to be passed to the specialist.'),
 });
 export type ExpertRouterOutput = z.infer<typeof ExpertRouterOutputSchema>;
@@ -58,7 +61,7 @@ const prompt = ai.definePrompt({
   1.  **Analyze the Conversation**: Read the entire history to understand the doctor's needs.
   2.  **Select the Best Expert**: Based on the conversation, choose the SINGLE most appropriate expert from the list. Provide their ID in the 'suggestedExpertId' field. If no expert seems relevant, leave it empty.
   3.  **Assess Urgency**: Determine if the case is an emergency. Set 'isUrgent' to true if it involves critical, life-threatening symptoms (e.g., stroke, heart attack, sepsis). Provide a brief 'urgencyReason'.
-  4.  **Formulate Quick Actions**: Suggest 2-3 brief, actionable next steps for the doctor (e.g., "Order STAT CBC & Chem-7", "Request immediate imaging", "Consult cardiology guidelines").
+  4.  **Formulate Quick Actions**: Suggest 2-3 brief, actionable next steps for the doctor. For each, provide a short 'keyword' (e.g., "Order EKG") and the 'fullAction' text (e.g., "Order a 12-lead EKG and check Troponin levels.").
   5.  **Create a Summary**: Write a one-sentence summary of the doctor's query for the specialist. This will be the first message the specialist sees.
   6.  **Craft a Response**: Write a concise, helpful response to the doctor. Acknowledge their query, state your suggested specialist, and mention any urgent concerns.
 
@@ -68,7 +71,11 @@ const prompt = ai.definePrompt({
     "suggestedExpertId": "cardiothoracic_surgeon_alex_morgan",
     "isUrgent": true,
     "urgencyReason": "Symptoms are consistent with a potential acute coronary syndrome.",
-    "quickActions": ["Order EKG and Troponin", "Administer aspirin", "Prepare for cardiac catheterization"],
+    "quickActions": [
+      {"keyword": "Order EKG/Troponin", "fullAction": "Order a 12-lead EKG and check Troponin levels."},
+      {"keyword": "Administer Aspirin", "fullAction": "Administer 325mg of aspirin if not contraindicated."},
+      {"keyword": "Prep Cath Lab", "fullAction": "Prepare for potential cardiac catheterization."}
+    ],
     "summaryForExpert": "Doctor is presenting a patient with symptoms of chest pain and shortness of breath and is seeking consultation."
   }
   `,

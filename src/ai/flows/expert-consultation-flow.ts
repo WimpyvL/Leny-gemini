@@ -28,7 +28,10 @@ const ExpertConsultationOutputSchema = z.object({
   confidenceInEvidence: z.string().describe('The overall strength of the evidence (e.g., High, Moderate, Low) with a brief justification.'),
   clinicalBottomLine: z.string().describe('A clear, actionable conclusion based on the evidence.'),
   contraryOrUnanswered: z.string().describe('Any significant counter-evidence or areas where evidence is lacking.'),
-  quickActions: z.array(z.string()).describe('A list of 3-4 suggested, brief, actionable next steps for the doctor to take (e.g., "Order EKG and Troponin", "Administer aspirin").'),
+  quickActions: z.array(z.object({
+    keyword: z.string().describe('A short keyword or phrase for the action (e.g., "Order EKG", "Administer Aspirin").'),
+    fullAction: z.string().describe('The complete, clinical action to be taken (e.g., "Order a 12-lead EKG and check Troponin levels.").'),
+  })).describe('A list of 3-4 suggested, brief, actionable next steps for the doctor to take.'),
   citations: z.array(z.object({
     term: z.string().describe('The exact term or phrase from the response text to be cited.'),
     source: z.string().describe('A brief definition, source, or link for the cited term. Should be concise enough for a tooltip.'),
@@ -57,7 +60,7 @@ Structure your response with the following sections:
 3.  **Clinical Bottom Line**: Provide a clear, actionable conclusion based on the evidence, adding new value from your specific specialty.
 4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking that haven't been discussed.
 
-After your structured response, you MUST generate a list of 3-4 brief, actionable next steps for the doctor (e.g., "Order STAT CBC & Chem-7", "Request immediate imaging", "Consult cardiology guidelines"). These should be clinical actions, not conversational replies.
+After your structured response, you MUST generate a list of 3-4 brief, actionable next steps for the doctor. For each action, provide a short 'keyword' (e.g., "Order EKG") and the 'fullAction' text (e.g., "Order a 12-lead EKG and check Troponin levels."). These should be clinical actions, not conversational replies.
 
 Finally, identify key terms (acronyms, study names, drug classes, etc.) within your entire response and provide brief definitions or sources for them in the 'citations' field. For example, if you mention 'RCTs', add a citation with the term 'RCTs' and the source 'Randomized Controlled Trials'.
 
