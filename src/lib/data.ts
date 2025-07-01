@@ -53,8 +53,13 @@ export async function getUser(userId: string): Promise<User | undefined> {
       return undefined;
     }
   } catch (error) {
-    console.error('Error fetching user:', error);
-    return undefined;
+    console.error(`Error fetching user from Firestore (${userId}):`, error);
+    console.warn(`Falling back to mock data for user ID: ${userId}`);
+    const mockUser = mockUsers.find(u => u.id === userId);
+    if (!mockUser) {
+        console.error(`FATAL: Fallback failed. No mock user found with ID: ${userId}`);
+    }
+    return mockUser;
   }
 }
 
@@ -75,7 +80,8 @@ export async function getAllUsers(): Promise<User[]> {
     
     return users;
   } catch (error) {
-    console.error('Error fetching all users:', error);
+    console.error('Error fetching all users from Firestore:', error);
+    console.warn('Falling back to mock user data.');
     return mockUsers; // Fallback to mock data on error
   }
 }
@@ -95,7 +101,8 @@ export async function getDoctors(): Promise<User[]> {
     const doctors = doctorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
     return doctors;
   } catch (error) {
-    console.error('Error fetching doctors:', error);
+    console.error('Error fetching doctors from Firestore:', error);
+    console.warn("Falling back to mock doctor data.");
     // Fallback to mock data on error
     return mockUsers.filter(u => u.role === 'doctor');
   }
