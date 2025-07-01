@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { runLandingChat } from "./actions";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const allPopularQuestions = [
   "What should I do about my child's fever?",
@@ -56,12 +57,14 @@ export default function Home() {
   
   const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
   const [helpTopics, setHelpTopics] = useState<typeof allHelpTopics>([]);
+  const [hasMounted, setHasMounted] = useState(false);
   
   const chatCardRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     handleShuffle();
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
@@ -218,34 +221,57 @@ export default function Home() {
                       <>
                         <Separator className="my-2" />
                         
-                        <div className="space-y-2">
-                            <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {!hasMounted ? (
+                          <div className="space-y-4 py-2">
+                            <div className="space-y-2">
+                              <Skeleton className="h-3 w-28 mx-auto" />
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <Skeleton className="h-12 w-full" />
+                                <Skeleton className="h-12 w-full" />
+                                <Skeleton className="h-12 w-full" />
+                              </div>
+                            </div>
+                            <div className="space-y-2 pt-3">
+                              <Skeleton className="h-3 w-36" />
+                              <div className="space-y-2">
+                                <Skeleton className="h-3 w-full" />
+                                <Skeleton className="h-3 w-5/6" />
+                                <Skeleton className="h-3 w-full" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="space-y-2">
+                              <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 {helpTopics.map((topic) => (
-                                    <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
-                                        <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
-                                            <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
-                                        </Avatar>
-                                        <span className="text-xs truncate">{topic.text}</span>
-                                    </Button>
+                                  <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
+                                    <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
+                                      <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
+                                    </Avatar>
+                                    <span className="text-xs truncate">{topic.text}</span>
+                                  </Button>
                                 ))}
+                              </div>
                             </div>
-                        </div>
 
-                        <div className="space-y-2 pt-3">
-                            <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
-                            <div className="space-y-1.5">
+                            <div className="space-y-2 pt-3">
+                              <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
+                              <div className="space-y-1.5">
                                 {popularQuestions.map((q, i) => (
-                                    <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
-                                        <span className="group-hover:underline">{q}</span>
-                                        <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
-                                    </div>
+                                  <div key={i} onClick={() => handleQuestionClick(q)} className="flex justify-between items-center text-xs hover:text-primary cursor-pointer group">
+                                    <span className="group-hover:underline">{q}</span>
+                                    <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"/>
+                                  </div>
                                 ))}
-                            </div>
-                            <div className="text-right">
+                              </div>
+                              <div className="text-right">
                                 <Button variant="link" size="sm" className={cn("text-xs text-muted-foreground transition-all", isExpanded && "animate-pulse font-semibold text-primary")} onClick={handleShuffle}>more</Button>
+                              </div>
                             </div>
-                        </div>
+                          </>
+                        )}
                       </>
                     )}
                   </motion.div>
