@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Mic, Paperclip } from "lucide-react";
 import { Logo } from "@/components/Logo";
@@ -134,11 +134,11 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
           <div className="flex items-center gap-2">
-            <Link href="/patient" asChild>
-              <Button>Patient View</Button>
+            <Link href="/patient" className={cn(buttonVariants({ variant: 'default' }))}>
+              Patient View
             </Link>
-            <Link href="/doctor" asChild>
-              <Button variant="outline">Doctor View</Button>
+            <Link href="/doctor" className={cn(buttonVariants({ variant: 'outline' }))}>
+              Doctor View
             </Link>
           </div>
         </nav>
