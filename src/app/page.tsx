@@ -3,9 +3,8 @@
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Mic, Paperclip } from "lucide-react";
+import { ArrowRight, Mic, Paperclip, User, Stethoscope } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,14 +24,6 @@ const allPopularQuestions = [
   "Best exercises for weight loss?",
   "How to treat a sprained ankle?",
   "Signs of a heart attack to watch for.",
-];
-
-const allHelpTopics = [
-  { initials: 'RA', text: 'Draft nutrition plan with Raya', color: 'bg-green-500' },
-  { initials: 'AL', text: 'Create workout routine with Alex', color: 'bg-blue-500' },
-  { initials: 'MY', text: 'Mental health check with Dr. Myles', color: 'bg-purple-500' },
-  { initials: 'SK', text: 'Get skincare advice from Dr. Chloe', color: 'bg-pink-500' },
-  { initials: 'PT', text: 'Discuss physical therapy with Jordan', color: 'bg-yellow-500' },
 ];
 
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -56,7 +47,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   
   const [popularQuestions, setPopularQuestions] = useState<string[]>([]);
-  const [helpTopics, setHelpTopics] = useState<typeof allHelpTopics>([]);
   const [hasMounted, setHasMounted] = useState(false);
   
   const chatCardRef = useRef<HTMLDivElement>(null);
@@ -83,7 +73,6 @@ export default function Home() {
 
   const handleShuffle = () => {
     setPopularQuestions(shuffleArray(allPopularQuestions).slice(0, 3));
-    setHelpTopics(shuffleArray(allHelpTopics).slice(0, 3));
   };
   
   const handleSendMessage = async (text: string) => {
@@ -115,10 +104,6 @@ export default function Home() {
     handleSendMessage(question);
   }
 
-  const handleHelpTopicClick = (topicText: string) => {
-    handleSendMessage(`I'd like to get help with: ${topicText}`);
-  };
-
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
        <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none">
@@ -137,11 +122,11 @@ export default function Home() {
         <nav className="flex items-center justify-between">
           <Logo />
           <div className="flex items-center gap-2">
-            <Link href="/patient" className={cn(buttonVariants({ variant: 'default' }))}>
-              Patient View
+            <Link href="/login" className={cn(buttonVariants({ variant: "ghost" }), "text-white/90 hover:bg-white/10 hover:text-white")}>
+              Login
             </Link>
-            <Link href="/doctor" className={cn(buttonVariants({ variant: 'outline' }))}>
-              Doctor View
+            <Link href="/signup" className={cn(buttonVariants({ variant: "default" }), "bg-white/90 text-primary hover:bg-white")}>
+              Sign Up
             </Link>
           </div>
         </nav>
@@ -225,10 +210,9 @@ export default function Home() {
                           <div className="space-y-4 py-2">
                             <div className="space-y-2">
                               <Skeleton className="h-3 w-28 mx-auto" />
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                <Skeleton className="h-12 w-full" />
-                                <Skeleton className="h-12 w-full" />
-                                <Skeleton className="h-12 w-full" />
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <Skeleton className="h-20 w-full" />
+                                <Skeleton className="h-20 w-full" />
                               </div>
                             </div>
                             <div className="space-y-2 pt-3">
@@ -242,21 +226,28 @@ export default function Home() {
                           </div>
                         ) : (
                           <>
-                            <div className="space-y-2">
-                              <p className="text-xs font-semibold text-muted-foreground text-center">Or get help with</p>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                {helpTopics.map((topic) => (
-                                  <Button key={topic.text} variant="outline" className="w-full justify-start h-auto py-2 px-3 rounded-lg border-gray-200 hover:border-primary/50 hover:bg-accent" onClick={() => handleHelpTopicClick(topic.text)}>
-                                    <Avatar className="h-5 w-5 mr-2 flex-shrink-0">
-                                      <AvatarFallback className={`${topic.color} text-white text-xs font-bold`}>{topic.initials}</AvatarFallback>
-                                    </Avatar>
-                                    <span className="text-xs truncate">{topic.text}</span>
-                                  </Button>
-                                ))}
+                             <div className="space-y-3 p-2">
+                                <p className="text-sm font-semibold text-muted-foreground text-center">First, select your role to get started:</p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <Link href="/patient" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'flex-col h-auto py-4')}>
+                                        <User className="h-6 w-6 mb-1" />
+                                        <span>I'm a Patient</span>
+                                    </Link>
+                                    <Link href="/doctor" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'flex-col h-auto py-4')}>
+                                        <Stethoscope className="h-6 w-6 mb-1" />
+                                        <span>I'm a Doctor</span>
+                                    </Link>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="space-y-2 pt-3">
+                              <div className="relative my-4">
+                                <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                  <span className="bg-background/80 px-2 text-muted-foreground">Or ask a question</span>
+                                </div>
+                              </div>
+
+                            <div className="space-y-2 pt-1">
                               <p className="text-xs font-semibold text-muted-foreground">POPULAR QUESTIONS</p>
                               <div className="space-y-1.5">
                                 {popularQuestions.map((q, i) => (
