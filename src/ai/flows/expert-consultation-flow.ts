@@ -29,6 +29,10 @@ const ExpertConsultationOutputSchema = z.object({
   clinicalBottomLine: z.string().describe('A clear, actionable conclusion based on the evidence.'),
   contraryOrUnanswered: z.string().describe('Any significant counter-evidence or areas where evidence is lacking.'),
   quickActions: z.array(z.string()).describe('A list of 3-4 suggested next replies or questions for the doctor to ask.'),
+  citations: z.array(z.object({
+    term: z.string().describe('The exact term or phrase from the response text to be cited.'),
+    source: z.string().describe('A brief definition, source, or link for the cited term. Should be concise enough for a tooltip.'),
+  })).optional().describe('A list of citations or definitions for important medical terms, studies, or concepts mentioned in the response.'),
 });
 export type ExpertConsultationOutput = z.infer<typeof ExpertConsultationOutputSchema>;
 
@@ -54,6 +58,8 @@ Structure your response with the following sections:
 4.  **Contrary or Unanswered Questions**: Briefly mention any significant counter-evidence or areas where the evidence is lacking that haven't been discussed.
 
 After your structured response, you MUST generate a list of 3-4 relevant "quick actions". These should be insightful follow-up questions or next steps for clinical investigation.
+
+Finally, identify key terms (acronyms, study names, drug classes, etc.) within your entire response and provide brief definitions or sources for them in the 'citations' field. For example, if you mention 'RCTs', add a citation with the term 'RCTs' and the source 'Randomized Controlled Trials'.
 
 Conversation History:
 {{#each history}}

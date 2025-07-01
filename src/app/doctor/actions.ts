@@ -34,6 +34,7 @@ export async function runExpertChat(message: string, expertPrompt: string): Prom
       clinicalBottomLine: "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment.",
       contraryOrUnanswered: 'N/A',
       quickActions: [],
+      citations: [],
     };
   }
 }
@@ -88,7 +89,8 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
             confidenceInEvidence: 'N/A',
             clinicalBottomLine: "I'm sorry, I encountered an error during the consultation.",
             contraryOrUnanswered: 'N/A',
-            quickActions: []
+            quickActions: [],
+            citations: [],
         };
     }
 }

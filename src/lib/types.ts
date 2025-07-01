@@ -41,11 +41,17 @@ export type Assessment = {
   suggestions: string[];
 }
 
+export type Citation = {
+  term: string;
+  source: string;
+};
+
 export type StructuredResponse = {
   evidenceSummary: string;
   confidenceInEvidence: string;
   clinicalBottomLine: string;
   contraryOrUnanswered: string;
+  citations?: Citation[];
 };
 
 export type Message = {

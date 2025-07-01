@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
 import { mockAiExperts } from '@/lib/mock-data';
 import { ConsultExpertDialog } from './ConsultExpertDialog';
+import { TextWithCitations } from './TextWithCitations';
 
 interface AiExpertChatViewProps {
   expert: AiExpert;
@@ -39,19 +40,19 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
       <div className="space-y-3 text-sm">
         <div>
           <h4 className="font-bold text-card-foreground">Evidence Summary</h4>
-          <p className="text-card-foreground/90">{response.evidenceSummary}</p>
+          <TextWithCitations text={response.evidenceSummary} citations={response.citations} className="text-card-foreground/90" />
         </div>
         <div>
           <h4 className="font-bold text-card-foreground">Confidence in Evidence</h4>
-          <p className="text-card-foreground/90">{response.confidenceInEvidence}</p>
+          <TextWithCitations text={response.confidenceInEvidence} citations={response.citations} className="text-card-foreground/90" />
         </div>
         <div>
           <h4 className="font-bold text-card-foreground">Clinical Bottom Line</h4>
-          <p className="text-card-foreground/90">{response.clinicalBottomLine}</p>
+          <TextWithCitations text={response.clinicalBottomLine} citations={response.citations} className="text-card-foreground/90" />
         </div>
         <div>
           <h4 className="font-bold text-card-foreground">Contrary or Unanswered Questions</h4>
-          <p className="text-card-foreground/90">{response.contraryOrUnanswered}</p>
+          <TextWithCitations text={response.contraryOrUnanswered} citations={response.citations} className="text-card-foreground/90" />
         </div>
       </div>
     );
