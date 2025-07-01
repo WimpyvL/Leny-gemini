@@ -100,6 +100,7 @@ export interface QuickAction {
 }
 
 export type AiExpert = {
+  id: string;
   specialty: string;
   name: string;
   gender: string;
