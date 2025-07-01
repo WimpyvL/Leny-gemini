@@ -36,30 +36,14 @@ export async function getUser(userId: string): Promise<User | undefined> {
     if (userDocSnap.exists()) {
       return { id: userDocSnap.id, ...userDocSnap.data() } as User;
     } else {
-      console.warn(`No user found with ID: ${userId}. Checking for mock user to seed database.`);
-
-      const mockUserToCreate = mockUsers.find(u => u.id === userId);
-      
-      if (mockUserToCreate) {
-        console.log(`Found mock user definition for '${userId}'. Creating profile in Firestore.`);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id, ...userData } = mockUserToCreate;
-        await createUserProfile(userId, userData);
-        console.log(`Mock user '${userId}' created successfully.`);
-        return mockUserToCreate;
-      }
-      
-      console.warn(`No mock user definition found for ID: ${userId}`);
-      return undefined;
+      // If user not found in DB, just return the mock user. Don't try to write.
+      console.warn(`No user found with ID: ${userId} in Firestore. Falling back to mock data.`);
+      return mockUsers.find(u => u.id === userId);
     }
   } catch (error) {
     console.error(`Error fetching user from Firestore (${userId}):`, error);
     console.warn(`Falling back to mock data for user ID: ${userId}`);
-    const mockUser = mockUsers.find(u => u.id === userId);
-    if (!mockUser) {
-        console.error(`FATAL: Fallback failed. No mock user found with ID: ${userId}`);
-    }
-    return mockUser;
+    return mockUsers.find(u => u.id === userId);
   }
 }
 
@@ -78,7 +62,7 @@ export async function getAllUsers(): Promise<User[]> {
         }
     }
     
-    return users;
+    return users.length > 0 ? users : mockUsers;
   } catch (error) {
     console.error('Error fetching all users from Firestore:', error);
     console.warn('Falling back to mock user data.');
