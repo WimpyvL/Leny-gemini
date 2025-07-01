@@ -1,7 +1,6 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-// import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { getFirestore, type Firestore, serverTimestamp, Timestamp } from "firebase/firestore";
+import { getAuth, type Auth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,11 +12,29 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
+let isFirebaseEnabled = false;
 
-const db = getFirestore(app);
-// const storage = getStorage(app);
-const auth = getAuth(app);
+// Check for the API key to avoid initialization errors
+if (firebaseConfig.apiKey) {
+  try {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    auth = getAuth(app);
+    db = getFirestore(app);
+    isFirebaseEnabled = true;
+    console.log("Firebase services initialized successfully.");
+  } catch (error) {
+    console.error("Firebase initialization failed:", error);
+    // Ensure all are null if initialization fails
+    app = null;
+    auth = null;
+    db = null;
+    isFirebaseEnabled = false;
+  }
+} else {
+  console.warn("Firebase API key is missing. Firebase services will be disabled and the app will run in offline/mock mode.");
+}
 
-export { app, auth, db /*, storage */ };
+export { app, auth, db, isFirebaseEnabled, serverTimestamp, Timestamp };
