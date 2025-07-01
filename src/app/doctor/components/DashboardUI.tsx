@@ -53,6 +53,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
   const handleSendMessage = (text: string) => {
     if (!selectedConversation) return;
 
+    const conversationId = selectedConversation.id;
     const newMessage: Message = {
       id: `msg_${Date.now()}`,
       text,
@@ -61,15 +62,16 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       type: 'user',
     };
 
-    const updatedConversations = conversations.map(c => {
-      if (c.id === selectedConversation.id) {
-        return { ...c, messages: [...c.messages, newMessage] };
-      }
-      return c;
+    setConversations(prev => {
+      const updated = prev.map(c => 
+        c.id === conversationId 
+          ? { ...c, messages: [...c.messages, newMessage] } 
+          : c
+      );
+      const newSelected = updated.find(c => c.id === conversationId) || null;
+      setSelectedConversation(newSelected);
+      return updated;
     });
-
-    setConversations(updatedConversations);
-    setSelectedConversation(updatedConversations.find(c => c.id === selectedConversation.id) || null);
   };
   
   const patientMessages = selectedConversation?.messages.filter(

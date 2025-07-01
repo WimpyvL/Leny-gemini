@@ -52,8 +52,12 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
   useEffect(() => {
     // When the active view (e.g., Chats, For You) changes, clear any specific
     // item selections to return to the list view on mobile.
-    setSelectedConversation(null);
-    setSelectedForYouItem(null);
+    if (activeView !== 'chats') {
+      setSelectedConversation(null);
+    }
+    if (activeView !== 'foryou') {
+      setSelectedForYouItem(null);
+    }
   }, [activeView]);
 
   const generateParticipantString = (participants: User[], currentUserId: string): string => {
@@ -77,23 +81,25 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
   const handleSendMessage = async (text: string) => {
     if (!selectedConversation) return;
 
-    const newMessage: Message = {
-      id: `msg_${Date.now()}`,
+    const conversationId = selectedConversation.id;
+
+    const userMessage: Message = {
+      id: `msg_user_${Date.now()}`,
       text,
       senderId: user.id,
       timestamp: new Date(),
       type: 'user',
     };
 
-    const updatedConversationsWithUserMessage = conversations.map(c => {
-      if (c.id === selectedConversation.id) {
-        return { ...c, messages: [...c.messages, newMessage] };
-      }
-      return c;
+    setConversations(prev => {
+        const updated = prev.map(c => 
+            c.id === conversationId 
+                ? { ...c, messages: [...c.messages, userMessage] }
+                : c
+        );
+        setSelectedConversation(updated.find(c => c.id === conversationId) || null);
+        return updated;
     });
-
-    setConversations(updatedConversationsWithUserMessage);
-    setSelectedConversation(updatedConversationsWithUserMessage.find(c => c.id === selectedConversation.id) || null);
 
     const isAiChat = selectedConversation.participants.some(p => p.id === 'assistant') && selectedConversation.participants.length === 2;
 
@@ -101,7 +107,6 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
       setIsLoading(true);
       try {
         const aiResponse = await runPatientChat(text, user.name);
-
         const aiMessage: Message = {
           id: `msg_ai_${Date.now()}`,
           text: aiResponse,
@@ -109,16 +114,15 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
           timestamp: new Date(),
           type: 'user',
         };
-
-        setConversations(prevConvos => {
-            const finalConvos = prevConvos.map(c => {
-                if (c.id === selectedConversation.id) {
-                    return { ...c, messages: [...c.messages, aiMessage] };
-                }
-                return c;
-            });
-            setSelectedConversation(finalConvos.find(c => c.id === selectedConversation.id) || null);
-            return finalConvos;
+        
+        setConversations(prev => {
+            const updated = prev.map(c => 
+                c.id === conversationId 
+                    ? { ...c, messages: [...c.messages, aiMessage] }
+                    : c
+            );
+            setSelectedConversation(updated.find(c => c.id === conversationId) || null);
+            return updated;
         });
 
       } catch (error) {

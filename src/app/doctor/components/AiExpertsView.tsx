@@ -51,6 +51,7 @@ export function AiExpertsView() {
             };
             setMessages(prev => [...prev, aiMessage]);
         } catch (error) {
+            console.error('Error in expert chat:', error);
             const errorMessage: Message = {
                 id: `msg_err_${Date.now()}`,
                 text: 'Sorry, I encountered an error. Please try again.',
@@ -66,7 +67,7 @@ export function AiExpertsView() {
     
     // Set initial message for the default selected expert
     useState(() => {
-        if (selectedExpert) {
+        if (selectedExpert && messages.length === 0) {
             setMessages([
                 {
                     id: 'initial',
