@@ -13,15 +13,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
 import { mockAiExperts } from '@/lib/mock-data';
+import { ConsultExpertDialog } from './ConsultExpertDialog';
 
 interface AiExpertChatViewProps {
   expert: AiExpert;
+  allExperts: AiExpert[];
   messages: Message[];
   currentUser: User;
   onSendMessage: (text: string) => void;
   isLoading: boolean;
   suggestion: ExpertRouterOutput | null;
   onConsultExpert: (expertId: string, summary: string) => void;
+  onConsultAnotherExpert: (expert: AiExpert) => void;
 }
 
 function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Message; isOwnMessage: boolean; sender?: User; expert?: AiExpert }) {
@@ -96,8 +99,9 @@ function MessageInput({ onSendMessage }: { onSendMessage: (text: string) => void
   );
 }
 
-export function AiExpertChatView({ expert, messages, currentUser, onSendMessage, isLoading, suggestion, onConsultExpert }: AiExpertChatViewProps) {
+export function AiExpertChatView({ expert, allExperts, messages, currentUser, onSendMessage, isLoading, suggestion, onConsultExpert, onConsultAnotherExpert }: AiExpertChatViewProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [isConsulting, setIsConsulting] = useState(false);
   
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -116,16 +120,39 @@ export function AiExpertChatView({ expert, messages, currentUser, onSendMessage,
 
   const suggestedExpertInfo = suggestion?.suggestedExpertId ? mockAiExperts.find(e => e.id === suggestion.suggestedExpertId) : null;
 
+  const getExpertForMessage = (message: Message): AiExpert | undefined => {
+    if(message.senderId === currentUser.id) return undefined;
+    return allExperts.find(e => e.id === message.senderId) ?? expert;
+  }
+
   return (
     <div className="flex flex-col h-screen bg-secondary">
-      <CardHeader className="flex flex-row items-center gap-4 p-4 border-b bg-card">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert.name)}</AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle className="text-xl font-headline">{expert.name}</CardTitle>
-            <CardDescription>{expert.specialty}</CardDescription>
+      <ConsultExpertDialog
+        isOpen={isConsulting}
+        onOpenChange={setIsConsulting}
+        onConsult={(newExpert) => {
+          onConsultAnotherExpert(newExpert);
+          setIsConsulting(false);
+        }}
+        allExperts={allExperts}
+        currentExpertId={expert.id}
+      />
+      <CardHeader className="flex flex-row items-center justify-between gap-4 p-4 border-b bg-card">
+          <div className="flex items-center gap-4">
+            <Avatar className="h-10 w-10">
+                <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert.name)}</AvatarFallback>
+            </Avatar>
+            <div>
+                <CardTitle className="text-xl font-headline">{expert.name}</CardTitle>
+                <CardDescription>{expert.specialty}</CardDescription>
+            </div>
           </div>
+          {expert.id !== 'leny-router' && (
+            <Button variant="outline" size="sm" onClick={() => setIsConsulting(true)}>
+                <Users className="mr-2 h-4 w-4" />
+                Add Expert
+            </Button>
+          )}
       </CardHeader>
       
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
@@ -136,7 +163,7 @@ export function AiExpertChatView({ expert, messages, currentUser, onSendMessage,
               message={message}
               isOwnMessage={message.senderId === currentUser.id}
               sender={currentUser}
-              expert={expert}
+              expert={getExpertForMessage(message)}
             />
           ))}
           {isLoading && (

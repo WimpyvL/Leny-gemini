@@ -5,7 +5,7 @@ import { AiExpertList } from './AiExpertList';
 import { AiExpertChatView } from './AiExpertChatView';
 import { mockAiExperts, mockUsers } from '@/lib/mock-data';
 import type { AiExpert, Message, User } from '@/lib/types';
-import { runExpertChat, runExpertRouter } from '../actions';
+import { runExpertChat, runExpertRouter, runExpertConsultation } from '../actions';
 import type { ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
 import { BrainCircuit } from 'lucide-react';
 
@@ -143,6 +143,47 @@ export function AiExpertsView() {
         }
     };
 
+    const handleConsultAnotherExpert = async (consultant: AiExpert) => {
+        if (!selectedExpert || !currentUser) return;
+
+        setIsLoading(true);
+
+        const systemMessage: Message = {
+            id: `msg_system_${Date.now()}`,
+            text: `Bringing in ${consultant.name} for a consultation...`,
+            senderId: 'leny-router',
+            timestamp: new Date(),
+            type: 'user',
+        };
+        setMessages(prev => [...prev, systemMessage]);
+
+        try {
+            const consultationResponse = await runExpertConsultation(messages, consultant, mockAiExperts, currentUser);
+            
+            const expertMessage: Message = {
+                id: `msg_consult_${Date.now()}`,
+                text: consultationResponse,
+                senderId: consultant.id,
+                timestamp: new Date(),
+                type: 'user',
+            };
+            setMessages(prev => [...prev, expertMessage]);
+
+        } catch (error) {
+            console.error('Error in expert consultation:', error);
+            const errorMessage: Message = {
+                id: `msg_err_${Date.now()}`,
+                text: `Sorry, I couldn't get a response from ${consultant.name}. Please try again.`,
+                senderId: 'leny-router',
+                timestamp: new Date(),
+                type: 'user',
+            };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="flex h-full w-full bg-background">
             <div className="w-full md:w-[340px] flex-shrink-0 border-r border-border flex flex-col">
@@ -163,6 +204,8 @@ export function AiExpertsView() {
                         isLoading={isLoading}
                         suggestion={suggestion}
                         onConsultExpert={handleConsultExpert}
+                        onConsultAnotherExpert={handleConsultAnotherExpert}
+                        allExperts={mockAiExperts}
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full text-muted-foreground flex-col gap-4">

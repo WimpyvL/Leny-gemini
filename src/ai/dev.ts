@@ -7,3 +7,4 @@ import '@/ai/flows/landing-chat-flow.ts';
 import '@/ai/flows/patient-chat-flow.ts';
 import '@/ai/flows/expert-chat-flow.ts';
 import '@/ai/flows/expert-router-flow.ts';
+import '@/ai/flows/expert-consultation-flow.ts';

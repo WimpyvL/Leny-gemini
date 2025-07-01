@@ -4,7 +4,8 @@ import { getExpertChatResponse } from '@/ai/flows/expert-chat-flow';
 import type { AnalyzeSymptomsOutput } from '@/ai/flows/analyze-symptoms';
 import { routeExpert } from '@/ai/flows/expert-router-flow';
 import type { ExpertRouterInput, ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
-import type { AiExpert } from '@/lib/types';
+import type { AiExpert, Message, User } from '@/lib/types';
+import { getExpertConsultation } from '@/ai/flows/expert-consultation-flow';
 
 
 export async function runAnalysis(message: string): Promise<AnalyzeSymptomsOutput> {
@@ -47,4 +48,35 @@ export async function runExpertRouter(history: ExpertRouterInput['history'], exp
       summaryForExpert: 'Error routing request.',
     };
   }
+}
+
+export async function runExpertConsultation(history: Message[], consultant: AiExpert, allExperts: AiExpert[], currentUser: User): Promise<string> {
+    const formattedHistory = history.map(msg => {
+        let senderName = '';
+        if (msg.senderId === currentUser.id) {
+            senderName = 'Doctor';
+        } else {
+            const expert = allExperts.find(e => e.id === msg.senderId);
+            senderName = expert?.name || 'AI Expert';
+        }
+        return {
+            senderName,
+            text: msg.text || '',
+        };
+    });
+
+    try {
+        const result = await getExpertConsultation({
+            history: formattedHistory,
+            consultant: {
+                name: consultant.name,
+                specialty: consultant.specialty,
+                expert_prompt: consultant.expert_prompt,
+            },
+        });
+        return result.response;
+    } catch (error) {
+        console.error('Error in expert consultation flow:', error);
+        return "I'm sorry, I encountered an error during the consultation.";
+    }
 }
