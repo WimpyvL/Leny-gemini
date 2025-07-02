@@ -18,7 +18,7 @@ const escapeRegExp = (string: string) => {
 
 export function TextWithCitations({ text, citations, className }: TextWithCitationsProps) {
   if (!citations || citations.length === 0) {
-    return <p className={className}>{text}</p>;
+    return <div className={className}>{text}</div>;
   }
 
   // Sort citations by term length, descending, to match longer terms first
@@ -27,7 +27,7 @@ export function TextWithCitations({ text, citations, className }: TextWithCitati
   
   // Do not create a regex if there are no terms, as it would be invalid.
   if (terms.length === 0) {
-    return <p className={className}>{text}</p>;
+    return <div className={className}>{text}</div>;
   }
   
   const regex = new RegExp(`(${terms.join('|')})`, 'g');
@@ -35,7 +35,7 @@ export function TextWithCitations({ text, citations, className }: TextWithCitati
   const parts = text.split(regex);
 
   return (
-    <p className={className}>
+    <div className={className}>
       <TooltipProvider delayDuration={100}>
         {parts.map((part, index) => {
           const citation = sortedCitations.find(c => c.term === part);
@@ -48,7 +48,7 @@ export function TextWithCitations({ text, citations, className }: TextWithCitati
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-sm">
-                  <p>{citation.source}</p>
+                  <div>{citation.source}</div>
                 </TooltipContent>
               </Tooltip>
             );
@@ -56,6 +56,6 @@ export function TextWithCitations({ text, citations, className }: TextWithCitati
           return <React.Fragment key={index}>{part}</React.Fragment>;
         })}
       </TooltipProvider>
-    </p>
+    </div>
   );
 }
