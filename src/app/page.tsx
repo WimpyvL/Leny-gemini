@@ -106,15 +106,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
-       <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none">
-          <iframe
-            className="h-full w-full"
-            src="https://www.youtube.com/embed/EiYMmakg6-s?autoplay=1&mute=1&controls=0&loop=1&playlist=EiYMmakg6-s&end=50&playsinline=1&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="background video"
-          ></iframe>
+       <div className="absolute inset-0 h-full w-full z-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto object-cover -translate-x-1/2 -translate-y-1/2"
+            src="/father.mp4"
+          >
+            Your browser does not support the video tag.
+          </video>
           <div className="absolute inset-0 bg-black/40" />
        </div>
       
