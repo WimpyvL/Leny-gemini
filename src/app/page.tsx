@@ -140,7 +140,21 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-hidden">
+<<<<<<< HEAD
        <div className="absolute inset-0 h-full w-full z-0 pointer-events-none bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900" />
+=======
+       <div className="absolute inset-0 h-full w-full bg-gray-300 dark:bg-gray-800 z-0 pointer-events-none" style={{ zoom: '110%' }}>
+          <video
+            className="h-full w-full object-cover"
+            src="/father.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <div className="absolute inset-0 bg-black/40" />
+       </div>
+>>>>>>> d31633e28e312aad3189f0883e923820c815c4e4
       
       <header className="relative z-10 p-4 sm:p-6">
         <nav className="flex items-center justify-between">
