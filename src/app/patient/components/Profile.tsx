@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Edit, User as UserIcon, HeartPulse, Bell, Settings, Shield, Briefcase, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 
 interface ProfileProps {
@@ -85,7 +86,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   {user.avatar && <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />}
-                  <AvatarFallback className="text-2xl">{user.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback className={cn("text-2xl text-white", user.avatarColor)}>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <CardTitle className="text-2xl font-bold font-headline">{user.name}</CardTitle>
@@ -93,7 +94,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
                 </div>
               </div>
               <Button onClick={() => isEditing ? handleSave() : setIsEditing(true)}>
-                <Edit className="mr-2 h-4 w-4" />
+                <span className="mr-2">✏️</span>
                 {isEditing ? 'Save Changes' : 'Edit Profile'}
               </Button>
             </CardHeader>
@@ -102,7 +103,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2"><UserIcon /> Personal Information</CardTitle>
+                <CardTitle className="flex items-center gap-2"><span>👤</span> Personal Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-1">
@@ -122,7 +123,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2"><HeartPulse /> Health Details</CardTitle>
+                <CardTitle className="flex items-center gap-2"><span>🫀</span> Health Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                  <div className="grid grid-cols-3 gap-4">
@@ -150,11 +151,11 @@ export function Profile({ user: initialUser }: ProfileProps) {
 
           <Card>
              <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Settings /> Preferences & Security</CardTitle>
+                <CardTitle className="flex items-center gap-2"><span>⚙️</span> Preferences & Security</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <h3 className="font-medium mb-2 flex items-center gap-2"><Bell /> Notifications</h3>
+                  <h3 className="font-medium mb-2 flex items-center gap-2"><span>🔔</span> Notifications</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between rounded-lg border p-3">
                       <div>
@@ -174,7 +175,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
                 </div>
                  <Separator />
                 <div>
-                  <h3 className="font-medium mb-2 flex items-center gap-2"><Shield /> Account Actions</h3>
+                  <h3 className="font-medium mb-2 flex items-center gap-2"><span>🛡️</span> Account Actions</h3>
                   <div className="space-y-2">
                       <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
                           <div>
@@ -183,7 +184,7 @@ export function Profile({ user: initialUser }: ProfileProps) {
                           </div>
                           <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                  <Button variant="secondary"><Briefcase className="mr-2 h-4 w-4" /> Register</Button>
+                                  <Button variant="secondary"><span className="mr-2">💼</span> Register</Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                   <AlertDialogHeader>

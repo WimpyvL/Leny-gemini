@@ -5,9 +5,13 @@ import { AiExpertList } from './AiExpertList';
 import { AiExpertChatView } from './AiExpertChatView';
 import { mockAiExperts, mockUsers } from '@/lib/mock-data';
 import type { AiExpert, Message, User } from '@/lib/types';
+<<<<<<< HEAD
 import { runExpertChat, runExpertRouter, runExpertConsultation } from '../actions';
 import type { ExpertRouterOutput } from '@/ai/flows/expert-router-flow';
 import { BrainCircuit } from 'lucide-react';
+=======
+import { runExpertChat } from '../actions';
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
 // Helper to convert message format for AI flow
 const toHistory = (messages: Message[]) => {
@@ -238,7 +242,7 @@ export function AiExpertsView() {
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full text-muted-foreground flex-col gap-4">
-                        <BrainCircuit className="h-16 w-16" />
+                        <span className="text-6xl">🧠</span>
                         <p className="text-lg">Select an AI Expert to start a consultation.</p>
                     </div>
                 )}

@@ -10,7 +10,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ForYouCardData } from '@/lib/types';
-import { Icon } from '@/components/Icon';
 
 interface GoalCreatorProps {
   onSave: (goal: Omit<ForYouCardData, 'id' | 'type'>) => void;
@@ -18,10 +17,10 @@ interface GoalCreatorProps {
 }
 
 const goalCategories = [
-  { value: 'fitness', label: 'Fitness', icon: 'Dumbbell', color: 'text-blue-500', units: ['reps', 'minutes', 'km', 'workouts'] },
-  { value: 'mindfulness', label: 'Mindfulness', icon: 'BrainCircuit', color: 'text-purple-500', units: ['minutes', 'sessions'] },
-  { value: 'nutrition', label: 'Nutrition', icon: 'Salad', color: 'text-green-500', units: ['servings', 'calories', 'days'] },
-  { value: 'sleep', label: 'Sleep', icon: 'BedDouble', color: 'text-indigo-500', units: ['hours', 'nights'] },
+  { value: 'fitness', label: 'Fitness', icon: '🏋️', color: 'text-blue-500', units: ['reps', 'minutes', 'km', 'workouts'] },
+  { value: 'mindfulness', label: 'Mindfulness', icon: '🧠', color: 'text-purple-500', units: ['minutes', 'sessions'] },
+  { value: 'nutrition', label: 'Nutrition', icon: '🥗', color: 'text-green-500', units: ['servings', 'calories', 'days'] },
+  { value: 'sleep', label: 'Sleep', icon: '🛌', color: 'text-indigo-500', units: ['hours', 'nights'] },
 ];
 
 export function GoalCreator({ onSave, onCancel }: GoalCreatorProps) {
@@ -71,7 +70,7 @@ export function GoalCreator({ onSave, onCancel }: GoalCreatorProps) {
               {goalCategories.map(cat => (
                 <SelectItem key={cat.value} value={cat.value}>
                   <div className="flex items-center gap-2">
-                    <Icon name={cat.icon} className="h-4 w-4" />
+                    <span className="text-lg">{cat.icon}</span>
                     <span>{cat.label}</span>
                   </div>
                 </SelectItem>

@@ -9,7 +9,6 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/Icon';
 
 interface ChatWindowProps {
   conversation: Conversation;
@@ -39,8 +38,8 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
 
 
   return (
-    <div className="flex flex-col h-screen bg-secondary">
-      <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-card">
+    <div className="flex flex-col h-screen bg-gradient-to-b from-orange-50 to-amber-100/50">
+      <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-gradient-to-br from-white to-slate-50 shadow-sm">
         <div className="flex items-center gap-4 flex-1 overflow-hidden">
           {onBack && (
             <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={onBack}>
@@ -48,14 +47,14 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
                 <span className="sr-only">Back</span>
             </Button>
           )}
-          <Avatar>
+          <Avatar className="h-12 w-12">
             <AvatarImage src={!isGroupChat ? otherParticipants[0]?.avatar : undefined} alt={conversation.title} data-ai-hint="doctor person" />
-            <AvatarFallback className={cn(conversation.avatarColor, 'text-white')}>
-              {conversation.icon ? <Icon name={conversation.icon} className="h-5 w-5" /> : conversation.title.charAt(0)}
+            <AvatarFallback className={cn(conversation.avatarColor, 'text-white font-bold')}>
+              {conversation.icon ? <span className="text-2xl">{conversation.icon}</span> : conversation.title.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div className="overflow-hidden">
-             <CardTitle className="text-xl font-headline truncate">{conversation.title}</CardTitle>
+             <CardTitle className="text-xl font-semibold tracking-tight truncate">{conversation.title}</CardTitle>
              <p className="text-sm text-muted-foreground truncate">{conversation.participantString}</p>
           </div>
         </div>
@@ -87,13 +86,14 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
               message={message}
               isOwnMessage={message.senderId === currentUser.id}
               sender={allUsers.find(u => u.id === message.senderId)}
+              isAiChat={isAiChat}
             />
           ))}
           {isLoading && assistantUser && (
             <div className="flex items-end gap-2 justify-start">
               <Avatar className="h-8 w-8">
                 <AvatarFallback className={cn(assistantUser.avatarColor, 'text-white')}>
-                  {assistantUser.icon ? <Icon name={assistantUser.icon} className="h-5 w-5" /> : assistantUser.avatar}
+                  {assistantUser.icon ? <span className="text-xl">{assistantUser.icon}</span> : assistantUser.avatar}
                 </AvatarFallback>
               </Avatar>
               <div className="max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-2xl shadow-md bg-card text-card-foreground rounded-bl-none">
@@ -108,7 +108,7 @@ export function ChatWindow({ conversation, currentUser, onSendMessage, allUsers,
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t bg-card">
+      <div className="p-4 border-t bg-transparent">
         <MessageInput onSendMessage={onSendMessage} />
       </div>
     </div>

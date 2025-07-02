@@ -1,12 +1,13 @@
 import Link from "next/link";
+import { Bot } from "lucide-react";
 
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary">
-        <span className="text-lg font-bold text-primary-foreground">L</span>
+    <Link href="/" className="flex items-center gap-2">
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <Bot className="h-5 w-5" />
       </div>
-      <h1 className="text-2xl font-bold font-headline text-foreground">Leny</h1>
+      <h1 className="text-xl font-semibold text-foreground">S.A.N.I</h1>
     </Link>
   );
 }

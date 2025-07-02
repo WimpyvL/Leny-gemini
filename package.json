@@ -1,5 +1,5 @@
 {
-  "name": "nextn",
+  "name": "sani",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -38,7 +38,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
-    "dotenv": "^16.5.0",
     "firebase": "^10.12.2",
     "framer-motion": "^11.3.11",
     "genkit": "^1.8.0",
@@ -54,6 +53,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

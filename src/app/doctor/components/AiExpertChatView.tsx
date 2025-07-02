@@ -5,7 +5,11 @@ import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+<<<<<<< HEAD
 import { Send, AlertTriangle, Users } from 'lucide-react';
+=======
+import { Send } from 'lucide-react';
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -27,6 +31,19 @@ interface AiExpertChatViewProps {
 }
 
 function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Message; isOwnMessage: boolean; sender?: User; expert?: AiExpert }) {
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasMounted) {
+      setFormattedTimestamp(format(message.timestamp, 'p, dd/MM/yy'));
+    }
+  }, [message.timestamp, hasMounted]);
+  
   const getInitials = (name: string) => {
     const parts = name.split(' ');
     if (parts.length > 1) return `${parts[0][0]}${parts[parts.length - 1][0]}`;
@@ -60,7 +77,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
       {!isOwnMessage && (
         <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert?.name || 'AI')}</AvatarFallback>
+          <AvatarFallback className={cn("text-white", expert?.avatarColor)}>{getInitials(expert?.name || 'AI')}</AvatarFallback>
         </Avatar>
       )}
       <TooltipProvider delayDuration={100}>
@@ -82,7 +99,7 @@ function MessageBubble({ message, isOwnMessage, sender, expert }: { message: Mes
             </div>
           </TooltipTrigger>
           <TooltipContent side={isOwnMessage ? 'left' : 'right'}>
-            <p>{format(message.timestamp, 'p, dd/MM/yy')}</p>
+            <p>{hasMounted ? formattedTimestamp : ''}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -151,6 +168,7 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
 
   return (
     <div className="flex flex-col h-screen bg-secondary">
+<<<<<<< HEAD
       <ConsultExpertDialog
         isOpen={isConsulting}
         onOpenChange={setIsConsulting}
@@ -170,6 +188,15 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
                 <CardTitle className="text-xl font-headline">{expert.name}</CardTitle>
                 <CardDescription>{expert.specialty}</CardDescription>
             </div>
+=======
+      <CardHeader className="flex flex-row items-center gap-4 p-4 border-b bg-card">
+          <Avatar className="h-10 w-10">
+            <AvatarFallback className={cn("text-white", expert.avatarColor)}>{getInitials(expert.name)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle className="text-xl font-headline">{expert.name}</CardTitle>
+            <CardDescription>{expert.specialty}</CardDescription>
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
           </div>
           {expert.id !== 'leny-router' && (
             <Button variant="outline" size="sm" onClick={() => setIsConsulting(true)}>
@@ -212,7 +239,7 @@ export function AiExpertChatView({ expert, allExperts, messages, currentUser, on
           {isLoading && (
              <div className="flex items-end gap-2 justify-start">
                 <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-muted-foreground/20 text-foreground">{getInitials(expert.name)}</AvatarFallback>
+                    <AvatarFallback className={cn("text-white", expert.avatarColor)}>{getInitials(expert.name)}</AvatarFallback>
                 </Avatar>
                 <div className="max-w-xs p-3 rounded-2xl shadow-md bg-card text-card-foreground rounded-bl-none">
                     <div className="flex items-center gap-2">

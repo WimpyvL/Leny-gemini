@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
-import { Icon } from '@/components/Icon';
 
 interface AssistantSummaryProps {
   assessment: Assessment;
@@ -16,26 +15,31 @@ interface AssistantSummaryProps {
 
 export function AssistantSummary({ assessment, sender, timestamp }: AssistantSummaryProps) {
   const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    if (timestamp) {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasMounted && timestamp) {
       setFormattedTimestamp(format(timestamp, 'p'));
     }
-  }, [timestamp]);
+  }, [timestamp, hasMounted]);
 
   return (
     <div className="flex items-start gap-3">
         {sender && (
             <Avatar className="h-9 w-9">
                 <AvatarFallback className={cn("text-white", sender.avatarColor)}>
-                    {sender.icon && <Icon name={sender.icon} className="h-5 w-5" />}
+                    {sender.icon && <span className="text-xl">{sender.icon}</span>}
                 </AvatarFallback>
             </Avatar>
         )}
         <div className="w-full">
             <p className="text-xs text-muted-foreground font-semibold flex justify-between w-full">
                 <span>{sender?.name}</span>
-                <span>{formattedTimestamp}</span>
+                <span>{hasMounted ? formattedTimestamp : ''}</span>
             </p>
             <Card className="bg-secondary mt-1 border-secondary-foreground/20">
             <CardContent className="p-4 space-y-3">

@@ -1,4 +1,5 @@
 'use server';
+<<<<<<< HEAD
 import { analyzeSymptoms } from '@/ai/flows/analyze-symptoms';
 import { getExpertChatResponse, type ExpertChatOutput } from '@/ai/flows/expert-chat-flow';
 import type { AnalyzeSymptomsOutput } from '@/ai/flows/analyze-symptoms';
@@ -21,6 +22,11 @@ export async function runAnalysis(message: string): Promise<AnalyzeSymptomsOutpu
     };
   }
 }
+=======
+import { processMedicalQuery } from '@/ai/flows/medical-query-flow';
+import type { MedicalQueryInput, FormattedClinicalResponse } from '@/lib/types';
+import { getExpertChatResponse } from '@/ai/flows/expert-chat-flow';
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
 export async function runExpertChat(message: string, expertPrompt: string): Promise<ExpertChatOutput> {
   try {
@@ -39,6 +45,7 @@ export async function runExpertChat(message: string, expertPrompt: string): Prom
   }
 }
 
+<<<<<<< HEAD
 export async function runExpertRouter(history: ExpertRouterInput['history'], experts: AiExpert[]): Promise<ExpertRouterOutput> {
   const expertList = experts.map(e => ({ id: e.id, name: e.name, specialty: e.specialty }));
   try {
@@ -94,3 +101,28 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
         };
     }
 }
+=======
+export async function runMedicalQuery(input: MedicalQueryInput): Promise<FormattedClinicalResponse> {
+  try {
+    const result = await processMedicalQuery(input);
+    return result;
+  } catch (error) {
+    console.error('Error running medical query:', error);
+    const classification = {
+      context: 'other',
+      specialty: 'internal_medicine',
+      hasRedFlags: true,
+      reason: 'AI system error.'
+    } as const;
+    return {
+      content: 'An unexpected error occurred during AI analysis. Please manually review the case.',
+      metadata: {
+        classification,
+        responseMode: input.userType === 'provider' ? 'professional' : 'consumer',
+      },
+      escalationTriggered: true,
+      sources: [],
+    };
+  }
+}
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4

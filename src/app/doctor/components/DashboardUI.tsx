@@ -1,20 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { Conversation, User, Message, ForYouCardData } from '@/lib/types';
+import type { Conversation, User, Message } from '@/lib/types';
 import { PatientList } from './PatientList';
 import { PatientChatView } from './PatientChatView';
-import { SymptomAnalysisCard } from './SymptomAnalysisCard';
 import { PatientNavRail, type PatientView } from '@/app/patient/components/PatientNavRail';
-import { ForYou } from '@/app/patient/components/ForYou';
-import { ForYouDashboard } from '@/app/patient/components/ForYouDashboard';
+import { ClinicalAssistantPanel } from './ClinicalAssistantPanel';
+import { AiExpertsView } from './AiExpertsView'; // To be replaced
 import { DoctorProfile } from './DoctorProfile';
-import { mockDoctorForYouData } from '@/lib/mock-data';
-import { cn } from '@/lib/utils';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { AiExpertsView } from './AiExpertsView';
+
+function EmptyChatPlaceholder() {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center h-full text-muted-foreground bg-secondary p-8 text-center">
+        <span className="text-5xl mb-4">🤖</span>
+        <h2 className="text-2xl font-bold text-foreground">
+            Clinical Assistant
+        </h2>
+        <p className="text-lg text-muted-foreground mt-1">Select a patient to begin your review.</p>
+      </div>
+    );
+}
 
 interface DashboardUIProps {
   user: User;
@@ -25,6 +30,7 @@ interface DashboardUIProps {
 export function DashboardUI({ user, conversations: initialConversations, allUsers }: DashboardUIProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+<<<<<<< HEAD
   const [activeView, setActiveView] = useState<PatientView>('aiexperts');
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockDoctorForYouData);
@@ -40,15 +46,15 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       }
     }
   }, [activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
+=======
+  const [activeView, setActiveView] = useState<PatientView>('chats');
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
   
   useEffect(() => {
-    if (activeView !== 'chats') {
-      setSelectedConversation(null);
+    if (activeView === 'chats' && initialConversations.length > 0 && !selectedConversation) {
+        setSelectedConversation(initialConversations[0]);
     }
-    if (activeView !== 'foryou') {
-      setSelectedForYouItem(null);
-    }
-  }, [activeView]);
+  }, [activeView, initialConversations, selectedConversation]);
 
   const handleSendMessage = (text: string) => {
     if (!selectedConversation) return;
@@ -62,6 +68,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       type: 'user',
     };
 
+<<<<<<< HEAD
     setConversations(prev => {
       const updated = prev.map(c => 
         c.id === conversationId 
@@ -72,17 +79,26 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
       setSelectedConversation(newSelected);
       return updated;
     });
-  };
-  
-  const patientMessages = selectedConversation?.messages.filter(
-    (msg) => msg.senderId !== user.id
-  ) || [];
-  const lastPatientMessage = patientMessages[patientMessages.length - 1];
+=======
+    const updatedConversations = conversations.map(c => {
+      if (c.id === selectedConversation.id) {
+        // Create a new messages array and update timestamp
+        const newMessages = [...c.messages, newMessage];
+        return { 
+          ...c, 
+          messages: newMessages,
+          timestamp: new Date(),
+        };
+      }
+      return c;
+    });
 
-  const handleAddGoal = (newGoal: Omit<ForYouCardData, 'id' | 'type'>) => {
-    // This is a patient-specific action and won't be used in the doctor view,
-    // but we keep it for component compatibility.
-    console.log("Adding goal (not implemented for doctors):", newGoal);
+    // Sort conversations to bring the updated one to the top
+    updatedConversations.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+
+    setConversations(updatedConversations);
+    setSelectedConversation(updatedConversations.find(c => c.id === selectedConversation.id) || null);
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
   };
   
   const handleSelectConversation = (id: string) => {
@@ -90,98 +106,48 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
     setSelectedConversation(conversation);
   };
 
-  const renderChatView = () => (
-    <div className="flex h-full w-full">
-      <div className={cn(
-        "w-full md:w-[340px] flex-shrink-0 border-r border-border flex-col",
-        selectedConversation ? "hidden md:flex" : "flex"
-      )}>
-        <PatientList
-          conversations={conversations}
-          selectedConversationId={selectedConversation?.id}
-          onSelectConversation={handleSelectConversation}
-          currentUser={user}
-        />
-      </div>
-      <div className={cn("flex-col flex-1", selectedConversation ? "flex" : "hidden md:flex")}>
-        {selectedConversation ? (
-          <PatientChatView
-            key={selectedConversation.id}
-            conversation={selectedConversation}
-            currentUser={user}
-            onSendMessage={handleSendMessage}
-            allUsers={allUsers}
-            onBack={() => setSelectedConversation(null)}
-            onShowAnalysis={() => setIsAnalysisSheetOpen(true)}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            <p>Select a patient to view their chat</p>
-          </div>
-        )}
-      </div>
-
-       <div className="hidden lg:flex items-stretch bg-background">
-          <aside className={cn(
-              "bg-card/50 overflow-hidden transition-all duration-300 ease-in-out",
-              isAnalysisSidebarOpen ? "w-[350px] p-4 border-l" : "w-0 p-0"
-          )}>
-              <div className="w-[calc(350px-2rem)] h-full overflow-y-auto">
-                  <SymptomAnalysisCard lastPatientMessage={lastPatientMessage} />
-              </div>
-          </aside>
-          <div className="flex-shrink-0 border-l bg-card">
-              <Button variant="ghost" size="icon" className="h-full w-12 rounded-none" onClick={() => setIsAnalysisSidebarOpen(!isAnalysisSidebarOpen)}>
-                  {isAnalysisSidebarOpen ? <ChevronsRight className="h-5 w-5" /> : <ChevronsLeft className="h-5 w-5" />}
-              </Button>
-          </div>
-      </div>
-
-      <Sheet open={isAnalysisSheetOpen} onOpenChange={setIsAnalysisSheetOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-md p-0 lg:hidden">
-            <SymptomAnalysisCard lastPatientMessage={lastPatientMessage} />
-        </SheetContent>
-      </Sheet>
-    </div>
-  );
-
-  const renderForYouView = () => (
-    <div className="flex h-full w-full">
-      <div className={cn(
-          "w-full md:w-72 flex-shrink-0 border-r border-border overflow-y-auto flex-col",
-          selectedForYouItem ? "hidden md:flex" : "flex"
-      )}>
-          <ForYou 
-              forYouData={forYouData}
-              selectedCardId={selectedForYouItem?.id}
-              onCardSelect={setSelectedForYouItem}
-              showCreateGoal={false}
-          />
-      </div>
-      <div className={cn(
-          "flex-col flex-1",
-          selectedForYouItem ? "flex" : "hidden md:flex"
-      )}>
-          <ForYouDashboard selectedItem={selectedForYouItem} onBack={() => setSelectedForYouItem(null)} />
-      </div>
-    </div>
-  );
-
   const renderMainContent = () => {
     switch (activeView) {
-      case 'chats':
-        return renderChatView();
-      case 'foryou':
-        return renderForYouView();
-      case 'aiexperts':
-        return <AiExpertsView />;
-      case 'profile':
-        return <DoctorProfile user={user} />;
-      default:
-        return null;
+        case 'chats':
+            return (
+                <div className="flex flex-1 min-w-0">
+                    <div className="w-[340px] flex-shrink-0 border-r border-border flex flex-col bg-card">
+                        <PatientList
+                            conversations={conversations}
+                            selectedConversationId={selectedConversation?.id}
+                            onSelectConversation={handleSelectConversation}
+                            currentUser={user}
+                        />
+                    </div>
+                    <main className="flex-1 flex flex-col min-w-0">
+                        {selectedConversation ? (
+                        <PatientChatView
+                            key={selectedConversation.id}
+                            conversation={selectedConversation}
+                            currentUser={user}
+                            onSendMessage={handleSendMessage}
+                            allUsers={allUsers}
+                        />
+                        ) : (
+                        <EmptyChatPlaceholder />
+                        )}
+                    </main>
+                    <aside className="w-[380px] flex-shrink-0 border-l bg-card hidden lg:flex flex-col">
+                        <ClinicalAssistantPanel conversation={selectedConversation} currentUser={user} />
+                    </aside>
+                </div>
+            );
+        case 'aiexperts':
+            // This view is being replaced by the integrated clinical assistant.
+            // Kept for structure, but should be phased out.
+            return <AiExpertsView />;
+        case 'profile':
+            return <DoctorProfile user={user} />;
+        default:
+            return <EmptyChatPlaceholder />;
     }
-  }
-
+  };
+  
   return (
     <div className="flex h-screen w-full bg-background">
       <PatientNavRail
@@ -189,9 +155,7 @@ export function DashboardUI({ user, conversations: initialConversations, allUser
         activeView={activeView}
         onViewChange={setActiveView}
       />
-      <main className="flex-1 flex ml-16">
-        {renderMainContent()}
-      </main>
+      {renderMainContent()}
     </div>
   );
 }

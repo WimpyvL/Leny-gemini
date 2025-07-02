@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview An AI flow for a doctor to chat with a specialized AI expert.
+ * @fileOverview An AI flow for a user to chat with a specialized AI expert.
  *
  * - getExpertChatResponse - A function that returns a specialized AI response.
  * - ExpertChatInput - The input type for the getExpertChatResponse function.
@@ -11,7 +11,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ExpertChatInputSchema = z.object({
-  message: z.string().describe('The user message from the doctor.'),
+  message: z.string().describe('The user message to the expert.'),
   expertPrompt: z.string().describe("The expert's persona and instructions."),
 });
 export type ExpertChatInput = z.infer<typeof ExpertChatInputSchema>;
@@ -43,6 +43,7 @@ const prompt = ai.definePrompt({
   output: {schema: ExpertChatOutputSchema},
   prompt: `{{expertPrompt}}
 
+<<<<<<< HEAD
 You are an AI medical expert providing an evidence-based consultation to a human doctor. Your responses must emulate the style of OpenEvidence.com: data-driven, structured, and grounded in clinical evidence. Avoid conversational filler.
 
 For the doctor's query below, structure your response with the following sections:
@@ -55,8 +56,11 @@ For the doctor's query below, structure your response with the following section
 After your structured response, you MUST generate a list of 3-4 brief, actionable clinical next steps for the doctor. For each action, provide a short 'keyword' (e.g., "Order STAT CBC & Chem-7") and the 'fullAction' text (e.g., "Order a STAT complete blood count and chemistry panel."). These should be clinical actions, not conversational replies.
 
 Finally, to ensure clinical validity, identify key terms, studies, or concepts (e.g., 'ACC/AHA guidelines', 'PRODIGY trial', 'SGLT2 inhibitors') within your response. For each, provide a citation with the term and its source (e.g., 'PRODIGY trial' -> 'Published in JAMA, 2022, this trial evaluated...'). This adds credibility and allows the doctor to verify the information.
+=======
+You are conversing with a human user who is seeking your expert opinion. Provide a concise, insightful, and actionable response based on your specialty.
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
-Doctor's message: {{{message}}}
+User's message: {{{message}}}
   `,
 });
 

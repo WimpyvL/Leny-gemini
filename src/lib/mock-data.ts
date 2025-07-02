@@ -1,25 +1,45 @@
 import type { User, Conversation, ForYouCardData, QuickAction, AiExpert } from './types';
 
+// Use a fixed date for all timestamps to prevent hydration errors
+const now = new Date('2024-08-01T10:00:00Z');
+
 export const mockUsers: User[] = [
-  { id: 'assistant', name: 'Leny', avatar: '', icon: 'Bot', avatarColor: 'bg-primary', role: 'assistant' },
   { 
-    id: 'doctor1', 
-    name: 'Dr. Sarah Chen', 
-    avatar: 'SC', 
-    avatarColor: 'bg-sky-500', 
-    role: 'doctor', 
-    icon: 'Stethoscope', 
-    email: 'drchen@example.com',
-    doctorInfo: {
-      specialty: 'Cardiology',
-      licenseNumber: 'MD-12345678',
-      practiceName: 'Heartwell Clinic',
-      practiceAddress: '123 Health St, Medville, MD 12345',
-      officeHours: 'Mon-Fri, 9:00 AM - 5:00 PM',
-      bio: 'Dr. Sarah Chen is a board-certified cardiologist with over 15 years of experience in treating a wide range of cardiovascular conditions. She is dedicated to providing compassionate and comprehensive care to her patients.'
+    id: 'assistant', 
+    name: 'S.A.N.I.', 
+    avatar: '🤖', 
+    role: 'assistant' 
+  },
+  { 
+    id: 'user1', 
+    name: 'Alex Rivera', 
+    avatar: 'https://placehold.co/100x100/7E57C2/FFFFFF.png', 
+    role: 'user',
+    email: 'alex.rivera@example.com',
+    settings: {
+        theme: 'dark',
+        notifications: {
+            email: true,
+            push: false,
+        }
+    }
+  },
+  { 
+    id: 'expert1', 
+    name: 'Dr. Evelyn Reed', 
+    avatar: 'https://placehold.co/100x100/42A5F5/FFFFFF.png', 
+    role: 'expert', 
+    email: 'evelyn.reed@example.com',
+    expertInfo: {
+      specialty: 'Venture Capital & Startups',
+      title: 'Managing Partner at Innovate Capital',
+      practiceName: 'Innovate Capital',
+      practiceAddress: '123 Tech Hub, Silicon Valley, CA 94025',
+      officeHours: 'By Appointment',
+      bio: 'Dr. Evelyn Reed is a seasoned venture capitalist with a passion for disruptive technologies. With over 20 years of experience, she has a knack for identifying and nurturing early-stage startups into market leaders.'
     },
     settings: {
-        theme: 'light',
+        theme: 'dark',
         notifications: {
             email: true,
             push: true,
@@ -27,145 +47,111 @@ export const mockUsers: User[] = [
     }
   },
   { 
-    id: 'doctor2', 
-    name: 'Dr. David Rodriguez', 
-    avatar: 'DR', 
-    avatarColor: 'bg-purple-500', 
-    role: 'doctor', 
-    icon: 'Stethoscope', 
-    email: 'drdavid@example.com',
-    doctorInfo: {
-      specialty: 'Dermatology',
-      practiceName: 'Clear Skin Partners',
-      practiceAddress: '456 Wellness Ave, Suite 200, Medville, MD 12345',
+    id: 'user2', 
+    name: 'Casey Lee', 
+    avatar: 'https://placehold.co/100x100/66BB6A/FFFFFF.png', 
+    role: 'user', 
+    email: 'casey.lee@example.com' 
+  },
+  { 
+    id: 'expert2', 
+    name: 'Marcus Thorne', 
+    avatar: 'https://placehold.co/100x100/AB47BC/FFFFFF.png', 
+    role: 'expert', 
+    email: 'marcus.thorne@example.com',
+    expertInfo: {
+      specialty: 'Marketing & Branding',
+      practiceName: 'Thorne Consulting',
+      practiceAddress: '456 Madison Ave, New York, NY 10017',
     }
   },
   { 
-    id: 'doctor3', 
-    name: 'Dr. Jessica Miller', 
-    avatar: 'JM', 
-    avatarColor: 'bg-pink-500', 
-    role: 'doctor', 
-    icon: 'Stethoscope', 
-    email: 'drjessica@example.com',
-    doctorInfo: {
-      specialty: 'Pediatrics',
-      practiceName: 'Happy Kids Pediatrics',
-      practiceAddress: '789 Child Way, Medville, MD 12345',
-    }
+    id: 'user3', 
+    name: 'Jordan Garcia', 
+    avatar: 'https://placehold.co/100x100/26A69A/FFFFFF.png', 
+    role: 'user', 
+    email: 'jordan.garcia@example.com' 
   },
-  { 
-    id: 'patient1', 
-    name: 'Alex', 
-    avatar: 'A', 
-    avatarColor: 'bg-blue-500', 
-    role: 'patient',
-    email: 'alex@example.com',
-    dob: '1990-05-15',
-    healthInfo: {
-      height: '5\'10"',
-      weight: '160 lbs',
-      bloodType: 'O+',
-      allergies: ['Peanuts', 'Pollen'],
-      conditions: ['Asthma'],
-      medications: [
-        { name: 'Albuterol', dosage: 'As needed' },
-        { name: 'Singulair', dosage: '10mg daily' },
-      ],
-    },
-    settings: {
-      theme: 'light',
-      notifications: {
-        email: true,
-        push: false,
-      }
-    }
-  },
-  { id: 'patient2', name: 'Casey', avatar: 'C', avatarColor: 'bg-green-400', role: 'patient', email: 'casey@example.com' },
-  { id: 'patient3', name: 'Jordan', avatar: 'J', avatarColor: 'bg-teal-500', role: 'patient', email: 'jordan@example.com' },
 ];
-
-const lenyConversation: Conversation = {
-  id: 'conv_leny_patient1',
-  title: 'Leny',
-  participants: [], // Will be populated by data layer
-  participantIds: ['patient1', 'assistant'],
-  participantString: 'Your AI Health Companion',
-  avatar: '',
-  icon: 'Bot',
-  avatarColor: 'bg-primary',
-  timestamp: new Date(), // most recent
-  patientId: 'patient1',
-  messages: [
-    {
-      id: 'msg_leny_1',
-      senderId: 'assistant',
-      text: 'Hi Alex! I\'m Leny, your personal health companion. I\'m here to help answer questions, track your goals, or just chat. What\'s on your mind today?',
-      timestamp: new Date(),
-      type: 'user',
-    },
-     {
-      id: 'msg_leny_2',
-      senderId: 'patient1',
-      text: 'Hi Leny, I\'ve been having some trouble sleeping lately. Any tips?',
-      timestamp: new Date(),
-      type: 'user',
-    },
-    {
-      id: 'msg_leny_3',
-      senderId: 'assistant',
-      text: 'I\'m sorry to hear that, Alex. Trouble sleeping can be really frustrating. Some people find that creating a relaxing bedtime routine, like reading or listening to calm music, can be helpful. It\'s also often recommended to avoid screens for an hour before bed. Have you tried anything like that?',
-      timestamp: new Date(),
-      type: 'user',
-    },
-  ],
-};
-
-const doctorPatientConversation: Conversation = {
-  id: 'conv_doctor1_patient2',
-  title: 'Casey',
-  participants: [], // Populated by data layer
-  participantIds: ['doctor1', 'patient2'],
-  participantString: 'Chat with Casey',
-  avatar: 'C',
-  icon: undefined,
-  avatarColor: 'bg-green-400',
-  timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-  patientId: 'patient2',
-  doctorId: 'doctor1',
-  messages: [
-    {
-      id: 'msg_dp_1',
-      senderId: 'patient2',
-      text: 'Hi Dr. Chen, I had a question about the new medication you prescribed.',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-      type: 'user',
-    },
-    {
-      id: 'msg_dp_2',
-      senderId: 'doctor1',
-      text: 'Of course, Casey. What\'s on your mind?',
-      timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-      type: 'user',
-    },
-  ],
-};
 
 
 export const mockConversations: Conversation[] = [
-  lenyConversation,
-  doctorPatientConversation,
+  {
+    id: 'conv_sani_user1',
+    title: 'S.A.N.I.',
+    participantIds: ['user1', 'assistant'],
+    participantString: 'Your AI Companion',
+    timestamp: new Date(now.getTime() - 5 * 60 * 1000), // 5 minutes ago
+    messages: [
+      {
+        id: 'msg_sani_1',
+        senderId: 'assistant',
+        text: "Hello Alex! I'm S.A.N.I., your personal AI companion. How can I help you unlock your potential today?",
+        timestamp: new Date(now.getTime() - 5 * 60 * 1000),
+        type: 'user',
+      }
+    ],
+  },
+  {
+    id: 'conv_expert1_user1',
+    title: 'Dr. Evelyn Reed',
+    participantIds: ['user1', 'expert1'],
+    participantString: 'Startup funding advice',
+    timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000), // 1 hour ago
+    messages: [
+       {
+        id: 'msg_expert1_1',
+        senderId: 'expert1',
+        text: "Alex, thanks for reaching out. Let's discuss your pitch deck. I have some initial thoughts on the market analysis section.",
+        timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+        type: 'user',
+      }
+    ],
+  },
+   {
+    id: 'conv_group_chat',
+    title: 'Project Phoenix Team',
+    participantIds: ['user1', 'user2', 'user3', 'expert2'],
+    participantString: 'Casey, Jordan, Marcus...',
+    timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
+    messages: [
+       {
+        id: 'msg_group_1',
+        senderId: 'expert2',
+        text: "Team, let's sync on the marketing campaign deliverables for Q3. The new AI-powered analytics tools are ready for us to test.",
+        timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+        type: 'user',
+      }
+    ],
+    unread: 3,
+  },
+  {
+    id: 'conv_expert1_user2',
+    title: 'Casey Lee',
+    participantIds: ['expert1', 'user2'],
+    participantString: 'Initial project screening',
+    timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    messages: [
+       {
+        id: 'msg_expert1_user2_1',
+        senderId: 'user2',
+        text: "Dr. Reed, I've sent over the documents for 'Project Chimera'. Looking forward to your feedback.",
+        timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+        type: 'user',
+      }
+    ],
+  },
 ];
 
 
 export const mockForYouData: ForYouCardData[] = [
   {
     id: 'fy_streak_1',
-    type: 'health_streak',
-    icon: 'Flame',
+    type: 'goal_streak',
+    icon: '🔥',
     iconColor: 'text-orange-500',
-    title: '7-Day Meditation Streak',
-    description: 'Keep it up! Just 3 more days to reach your goal.',
+    title: '7-Day Learning Streak',
+    description: 'Keep it up! Just 3 more days to reach your goal of learning about AI.',
     currentStreak: 4,
     goal: 7,
     cta: 'Continue Streak',
@@ -180,144 +166,51 @@ export const mockForYouData: ForYouCardData[] = [
     ],
   },
   {
-    id: 'fy_streak_2',
-    type: 'health_streak',
-    icon: 'Dumbbell',
-    iconColor: 'text-blue-500',
-    title: 'Monthly Workout Goal',
-    description: 'You\'ve completed 10 workouts this month.',
-    currentStreak: 10,
-    goal: 15,
-    cta: 'Log Workout',
-     progressData: [
-      { date: 'Week 1', value: 3 },
-      { date: 'Week 2', value: 4 },
-      { date: 'Week 3', value: 3 },
-      { date: 'Week 4', value: 0 },
-    ],
-  },
-  {
     id: 'fy_1',
-    type: 'appointment',
-    icon: 'Calendar',
+    type: 'consultation',
+    icon: '🗓️',
     iconColor: 'text-blue-500',
-    title: 'Upcoming Appointment',
-    description: 'Cardiology check-up with Dr. Sarah Chen.',
+    title: 'Upcoming Consultation',
+    description: 'Pitch review with Dr. Evelyn Reed.',
     timestamp: new Date('2024-08-05T14:30:00Z'),
     cta: 'View Details',
   },
   {
     id: 'fy_2',
     type: 'reminder',
-    icon: 'Bell',
+    icon: '🔔',
     iconColor: 'text-orange-500',
-    title: 'Medication Reminder',
-    description: 'Take your daily multivitamin.',
+    title: 'Task Reminder',
+    description: 'Finalize Q3 budget report.',
     cta: 'Mark as Done',
   },
   {
     id: 'fy_3',
-    type: 'lab_result',
-    icon: 'FlaskConical',
+    type: 'insight',
+    icon: '💡',
     iconColor: 'text-purple-500',
-    title: 'New Lab Results',
-    description: 'Your recent blood test results are available.',
+    title: 'New Insight Available',
+    description: 'AI analysis of your recent market data is ready.',
     timestamp: new Date('2024-07-29T11:00:00Z'),
-    cta: 'View Results',
-  },
-    {
-    id: 'fy_4',
-    type: 'health_tip',
-    icon: 'Lightbulb',
-    iconColor: 'text-green-500',
-    title: 'Health Tip of the Day',
-    description: 'Stay hydrated! Aim for 8 glasses of water.',
-    cta: 'Learn More',
+    cta: 'View Insight',
   },
 ];
-
-export const mockDoctorForYouData: ForYouCardData[] = [
-  {
-    id: 'doc_fy_1',
-    type: 'research_update',
-    icon: 'ClipboardPenLine',
-    iconColor: 'text-blue-600',
-    title: 'New Study on Beta-Blockers in Post-MI Patients',
-    description: 'A recent trial published in NEJM challenges long-standing practices for stable post-MI patients without heart failure.',
-    timestamp: new Date('2024-07-28T09:00:00Z'),
-    cta: 'Read Summary',
-  },
-  {
-    id: 'doc_fy_2',
-    type: 'industry_news',
-    icon: 'Newspaper',
-    iconColor: 'text-green-600',
-    title: 'FDA Approves New SGLT2 Inhibitor for Heart Failure',
-    description: 'The FDA has expanded the indication for a new SGLT2 inhibitor to include patients with heart failure with preserved ejection fraction (HFpEF).',
-    timestamp: new Date('2024-07-27T14:00:00Z'),
-    cta: 'Review Data',
-  },
-  {
-    id: 'doc_fy_3',
-    type: 'cme_course',
-    icon: 'BookOpenCheck',
-    iconColor: 'text-purple-600',
-    title: 'Upcoming CME: Advanced Cardiac Imaging',
-    description: 'Earn 5 CME credits with this online course covering the latest in cardiac MRI and CT angiography.',
-    timestamp: new Date('2024-08-15T00:00:00Z'),
-    cta: 'Enroll Now',
-  },
-  {
-    id: 'doc_fy_4',
-    type: 'research_update',
-    icon: 'ClipboardPenLine',
-    iconColor: 'text-blue-600',
-    title: 'AI in ECG Interpretation Shows Promise',
-    description: 'A new algorithm demonstrates higher accuracy in detecting atrial fibrillation from standard 12-lead ECGs compared to traditional methods.',
-    timestamp: new Date('2024-07-26T11:30:00Z'),
-    cta: 'Explore the Research',
-  },
-];
-
 
 export const mockRecentSearches: string[] = [
-    'How to manage seasonal allergies?',
-    'Is intermittent fasting safe?',
-    'Stretches for lower back pain',
+    'How to create a business plan?',
+    'Latest trends in AI',
+    'Tips for effective public speaking',
 ];
 
 export const mockFavoriteActions: QuickAction[] = [
-    { id: 'fav1', label: 'Log Symptoms', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
-    { id: 'fav2', label: 'Track Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
-    { id: 'fav3', label: 'Book Appointment', icon: 'CalendarPlus', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
-];
-
-export const mockEmergencyProtocols: QuickAction[] = [
-    { id: 'em1', label: 'Call 911', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em2', label: 'Poison Control', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'em3', label: 'Find Urgent Care', icon: 'MapPin', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-];
-
-export const mockDoctorRecentSearches: string[] = [
-    'Atrial Fibrillation treatment guidelines',
-    'Patient: Alex - medication history',
-    'Drug interactions for Warfarin',
-];
-
-export const mockDoctorFavoriteActions: QuickAction[] = [
-    { id: 'doc_fav1', label: 'Review Patient Chart', icon: 'NotepadText', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
-    { id: 'doc_fav2', label: 'Prescribe Medication', icon: 'Pill', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
-    { id: 'doc_fav3', label: 'Order Lab Tests', icon: 'FlaskConical', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
-];
-
-export const mockDoctorImmediateAssistance: QuickAction[] = [
-    { id: 'doc_em1', label: 'Consult Specialist', icon: 'PhoneCall', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'doc_em2', label: 'Admit to Hospital', icon: 'Siren', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
-    { id: 'doc_em3', label: 'View Protocols', icon: 'BookOpenCheck', isStarred: false, cardColor: 'bg-red-100/50', iconColor: 'text-red-600' },
+    { id: 'fav1', label: 'Log Idea', icon: '📝', isStarred: true, cardColor: 'bg-blue-100/50', iconColor: 'text-blue-600' },
+    { id: 'fav2', label: 'Track Expenses', icon: '💰', isStarred: true, cardColor: 'bg-green-100/50', iconColor: 'text-green-600' },
+    { id: 'fav3', label: 'Book Consultation', icon: '📅', isStarred: true, cardColor: 'bg-purple-100/50', iconColor: 'text-purple-600' },
 ];
 
 export const mockAiExperts: AiExpert[] = [
     {
+<<<<<<< HEAD
         id: 'leny-router',
         name: 'Leny',
         specialty: 'AI Triage Assistant',
@@ -476,5 +369,40 @@ export const mockAiExperts: AiExpert[] = [
         gender: "Male",
         personality: "intensely focused and fiercely dedicated",
         expert_prompt: "You are Dr. Noah Bennett, a top-tier Internal Medicine Physician known for being intensely focused and fiercely dedicated. You speak with authority and care, providing expert-level insights and precise recommendations in your field."
+=======
+        "specialty": "Venture Capital",
+        "name": "Dr. Evelyn Reed",
+        "expert_prompt": "You are Dr. Evelyn Reed, a top-tier Venture Capitalist known for your sharp insights and strategic funding advice. You speak with authority and clarity, providing expert-level analysis on startups, market trends, and investment strategies.",
+    },
+    {
+        "specialty": "Marketing & Branding",
+        "name": "Marcus Thorne",
+        "expert_prompt": "You are Marcus Thorne, a world-renowned marketing guru obsessed with brand storytelling and consumer psychology. You provide charismatic, data-driven advice on building memorable brands and effective campaigns.",
+    },
+    {
+        "specialty": "Artificial Intelligence",
+        "name": "Dr. Kenji Tanaka",
+        "expert_prompt": "You are Dr. Kenji Tanaka, a leading AI researcher and ethicist. You explain complex AI concepts with precision and approachability, focusing on practical applications and ethical considerations.",
+    },
+    {
+        "specialty": "Finance & Investing",
+        "name": "Anya Sharma",
+        "expert_prompt": "You are Anya Sharma, a seasoned financial analyst and investment strategist. You are known for your calm, detail-oriented approach to wealth management, market analysis, and personal finance.",
+    },
+    {
+        "specialty": "Leadership & Management",
+        "name": "David Chen",
+        "expert_prompt": "You are David Chen, a leadership coach and former Fortune 500 CEO. You provide strategic and composed advice on team building, organizational psychology, and effective management.",
+    },
+    {
+        "specialty": "Education & Learning",
+        "name": "Dr. Isabel Moreno",
+        "expert_prompt": "You are Dr. Isabel Moreno, an expert in pedagogy and cognitive science. You offer meticulous and empathetic advice on learning strategies, educational technology, and curriculum development.",
+    },
+    {
+        "specialty": "Relationships & Communication",
+        "name": "Dr. Leo Maxwell",
+        "expert_prompt": "You are Dr. Leo Maxwell, a psychologist specializing in relationships and communication. You are compassionate and analytical, providing guidance on interpersonal dynamics and conflict resolution.",
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
     }
 ];

@@ -1,25 +1,17 @@
-import type { LucideIcon } from "lucide-react";
+import { z } from 'zod';
+
+export type UserRole = 'user' | 'expert' | 'assistant';
 
 export type User = {
   id: string;
   name: string;
   email?: string;
   dob?: string;
-  avatar: string;
-  avatarColor: string;
-  icon?: string;
-  role: 'patient' | 'doctor' | 'family' | 'assistant';
-  healthInfo?: {
-    height?: string;
-    weight?: string;
-    bloodType?: string;
-    allergies?: string[];
-    conditions?: string[];
-    medications?: { name: string; dosage: string }[];
-  };
-  doctorInfo?: {
+  avatar: string; // URL to an image
+  role: UserRole;
+  expertInfo?: {
     specialty?: string;
-    licenseNumber?: string;
+    title?: string;
     practiceName?: string;
     practiceAddress?: string;
     officeHours?: string;
@@ -34,6 +26,7 @@ export type User = {
   }
 };
 
+<<<<<<< HEAD
 export type Assessment = {
   title: string;
   summary: string[];
@@ -59,42 +52,39 @@ export type QuickActionItem = {
   fullAction: string;
 };
 
+=======
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 export type Message = {
   id: string;
   text?: string;
   senderId: string;
   timestamp: Date;
+<<<<<<< HEAD
   type: 'user' | 'assessment';
   assessment?: Assessment;
   quickActions?: QuickActionItem[];
   structuredResponse?: StructuredResponse;
+=======
+  type: 'user';
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 };
 
 export type Conversation = {
   id: string;
   title: string;
-  participants: User[];
   participantIds: string[];
   participantString: string;
   messages: Message[];
   timestamp: Date;
   unread?: number;
-  avatar: string;
-  avatarColor: string;
-  icon?: string;
-  patientId?: string;
-  doctorId?: string;
 };
 
 export type ForYouCardType = 
-  | 'appointment' 
+  | 'consultation' 
   | 'reminder' 
-  | 'lab_result' 
-  | 'health_tip' 
-  | 'health_streak'
-  | 'research_update'
-  | 'industry_news'
-  | 'cme_course';
+  | 'insight' 
+  | 'tip' 
+  | 'goal_streak';
 
 export interface ForYouCardData {
     id: string;
@@ -123,7 +113,20 @@ export type AiExpert = {
   id: string;
   specialty: string;
   name: string;
-  gender: string;
-  personality: string;
   expert_prompt: string;
 };
+
+export const QueryInputSchema = z.object({
+  text: z.string().describe('The query text from the user.'),
+  userRole: z.custom<UserRole>().describe('The role of the user (user or expert).'),
+  conversationHistory: z.array(z.string()).optional().describe('Previous messages in the conversation for context.'),
+});
+export type QueryInput = z.infer<typeof QueryInputSchema>;
+
+export const FormattedResponseSchema = z.object({
+  content: z.string().describe('The formatted response text for the user.'),
+  metadata: z.object({
+    responseMode: z.enum(['consumer', 'professional']).describe('The mode used for the response.'),
+  }),
+});
+export type FormattedResponse = z.infer<typeof FormattedResponseSchema>;

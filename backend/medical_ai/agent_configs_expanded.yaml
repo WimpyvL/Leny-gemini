@@ -1,0 +1,495 @@
+# Comprehensive Agent Configuration for All Medical Specialties
+# Expanded to include all specialties with detailed tinting rules
+
+# PRIMARY CARE SPECIALTIES
+family_medicine:
+  prioritize_keywords:
+    - "family history"
+    - "preventive care"
+    - "wellness"
+    - "screening"
+    - "vaccination"
+    - "chronic disease"
+    - "behavioral health"
+  deprioritize_keywords:
+    - "specialized procedures"
+    - "complex surgery"
+  add_tests:
+    - condition: "routine care"
+      recommended_test: "Age-appropriate screening tests"
+    - condition: "family history of disease"
+      recommended_test: "Genetic counseling consideration"
+  emphasis_areas:
+    - "Whole-person care approach"
+    - "Family and social context"
+    - "Preventive care guidelines"
+    - "Behavioral health integration"
+
+internal_medicine:
+  prioritize_keywords:
+    - "chronic disease"
+    - "diabetes"
+    - "hypertension"
+    - "multiple comorbidities"
+    - "medication management"
+    - "systemic disease"
+  deprioritize_keywords:
+    - "acute trauma"
+    - "pediatric"
+  add_tests:
+    - condition: "diabetes management"
+      recommended_test: "HbA1c, microalbumin, lipid panel"
+    - condition: "hypertension"
+      recommended_test: "Basic metabolic panel, urinalysis, ECG"
+  emphasis_areas:
+    - "Chronic disease management"
+    - "Medication reconciliation"
+    - "Preventive care coordination"
+
+pediatrics:
+  prioritize_keywords:
+    - "child"
+    - "infant"
+    - "development"
+    - "growth"
+    - "vaccination"
+    - "fever in child"
+    - "behavioral issues"
+  deprioritize_keywords:
+    - "adult conditions"
+    - "geriatric"
+  add_tests:
+    - condition: "fever in infant <3 months"
+      recommended_test: "Full sepsis workup including LP"
+    - condition: "developmental concerns"
+      recommended_test: "Developmental screening tools"
+  emphasis_areas:
+    - "Age-appropriate assessment"
+    - "Growth and development"
+    - "Family-centered care"
+
+geriatrics:
+  prioritize_keywords:
+    - "elderly"
+    - "falls"
+    - "cognitive decline"
+    - "polypharmacy"
+    - "frailty"
+    - "functional decline"
+  deprioritize_keywords:
+    - "pediatric"
+    - "reproductive health"
+  add_tests:
+    - condition: "cognitive concerns"
+      recommended_test: "Mini-Mental State Exam, B12, TSH"
+    - condition: "falls"
+      recommended_test: "Vitamin D, bone density"
+  emphasis_areas:
+    - "Functional assessment"
+    - "Medication optimization"
+    - "Fall prevention"
+
+# EMERGENCY & CRITICAL CARE
+emergency_medicine:
+  prioritize_keywords:
+    - "acute"
+    - "severe"
+    - "emergency"
+    - "trauma"
+    - "unconscious"
+    - "severe bleeding"
+    - "respiratory distress"
+  deprioritize_keywords:
+    - "chronic"
+    - "routine"
+    - "stable"
+  add_tests:
+    - condition: "trauma"
+      recommended_test: "FAST exam, trauma series"
+    - condition: "altered mental status"
+      recommended_test: "Glucose, ABG, toxicology screen"
+  emphasis_areas:
+    - "ABCs and stabilization"
+    - "Rapid triage"
+    - "Time-sensitive interventions"
+
+critical_care:
+  prioritize_keywords:
+    - "sepsis"
+    - "shock"
+    - "respiratory failure"
+    - "multi-organ failure"
+    - "hemodynamic instability"
+  deprioritize_keywords:
+    - "outpatient"
+    - "routine"
+  add_tests:
+    - condition: "sepsis"
+      recommended_test: "Lactate, blood cultures, procalcitonin"
+    - condition: "shock"
+      recommended_test: "ABG, central venous pressure"
+  emphasis_areas:
+    - "Hemodynamic monitoring"
+    - "Ventilator management"
+    - "Multi-organ support"
+
+# SURGICAL SPECIALTIES
+general_surgery:
+  prioritize_keywords:
+    - "abdominal pain"
+    - "appendicitis"
+    - "hernia"
+    - "gallbladder"
+    - "bowel obstruction"
+    - "surgical abdomen"
+  deprioritize_keywords:
+    - "medical management"
+    - "chronic pain"
+  add_tests:
+    - condition: "acute abdomen"
+      recommended_test: "CT abdomen/pelvis with contrast"
+    - condition: "suspected appendicitis"
+      recommended_test: "CBC, urinalysis, imaging"
+  emphasis_areas:
+    - "Surgical vs medical management"
+    - "Perioperative care"
+    - "Complications recognition"
+
+orthopedics:
+  prioritize_keywords:
+    - "fracture"
+    - "joint pain"
+    - "back pain"
+    - "sports injury"
+    - "arthritis"
+    - "bone"
+    - "ligament"
+  deprioritize_keywords:
+    - "medical conditions"
+    - "systemic disease"
+  add_tests:
+    - condition: "trauma"
+      recommended_test: "X-ray (AP, lateral, oblique)"
+    - condition: "joint pain"
+      recommended_test: "MRI if conservative treatment fails"
+  emphasis_areas:
+    - "Functional assessment"
+    - "Return to activity"
+    - "Physical therapy timing"
+
+neurosurgery:
+  prioritize_keywords:
+    - "head injury"
+    - "brain tumor"
+    - "spinal cord"
+    - "intracranial pressure"
+    - "hemorrhage"
+  deprioritize_keywords:
+    - "peripheral neuropathy"
+    - "medical neurology"
+  add_tests:
+    - condition: "head trauma"
+      recommended_test: "CT head, consider MRI"
+    - condition: "spinal injury"
+      recommended_test: "MRI spine, CT if unstable"
+  emphasis_areas:
+    - "Neurological emergencies"
+    - "Surgical indications"
+    - "Intracranial pressure management"
+
+# MEDICAL SPECIALTIES
+cardiology:
+  prioritize_keywords:
+    - "chest pain"
+    - "palpitations"
+    - "shortness of breath"
+    - "heart failure"
+    - "arrhythmia"
+    - "hypertension"
+  deprioritize_keywords:
+    - "musculoskeletal"
+    - "respiratory"
+  add_tests:
+    - condition: "chest pain"
+      recommended_test: "12-lead ECG, troponin"
+    - condition: "heart failure"
+      recommended_test: "BNP, echocardiogram"
+  emphasis_areas:
+    - "ASCVD risk assessment"
+    - "Hemodynamic evaluation"
+    - "Anticoagulation management"
+
+pulmonology:
+  prioritize_keywords:
+    - "shortness of breath"
+    - "cough"
+    - "asthma"
+    - "COPD"
+    - "pneumonia"
+    - "lung disease"
+  deprioritize_keywords:
+    - "cardiac"
+    - "gastrointestinal"
+  add_tests:
+    - condition: "dyspnea"
+      recommended_test: "Chest X-ray, ABG, pulmonary function"
+    - condition: "chronic cough"
+      recommended_test: "CT chest, bronchoscopy if indicated"
+  emphasis_areas:
+    - "Respiratory failure recognition"
+    - "Pulmonary function assessment"
+    - "Oxygen therapy optimization"
+
+gastroenterology:
+  prioritize_keywords:
+    - "abdominal pain"
+    - "nausea"
+    - "vomiting"
+    - "diarrhea"
+    - "GI bleeding"
+    - "liver disease"
+  deprioritize_keywords:
+    - "cardiac"
+    - "pulmonary"
+  add_tests:
+    - condition: "GI bleeding"
+      recommended_test: "CBC, type and screen, endoscopy"
+    - condition: "liver dysfunction"
+      recommended_test: "Hepatic function panel, hepatitis panel"
+  emphasis_areas:
+    - "GI bleeding management"
+    - "Endoscopy indications"
+    - "Liver disease staging"
+
+neurology:
+  prioritize_keywords:
+    - "headache"
+    - "seizure"
+    - "stroke"
+    - "weakness"
+    - "numbness"
+    - "cognitive decline"
+  deprioritize_keywords:
+    - "orthopedic"
+    - "cardiac"
+  add_tests:
+    - condition: "stroke symptoms"
+      recommended_test: "CT head, MRI brain, vascular imaging"
+    - condition: "seizure"
+      recommended_test: "EEG, MRI brain, metabolic panel"
+  emphasis_areas:
+    - "Stroke recognition and treatment"
+    - "Seizure management"
+    - "Neurological examination"
+
+endocrinology:
+  prioritize_keywords:
+    - "diabetes"
+    - "thyroid"
+    - "hormone"
+    - "metabolism"
+    - "obesity"
+    - "adrenal"
+  deprioritize_keywords:
+    - "acute trauma"
+    - "infectious"
+  add_tests:
+    - condition: "diabetes"
+      recommended_test: "HbA1c, fructosamine, C-peptide"
+    - condition: "thyroid dysfunction"
+      recommended_test: "TSH, free T4, thyroid antibodies"
+  emphasis_areas:
+    - "Glucose management"
+    - "Hormone replacement"
+    - "Metabolic syndrome"
+
+nephrology:
+  prioritize_keywords:
+    - "kidney disease"
+    - "dialysis"
+    - "proteinuria"
+    - "hematuria"
+    - "hypertension"
+    - "electrolyte"
+  deprioritize_keywords:
+    - "respiratory"
+    - "neurological"
+  add_tests:
+    - condition: "kidney dysfunction"
+      recommended_test: "Creatinine, BUN, urinalysis, renal ultrasound"
+    - condition: "proteinuria"
+      recommended_test: "24-hour urine protein, kidney biopsy"
+  emphasis_areas:
+    - "Chronic kidney disease staging"
+    - "Dialysis planning"
+    - "Electrolyte management"
+
+# WOMEN'S HEALTH
+obstetrics_gynecology:
+  prioritize_keywords:
+    - "pregnancy"
+    - "menstrual"
+    - "pelvic pain"
+    - "contraception"
+    - "menopause"
+    - "prenatal"
+  deprioritize_keywords:
+    - "male-specific"
+    - "pediatric"
+  add_tests:
+    - condition: "pregnancy"
+      recommended_test: "Beta-hCG, prenatal labs"
+    - condition: "abnormal bleeding"
+      recommended_test: "Pelvic ultrasound, endometrial biopsy"
+  emphasis_areas:
+    - "Reproductive health"
+    - "Prenatal care"
+    - "Gynecologic oncology screening"
+
+# MENTAL HEALTH
+psychiatry:
+  prioritize_keywords:
+    - "depression"
+    - "anxiety"
+    - "psychosis"
+    - "bipolar"
+    - "suicidal"
+    - "substance abuse"
+  deprioritize_keywords:
+    - "medical conditions"
+    - "surgical"
+  add_tests:
+    - condition: "depression"
+      recommended_test: "PHQ-9, thyroid function"
+    - condition: "psychosis"
+      recommended_test: "Toxicology screen, metabolic panel"
+  emphasis_areas:
+    - "Suicide risk assessment"
+    - "Medication management"
+    - "Psychosocial interventions"
+
+# SPECIALIZED CARE
+dermatology:
+  prioritize_keywords:
+    - "rash"
+    - "skin lesion"
+    - "mole"
+    - "acne"
+    - "eczema"
+    - "psoriasis"
+  deprioritize_keywords:
+    - "internal medicine"
+    - "cardiac"
+  add_tests:
+    - condition: "suspicious lesion"
+      recommended_test: "Dermoscopy, biopsy if indicated"
+    - condition: "systemic rash"
+      recommended_test: "Skin biopsy, autoimmune workup"
+  emphasis_areas:
+    - "Skin cancer screening"
+    - "Dermatopathology correlation"
+    - "Cosmetic vs medical treatment"
+
+ophthalmology:
+  prioritize_keywords:
+    - "vision loss"
+    - "eye pain"
+    - "glaucoma"
+    - "cataract"
+    - "retinal"
+    - "diplopia"
+  deprioritize_keywords:
+    - "systemic disease"
+    - "non-ocular"
+  add_tests:
+    - condition: "vision loss"
+      recommended_test: "Fundoscopy, visual field testing"
+    - condition: "glaucoma"
+      recommended_test: "Intraocular pressure, optic nerve assessment"
+  emphasis_areas:
+    - "Vision-threatening conditions"
+    - "Surgical vs medical management"
+    - "Diabetic eye disease"
+
+infectious_disease:
+  prioritize_keywords:
+    - "fever"
+    - "infection"
+    - "sepsis"
+    - "antibiotic"
+    - "immunocompromised"
+    - "travel medicine"
+  deprioritize_keywords:
+    - "chronic disease"
+    - "degenerative"
+  add_tests:
+    - condition: "sepsis"
+      recommended_test: "Blood cultures, lactate, procalcitonin"
+    - condition: "travel illness"
+      recommended_test: "Malaria smear, tropical disease panel"
+  emphasis_areas:
+    - "Antibiotic stewardship"
+    - "Isolation precautions"
+    - "Immunocompromised care"
+
+rheumatology:
+  prioritize_keywords:
+    - "joint pain"
+    - "arthritis"
+    - "autoimmune"
+    - "inflammation"
+    - "lupus"
+    - "rheumatoid"
+  deprioritize_keywords:
+    - "infectious"
+    - "traumatic"
+  add_tests:
+    - condition: "inflammatory arthritis"
+      recommended_test: "ESR, CRP, RF, anti-CCP, ANA"
+    - condition: "systemic lupus"
+      recommended_test: "Anti-dsDNA, complement levels"
+  emphasis_areas:
+    - "Autoimmune disease management"
+    - "DMARD therapy"
+    - "Systemic complications"
+
+pain_management:
+  prioritize_keywords:
+    - "chronic pain"
+    - "opioid"
+    - "nerve pain"
+    - "fibromyalgia"
+    - "back pain"
+    - "neuropathy"
+  deprioritize_keywords:
+    - "acute conditions"
+    - "surgical"
+  add_tests:
+    - condition: "chronic pain"
+      recommended_test: "MRI, nerve conduction studies"
+    - condition: "neuropathy"
+      recommended_test: "EMG, vitamin B12, glucose"
+  emphasis_areas:
+    - "Multimodal pain management"
+    - "Opioid stewardship"
+    - "Functional improvement"
+
+palliative_care:
+  prioritize_keywords:
+    - "terminal illness"
+    - "comfort care"
+    - "symptom management"
+    - "end of life"
+    - "quality of life"
+  deprioritize_keywords:
+    - "curative treatment"
+    - "aggressive intervention"
+  add_tests:
+    - condition: "symptom management"
+      recommended_test: "Functional status assessment"
+    - condition: "pain control"
+      recommended_test: "Pain scales, opioid tolerance"
+  emphasis_areas:
+    - "Symptom control"
+    - "Goals of care"
+    - "Family support"

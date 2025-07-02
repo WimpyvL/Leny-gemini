@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Paperclip, Send } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 interface MessageInputProps {
   onSendMessage: (text: string) => void;
@@ -9,6 +9,7 @@ interface MessageInputProps {
 
 export function MessageInput({ onSendMessage }: MessageInputProps) {
   const [text, setText] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
     if (text.trim()) {
@@ -24,21 +25,43 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
     }
   };
 
+  // Auto-resize textarea height
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reset height to recalculate
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 120; // 7.5rem
+      textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+    }
+  }, [text]);
+
   return (
-    <div className="flex items-center gap-2">
-      <Button variant="ghost" size="icon" className="shrink-0" onClick={() => alert('File sharing not implemented yet.')}>
-        <Paperclip />
+    <div className="flex items-end gap-2 bg-white rounded-2xl p-2 shadow-[0_4px_16px_rgba(0,0,0,0.07)] border border-slate-200/90">
+      <Button variant="ghost" size="icon" className="shrink-0 text-slate-500 hover:text-primary rounded-full h-9 w-9" onClick={() => alert('Feature not implemented yet.')}>
+        <span>📷</span>
+        <span className="sr-only">Upload image</span>
+      </Button>
+      <Button variant="ghost" size="icon" className="shrink-0 text-slate-500 hover:text-primary rounded-full h-9 w-9" onClick={() => alert('Feature not implemented yet.')}>
+        <span>📎</span>
         <span className="sr-only">Attach file</span>
       </Button>
       <Textarea
+        ref={textareaRef}
+        rows={1}
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder="Type a message..."
-        className="resize-none min-h-14 rounded-2xl p-4 max-h-36"
+        className="flex-1 resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 p-0 py-2 text-base max-h-32 shadow-none self-center"
       />
-      <Button size="icon" onClick={handleSend} className="shrink-0" disabled={!text.trim()}>
-        <Send />
+      <Button 
+        size="icon" 
+        onClick={handleSend} 
+        className="shrink-0 rounded-full h-9 w-9 bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-slate-200 disabled:text-slate-400" 
+        disabled={!text.trim()}
+      >
+        <ArrowUp className="h-5 w-5" />
         <span className="sr-only">Send message</span>
       </Button>
     </div>

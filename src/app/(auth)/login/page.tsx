@@ -13,6 +13,15 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+<<<<<<< HEAD
+=======
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertTriangle, Loader2 } from 'lucide-react';
+import { auth } from '@/lib/firebase';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { findOrCreateUser } from '@/app/auth/actions';
+import { Logo } from '@/components/Logo';
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg role="img" viewBox="0 0 24 24" {...props}>
@@ -28,6 +37,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+<<<<<<< HEAD
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Mock login logic: any credentials work
@@ -36,6 +46,57 @@ export default function LoginPage() {
       router.push('/doctor');
     } else {
       router.push('/patient');
+=======
+  const handleEmailLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    if (!email || !password) {
+      setError('Email and password are required.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/dashboard');
+    } catch (err: any) {
+      console.error(err.code, err.message);
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+          setError('Invalid email or password. Please try again.');
+      } else {
+          setError('An unexpected error occurred. Please try again.');
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setError(null);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const googleUser = result.user;
+      await findOrCreateUser({
+        uid: googleUser.uid,
+        email: googleUser.email,
+        name: googleUser.displayName,
+        avatar: googleUser.photoURL,
+      });
+      router.push('/dashboard');
+    } catch (err: any) {
+      console.error(err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+          setError('Failed to sign in with Google. Please try again.');
+      }
+      setIsLoading(false);
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
     }
   };
   
@@ -45,12 +106,21 @@ export default function LoginPage() {
   }
 
   return (
+<<<<<<< HEAD
     <Card className="w-full max-w-sm">
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
             Enter any credentials. Use 'doctor' in the email to access the doctor view.
+=======
+    <Card className="w-full max-w-sm border-border/50">
+      <form onSubmit={handleEmailLogin}>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+          <CardDescription>
+            Sign in to continue your journey with S.A.N.I.
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -99,9 +169,9 @@ export default function LoginPage() {
             Sign in with Google
           </Button>
 
-          <div className="text-center text-sm">
+          <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline">
+            <Link href="/signup" className="underline text-foreground hover:text-primary">
               Sign up
             </Link>
           </div>

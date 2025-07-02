@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import type { User } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { DoctorCard } from './DoctorCard';
 
@@ -29,7 +28,7 @@ export function FindDoctorView({ doctors }: FindDoctorViewProps) {
       <header className="p-4 border-b bg-card space-y-4">
         <h1 className="text-2xl font-bold font-headline">Find a Doctor</h1>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xl text-muted-foreground">🔍</span>
           <Input
             placeholder="Search by name, specialty, or location..."
             className="h-11 rounded-full bg-input pl-10 text-base"

@@ -1,14 +1,14 @@
 'use client';
+import { useState, useEffect } from 'react';
 import type { ForYouCardData } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import { Sparkles, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
-import { Icon } from '@/components/Icon';
 
 interface ForYouDashboardProps {
   selectedItem: ForYouCardData | null;
@@ -36,7 +36,7 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
                         </Button>
                     )}
                     <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
-                        <Icon name={item.icon} className={cn("h-6 w-6", item.iconColor)} />
+                        <span className={cn("text-2xl", item.iconColor)}>{item.icon}</span>
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
@@ -78,7 +78,21 @@ function StreakDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () =
 }
 
 function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () => void }) {
+    const [formattedTimestamp, setFormattedTimestamp] = useState('');
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (hasMounted && item?.timestamp) {
+            setFormattedTimestamp(format(item.timestamp, 'EEEE, MMMM d, yyyy @ p'));
+        }
+    }, [item?.timestamp, hasMounted]);
+    
     if (!item) return null;
+
      return (
         <Card className="w-full h-full border-0 shadow-none rounded-none">
             <CardHeader>
@@ -90,11 +104,11 @@ function DefaultDashboard({ item, onBack }: { item: ForYouCardData, onBack?: () 
                         </Button>
                      )}
                      <div className={cn("flex items-center justify-center h-12 w-12 rounded-lg", item.iconColor?.replace('text-', 'bg-') + '/20')}>
-                        <Icon name={item.icon} className={cn("h-6 w-6", item.iconColor)} />
+                        <span className={cn("text-2xl", item.iconColor)}>{item.icon}</span>
                     </div>
                     <div>
                         <CardTitle className="text-2xl font-bold font-headline">{item.title}</CardTitle>
-                        {item.timestamp && <p className="text-sm text-muted-foreground">{format(item.timestamp, 'EEEE, MMMM d, yyyy @ p')}</p>}
+                        {hasMounted && formattedTimestamp && <p className="text-sm text-muted-foreground">{formattedTimestamp}</p>}
                     </div>
                 </div>
             </CardHeader>
@@ -112,7 +126,7 @@ export function ForYouDashboard({ selectedItem, onBack }: ForYouDashboardProps) 
   if (!selectedItem) {
     return (
       <div className="hidden md:flex flex-col items-center justify-center h-full bg-secondary text-center p-8">
-        <Sparkles className="h-16 w-16 text-primary mb-4" />
+        <span className="text-6xl text-primary mb-4">✨</span>
         <h2 className="text-2xl font-bold">Welcome to Your Space</h2>
         <p className="text-muted-foreground mt-2 max-w-md">
           This is your personal health dashboard. Select an item from the "For You" list to see more details here.

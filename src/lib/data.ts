@@ -91,27 +91,47 @@ export async function getAllUsers(): Promise<User[]> {
   }
 }
 
+<<<<<<< HEAD
 export async function getDoctors(): Promise<User[]> {
   if (!isFirebaseEnabled || !db) {
     console.warn("Firebase disabled. Falling back to mock data for getDoctors.");
     return mockUsers.filter(u => u.role === 'doctor');
   }
 
+=======
+export async function getExperts(): Promise<User[]> {
+  console.log('Fetching all experts from Firestore');
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
   try {
     const usersCollectionRef = collection(db, 'users');
-    const q = query(usersCollectionRef, where("role", "==", "doctor"));
-    const doctorsSnapshot = await getDocs(q);
+    const q = query(usersCollectionRef, where("role", "==", "expert"));
+    const expertsSnapshot = await getDocs(q);
 
+<<<<<<< HEAD
     if (!doctorsSnapshot.empty) {
       return doctorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
+=======
+    if (expertsSnapshot.empty) {
+      console.warn("No experts found in Firestore. Falling back to mock data.");
+      return mockUsers.filter(u => u.role === 'expert');
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
     }
     
     console.warn("No doctors found in Firestore. Falling back to mock doctor data.");
     return mockUsers.filter(u => u.role === 'doctor');
 
+<<<<<<< HEAD
   } catch (error) {
     console.error('Firestore connection error for getDoctors. Falling back to mock data.', error);
     return mockUsers.filter(u => u.role === 'doctor');
+=======
+    const experts = expertsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as User));
+    return experts;
+  } catch (error) {
+    console.error('Error fetching experts:', error);
+    // Fallback to mock data on error
+    return mockUsers.filter(u => u.role === 'expert');
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
   }
 }
 
@@ -127,7 +147,12 @@ export async function getConversationsForUser(userId: string): Promise<Conversat
   // Use mock conversations as the base, as conversation data isn't in Firestore yet.
   let userMockConversations = mockConversations.filter(c => c.participantIds.includes(userId));
 
+<<<<<<< HEAD
   if (user.role === 'doctor') {
+=======
+  // The expert shouldn't see chats with the assistant S.A.N.I in their user list.
+  if (user.role === 'expert') {
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
     userMockConversations = userMockConversations.filter(c => !c.participantIds.includes('assistant'));
   }
 

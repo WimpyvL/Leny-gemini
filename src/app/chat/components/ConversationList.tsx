@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useState, useEffect } from 'react';
-import { Icon } from '@/components/Icon';
 
 function ConversationItem({
   conv,
@@ -19,8 +18,15 @@ function ConversationItem({
   selected: boolean;
 }) {
   const [relativeTime, setRelativeTime] = useState('');
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return;
+
     const updateRelativeTime = () => {
       if (conv.timestamp) {
         setRelativeTime(formatDistanceToNow(conv.timestamp, { addSuffix: false }));
@@ -31,7 +37,7 @@ function ConversationItem({
     const interval = setInterval(updateRelativeTime, 60000);
 
     return () => clearInterval(interval);
-  }, [conv.timestamp]);
+  }, [conv.timestamp, hasMounted]);
 
   return (
     <div
@@ -43,14 +49,14 @@ function ConversationItem({
     >
       <Avatar className={cn("h-12 w-12 rounded-lg flex-shrink-0", conv.avatarColor)}>
         <AvatarFallback className={cn("rounded-lg text-white", conv.avatarColor)}>
-          {conv.icon && <Icon name={conv.icon} className="h-6 w-6" />}
+          {conv.icon && <span className="text-2xl">{conv.icon}</span>}
         </AvatarFallback>
       </Avatar>
       <div className="w-full overflow-hidden">
         <div className="flex items-baseline justify-between">
           <p className="font-semibold text-foreground truncate">{conv.title}</p>
           <p className="text-xs text-muted-foreground whitespace-nowrap">
-            {relativeTime}
+            {hasMounted ? relativeTime : ''}
           </p>
         </div>
         <p className="text-sm text-muted-foreground truncate">{conv.participantString}</p>

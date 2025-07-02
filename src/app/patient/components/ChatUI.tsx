@@ -9,12 +9,13 @@ import { PatientNavRail, type PatientView } from './PatientNavRail';
 import { ForYou } from './ForYou';
 import { ForYouDashboard } from './ForYouDashboard';
 import { Profile } from './Profile';
-import { runPatientChat } from '../actions';
+import { runMedicalPatientQuery, runPatientChat } from '../actions';
 import { cn } from '@/lib/utils';
 import { InviteDialog } from './InviteDialog';
 import { useToast } from '@/hooks/use-toast';
 import { AddParticipantDialog } from './AddParticipantDialog';
 import { FindDoctorView } from './FindDoctorView';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ChatUIProps {
   user: User;
@@ -34,11 +35,10 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
   
   const [forYouData, setForYouData] = useState<ForYouCardData[]>(mockForYouData);
   const [selectedForYouItem, setSelectedForYouItem] = useState<ForYouCardData | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    // This client-side effect ensures the correct view is shown on initial load
-    // for desktop users without causing hydration errors.
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) { // md breakpoint
+    if (isMobile === false) { 
       if (activeView === 'chats' && initialConversations.length > 0 && !selectedConversation) {
         setSelectedConversation(initialConversations[0]);
       } else if (activeView === 'foryou' && forYouData.length > 0 && !selectedForYouItem) {
@@ -47,9 +47,10 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
         setSelectedForYouItem(firstStreak || firstItem || null);
       }
     }
-  }, [activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
+  }, [isMobile, activeView, initialConversations, forYouData, selectedConversation, selectedForYouItem]);
   
   useEffect(() => {
+<<<<<<< HEAD
     // When the active view (e.g., Chats, For You) changes, clear any specific
     // item selections to return to the list view on mobile.
     if (activeView !== 'chats') {
@@ -58,6 +59,10 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
     if (activeView !== 'foryou') {
       setSelectedForYouItem(null);
     }
+=======
+    setSelectedConversation(null);
+    setSelectedForYouItem(null);
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
   }, [activeView]);
 
   const generateParticipantString = (participants: User[], currentUserId: string): string => {
@@ -91,6 +96,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
       type: 'user',
     };
 
+<<<<<<< HEAD
     setConversations(prev => {
         const updated = prev.map(c => 
             c.id === conversationId 
@@ -102,11 +108,30 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
     });
 
     const isAiChat = selectedConversation.participants.some(p => p.id === 'assistant') && selectedConversation.participants.length === 2;
+=======
+    const updatedConversationsWithUserMessage = conversations.map(c => {
+      if (c.id === selectedConversation.id) {
+        return { ...c, messages: [...c.messages, newMessage], timestamp: new Date() };
+      }
+      return c;
+    }).sort((a,b) => b.timestamp.getTime() - a.timestamp.getTime());
+
+    setConversations(updatedConversationsWithUserMessage);
+    setSelectedConversation(updatedConversationsWithUserMessage.find(c => c.id === selectedConversation.id) || null);
+
+    const isAiChat = selectedConversation.participants.some(p => p.id === 'assistant');
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
     if (isAiChat) {
       setIsLoading(true);
       try {
+<<<<<<< HEAD
         const aiResponse = await runPatientChat(text, user.name);
+=======
+        const conversationHistory = selectedConversation.messages.slice(-5).map(m => m.text || '');
+        const aiResponse = await runMedicalPatientQuery(text, conversationHistory);
+
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
         const aiMessage: Message = {
           id: `msg_ai_${Date.now()}`,
           text: aiResponse,
@@ -114,6 +139,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
           timestamp: new Date(),
           type: 'user',
         };
+<<<<<<< HEAD
         
         setConversations(prev => {
             const updated = prev.map(c => 
@@ -123,6 +149,18 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
             );
             setSelectedConversation(updated.find(c => c.id === conversationId) || null);
             return updated;
+=======
+
+        setConversations(prevConvos => {
+            const finalConvos = prevConvos.map(c => {
+                if (c.id === selectedConversation!.id) {
+                    return { ...c, messages: [...c.messages, aiMessage] };
+                }
+                return c;
+            });
+            setSelectedConversation(finalConvos.find(c => c.id === selectedConversation!.id) || null);
+            return finalConvos;
+>>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
         });
 
       } catch (error) {
@@ -170,7 +208,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
           participants: updatedParticipants,
           participantString: newParticipantString,
           messages: [...c.messages, systemMessage],
-          icon: 'Users',
+          icon: '👨‍👩‍👧',
           avatarColor: 'bg-gray-500',
         };
       }
@@ -216,6 +254,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
     if (existingConversation) {
       toast({ title: 'Chat already exists.', description: 'Selecting the existing conversation.' });
       setSelectedConversation(existingConversation);
+      setActiveView('chats');
       setIsInviteDialogOpen(false);
       return;
     }
@@ -225,6 +264,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
       id: `conv_${user.id}_${invitedUser.id}`,
       title: invitedUser.name,
       participants: newParticipants,
+      participantIds: newParticipants.map(p => p.id),
       participantString: generateParticipantString(newParticipants, user.id),
       messages: [{
         id: `msg_system_${Date.now()}`,
@@ -243,6 +283,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
     const updatedConversations = [newConversation, ...conversations];
     setConversations(updatedConversations);
     setSelectedConversation(newConversation);
+    setActiveView('chats');
     setIsInviteDialogOpen(false);
     toast({ title: 'Invite Sent!', description: `You can now chat with ${invitedUser.name}.` });
   };
@@ -283,7 +324,7 @@ export function ChatUI({ user, conversations: initialConversations, doctors }: C
             currentUser={user}
             onSendMessage={handleSendMessage}
             allUsers={allUsers}
-            isLoading={isLoading && selectedConversation.participants.some(p => p.id === 'assistant')}
+            isLoading={isLoading}
             onBack={() => setSelectedConversation(null)}
             onAddParticipantClick={() => setIsAddParticipantDialogOpen(true)}
           />
