@@ -88,7 +88,7 @@ export function AiExpertsView() {
                     setIsLoading(false);
                 }
             } else {
-                const result = await runExpertChat(text, selectedExpert.expert_prompt);
+                const result = await runExpertChat(text, selectedExpert);
                 const aiMessage: Message = {
                     id: `msg_ai_${Date.now()}`,
                     structuredResponse: {
@@ -139,7 +139,7 @@ export function AiExpertsView() {
         setMessages([initialMessage]);
         
         try {
-            const result = await runExpertChat(summary, expert.expert_prompt);
+            const result = await runExpertChat(summary, expert);
             const aiMessage: Message = {
                 id: `msg_ai_initial_${Date.now()}`,
                 structuredResponse: {

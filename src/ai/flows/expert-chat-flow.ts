@@ -9,10 +9,12 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const ExpertChatInputSchema = z.object({
   message: z.string().describe('The user message to the expert.'),
   expertPrompt: z.string().describe("The expert's persona and instructions."),
+  expertId: z.string().optional().describe("The ID of the expert being consulted."),
 });
 export type ExpertChatInput = z.infer<typeof ExpertChatInputSchema>;
 
@@ -72,7 +74,11 @@ const expertChatFlow = ai.defineFlow(
     outputSchema: ExpertChatOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    let model;
+    if (input.expertId === 'dr-gemma-med') {
+      model = googleAI.model('medgemma');
+    }
+    const {output} = await prompt(input, { model });
     return output!;
   }
 );

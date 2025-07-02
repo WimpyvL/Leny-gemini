@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const ExpertConsultationInputSchema = z.object({
   history: z.array(z.object({
@@ -16,6 +17,7 @@ const ExpertConsultationInputSchema = z.object({
     text: z.string(),
   })).describe('The conversation history. "Doctor" is the user asking for help.'),
   consultant: z.object({
+      id: z.string().describe('The unique ID of the expert.'),
       name: z.string(),
       specialty: z.string(),
       expert_prompt: z.string(),
@@ -81,7 +83,11 @@ const expertConsultationFlow = ai.defineFlow(
     outputSchema: ExpertConsultationOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    let model;
+    if (input.consultant.id === 'dr-gemma-med') {
+      model = googleAI.model('medgemma');
+    }
+    const {output} = await prompt(input, { model });
     return output!;
   }
 );

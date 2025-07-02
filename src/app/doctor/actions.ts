@@ -28,9 +28,9 @@ import type { MedicalQueryInput, FormattedClinicalResponse } from '@/lib/types';
 import { getExpertChatResponse } from '@/ai/flows/expert-chat-flow';
 >>>>>>> 4de5c1ea31c6afd7cb8b6b3e60a7b345ab82f1b4
 
-export async function runExpertChat(message: string, expertPrompt: string): Promise<ExpertChatOutput> {
+export async function runExpertChat(message: string, expert: AiExpert): Promise<ExpertChatOutput> {
   try {
-    const result = await getExpertChatResponse({ message, expertPrompt });
+    const result = await getExpertChatResponse({ message, expertPrompt: expert.expert_prompt, expertId: expert.id });
     return result;
   } catch (error) {
     console.error('Error in expert chat:', error);
@@ -83,6 +83,7 @@ export async function runExpertConsultation(history: Message[], consultant: AiEx
         const result = await getExpertConsultation({
             history: formattedHistory,
             consultant: {
+                id: consultant.id,
                 name: consultant.name,
                 specialty: consultant.specialty,
                 expert_prompt: consultant.expert_prompt,
